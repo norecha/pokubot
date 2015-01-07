@@ -5,8 +5,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.sun.jna.platform.win32.WinDef.HWND;
-
 public class ConfigUtils {
 
 	//----------------------------------------------------------
@@ -98,49 +96,4 @@ public class ConfigUtils {
 		return list;
 	}
 
-	public static int[] getRect(String windowName) throws WindowNotFoundException,
-			GetWindowRectException {
-		HWND hwnd = User32.INSTANCE.FindWindow(null, windowName);
-		if (hwnd == null) {
-			throw new WindowNotFoundException("", windowName);
-		}
-
-		//User32.INSTANCE.SetForegroundWindow(hwnd);
-		System.out.printf("Setting focus to %s window, do not click elsewhere!\n", windowName);
-
-		int[] rect = { 0, 0, 0, 0 };
-		int result = User32.INSTANCE.GetWindowRect(hwnd, rect);
-		if (result == 0) {
-			throw new GetWindowRectException(windowName);
-		}
-
-		//int lParam = (short)613 | (364<< 16);
-		//while ("asd" instanceof String) {
-		//User32.INSTANCE.SendMessage(hwnd, 0x201, 0x00000001, lParam);
-		//User32.INSTANCE.SendMessage(hwnd, 0x202, 0x00000000, lParam);
-		//try {
-		//	Thread.sleep(1000);
-		//} catch (InterruptedException e) {
-		//	// TODO Auto-generated catch block
-		//	e.printStackTrace();
-		//}
-		//}
-		//System.exit(1);
-		return rect;
-	}
-
-	@SuppressWarnings("serial")
-	public static class WindowNotFoundException extends Exception {
-		public WindowNotFoundException(String className, String windowName) {
-			super(String.format("Window null for className: %s; windowName: %s",
-				className, windowName));
-		}
-	}
-
-	@SuppressWarnings("serial")
-	public static class GetWindowRectException extends Exception {
-		public GetWindowRectException(String windowName) {
-			super("Window Rect not found for " + windowName);
-		}
-	}
 }

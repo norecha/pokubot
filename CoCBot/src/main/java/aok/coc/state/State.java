@@ -1,8 +1,8 @@
 package aok.coc.state;
 
-import aok.coc.exception.CocBotException;
+import aok.coc.exception.BotException;
 
 public interface State {
 
-	public void handle(Context context) throws CocBotException;
+	public void handle(Context context) throws BotException;
 }

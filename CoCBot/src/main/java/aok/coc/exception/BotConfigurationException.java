@@ -1,14 +1,13 @@
 package aok.coc.exception;
 
-public abstract class CocBotException extends Exception {
+public class BotConfigurationException extends BotException {
 
 	/**
 	 * 
 	 */
 	private static final long	serialVersionUID	= 1L;
 
-	public CocBotException(String msg) {
+	public BotConfigurationException(String msg) {
 		super(msg);
 	}
-	
 }

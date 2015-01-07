@@ -1,6 +1,6 @@
 package aok.coc.state;
 
-import aok.coc.exception.CocBotConfigurationException;
+import aok.coc.exception.BotConfigurationException;
 import aok.coc.util.Clickable;
 import aok.coc.util.RobotUtils;
 
@@ -12,7 +12,7 @@ public class StateMainMenu implements State {
 	}
 
 	@Override
-	public void handle(Context context) throws CocBotConfigurationException {
+	public void handle(Context context) throws BotConfigurationException {
 		try {
 			System.out.println("StateMainMenu");
 			if (Thread.interrupted()) {
@@ -30,7 +30,7 @@ public class StateMainMenu implements State {
 				// if still not active, throw exception
 				if (!RobotUtils.isClickableActive(Clickable.BUTTON_RAX_TRAIN)) {
 					System.err.println("Unable to locate barracks.");
-					throw new CocBotConfigurationException("Barracks location is not correct.");
+					throw new BotConfigurationException("Barracks location is not correct.");
 				}
 			}
 			RobotUtils.leftClick(Clickable.BUTTON_RAX_TRAIN, 500);

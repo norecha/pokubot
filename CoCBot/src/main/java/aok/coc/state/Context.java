@@ -1,6 +1,6 @@
 package aok.coc.state;
 
-import aok.coc.exception.CocBotException;
+import aok.coc.exception.BotException;
 
 public class Context {
 
@@ -13,7 +13,7 @@ public class Context {
 	public void handle() {
 		try {
 			current.handle(this);
-		} catch (CocBotException e) {
+		} catch (BotException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
