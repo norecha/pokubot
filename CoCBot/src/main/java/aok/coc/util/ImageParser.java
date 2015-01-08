@@ -2,8 +2,10 @@ package aok.coc.util;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.util.logging.Logger;
 
 public class ImageParser {
+	private static final Logger		logger			= Logger.getLogger(ImageParser.class.getName());
 
 	// use 3 points to detect number
 	// offsets are relative to top left of the digit
@@ -188,13 +190,13 @@ public class ImageParser {
 		// String fileName = "post_zort_" + System.currentTimeMillis();
 		// File save_path = new File(fileName + "_" + 0 + ".png");
 		// ImageIO.write(image, "png", save_path);
-	
+
 		int gold = parseGold(image);
 		int elixir = parseElixir(image);
 		int de = parseDarkElixir(image);
-		System.out.printf("[gold: %d, elixir: %d, de: %d]\n",
-			gold, elixir, de);
-	
+		logger.fine(String.format("[gold: %d, elixir: %d, de: %d]\n",
+			gold, elixir, de));
+
 		return new int[] { gold, elixir, de };
 	}
 }

@@ -1,11 +1,14 @@
 package aok.coc.state;
 
+import java.util.logging.Logger;
+
 import aok.coc.util.Clickable;
 import aok.coc.util.ConfigUtils;
 import aok.coc.util.ImageParser;
 import aok.coc.util.RobotUtils;
 
 public class StateAttack implements State {
+	private static final Logger			logger		= Logger.getLogger(StateAttack.class.getName());
 
 	private static final StateAttack	instance	= new StateAttack();
 
@@ -20,38 +23,38 @@ public class StateAttack implements State {
 	public void handle(Context context) {
 		while (true) {
 			try {
-				System.out.println("StateAttack");
+				logger.info("StateAttack");
 				// attack();
 				if (Thread.interrupted()) {
 					throw new InterruptedException("StateAttack is interrupted.");
 				}
-				
+
 				int[] loot = ImageParser.parseLoot();
 
 				int gold = loot[0];
 				int elixir = loot[1];
 				int de = loot[2];
-				
+
 				if ((ConfigUtils.instance().isMatchAllConditions() &&
-					gold >= ConfigUtils.instance().getGoldThreshold() &&
-					elixir >= ConfigUtils.instance().getElixirThreshold() &&
+						gold >= ConfigUtils.instance().getGoldThreshold() &&
+						elixir >= ConfigUtils.instance().getElixirThreshold() &&
 					de >= ConfigUtils.instance().getDarkElixirThreshold())
 					||
 					(!ConfigUtils.instance().isMatchAllConditions() &&
 					(gold >= ConfigUtils.instance().getGoldThreshold() ||
-					elixir >= ConfigUtils.instance().getElixirThreshold() ||
+						elixir >= ConfigUtils.instance().getElixirThreshold() ||
 					de >= ConfigUtils.instance().getDarkElixirThreshold()))) {
-					
+
 					// attack
 					ConfigUtils.instance().getAttackStrategy().attack(loot);
-					
+
 					RobotUtils.leftClick(Clickable.BUTTON_END_BATTLE, 1200);
 					RobotUtils.leftClick(Clickable.BUTTON_END_BATTLE_QUESTION_OKAY, 1200);
 					RobotUtils.leftClick(Clickable.BUTTON_END_BATTLE_QUESTION_OKAY, 1200);
 					RobotUtils.leftClick(Clickable.BUTTON_END_BATTLE_RETURN_HOME, 1200);
-					
+
 					context.setState(StateIdle.instance());
-					
+
 					break;
 				} else {
 					// next
@@ -66,10 +69,10 @@ public class StateAttack implements State {
 					e1.printStackTrace();
 				}
 				// TODO: click yes if attack has already started
-				
+
 				context.setState(StateIdle.instance());
 			}
 		}
 	}
-	
+
 }

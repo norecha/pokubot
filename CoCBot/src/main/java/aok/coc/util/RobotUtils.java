@@ -8,6 +8,7 @@ import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Random;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
@@ -15,6 +16,8 @@ import javax.swing.JOptionPane;
 import com.sun.jna.platform.win32.WinDef.HWND;
 
 public class RobotUtils {
+
+	private static final Logger	logger				= Logger.getLogger(RobotUtils.class.getName());
 
 	public static final String	WORKING_DIR			= System.getProperty("user.dir");
 	public static final int		SCREEN_WIDTH		= Toolkit.getDefaultToolkit().getScreenSize().width;
@@ -113,17 +116,17 @@ public class RobotUtils {
 	public static void msgBox(String Text) {
 		msgBox(Text, "");
 	}
-	
+
 	public static boolean confirmationBox(String msg, String title) {
 		int result = JOptionPane.showConfirmDialog(null, msg, title, JOptionPane.YES_NO_OPTION);
-		
+
 		if (result == JOptionPane.YES_OPTION) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
+
 	public static BufferedImage screenShot(int x1, int y1, int x2, int y2) {
 		return r.createScreenCapture(new Rectangle(x1 + offsetX, y1 + offsetY, x2 - x1, y2 - y1));
 	}

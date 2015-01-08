@@ -3,6 +3,7 @@ package aok.coc.state;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 import aok.coc.util.Clickable;
 import aok.coc.util.ConfigUtils;
@@ -10,6 +11,7 @@ import aok.coc.util.RobotUtils;
 
 
 public class StateTrainTroops implements State {
+	private static final Logger	logger	= Logger.getLogger(StateTrainTroops.class.getName());
 	
 	private static StateTrainTroops instance = new StateTrainTroops();
 	
@@ -19,7 +21,7 @@ public class StateTrainTroops implements State {
 	@Override
 	public void handle(Context context) {
 		try {
-			System.out.println("StateTrainTroops");
+			logger.info("StateTrainTroops");
 			
 			List<Map<Clickable, Integer>> raxInfo = ConfigUtils.instance().getRaxInfo();
 			for (int currRax = 0; currRax < raxInfo.size(); currRax++) {

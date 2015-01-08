@@ -1,9 +1,12 @@
 package aok.coc.state;
 
+import java.util.logging.Logger;
+
 import aok.coc.util.Clickable;
 import aok.coc.util.RobotUtils;
 
 public class StateIdle implements State {
+	private static final Logger		logger		= Logger.getLogger(StateIdle.class.getName());
 
 	private static final StateIdle	instance	= new StateIdle();
 
@@ -15,7 +18,7 @@ public class StateIdle implements State {
 		State nextState = null;
 		while (true) {
 			try {
-				System.out.println("StateIdle");
+				logger.info("StateIdle");
 				if (Thread.interrupted()) {
 					throw new InterruptedException("StateIdle is interrupted.");
 				}

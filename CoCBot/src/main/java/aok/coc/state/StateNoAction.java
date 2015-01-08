@@ -1,6 +1,9 @@
 package aok.coc.state;
 
+import java.util.logging.Logger;
+
 public class StateNoAction implements State {
+	private static final Logger	logger	= Logger.getLogger(StateNoAction.class.getName());
 
 	private final static StateNoAction instance = new StateNoAction();
 	
@@ -9,7 +12,7 @@ public class StateNoAction implements State {
 	
 	@Override
 	public void handle(Context context) {
-		System.out.println("StateNoAction");
+		logger.info("StateNoAction");
 	}
 
 	public static StateNoAction instance() {
