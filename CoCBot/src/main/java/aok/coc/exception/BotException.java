@@ -10,5 +10,9 @@ public abstract class BotException extends Exception {
 	public BotException(String msg) {
 		super(msg);
 	}
+
+	public BotException(String msg, Throwable t) {
+		super(msg, t);
+	}
 	
 }
