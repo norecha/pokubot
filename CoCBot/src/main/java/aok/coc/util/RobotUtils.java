@@ -124,6 +124,21 @@ public class RobotUtils {
 		}
 	}
 	
+	public static int[] parseLoot() {
+		BufferedImage image = RobotUtils.screenShot(20, 98, 141, 270);
+		// String fileName = "post_zort_" + System.currentTimeMillis();
+		// File save_path = new File(fileName + "_" + 0 + ".png");
+		// ImageIO.write(image, "png", save_path);
+
+		int gold = DigitParser.parseGold(image);
+		int elixir = DigitParser.parseElixir(image);
+		int de = DigitParser.parseDarkElixir(image);
+		System.out.printf("[gold: %d, elixir: %d, de: %d]\n",
+			gold, elixir, de);
+
+		return new int[] { gold, elixir, de };
+	}
+
 	public static BufferedImage screenShot(int x1, int y1, int x2, int y2) {
 		return r.createScreenCapture(new Rectangle(x1 + offsetX, y1 + offsetY, x2 - x1, y2 - y1));
 	}

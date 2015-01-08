@@ -1,6 +1,5 @@
 package aok.coc.exception;
 
-
 public class BotConfigurationException extends BotException {
 
 	/**
@@ -10,9 +9,5 @@ public class BotConfigurationException extends BotException {
 
 	public BotConfigurationException(String msg) {
 		super(msg);
-	}
-
-	public BotConfigurationException(String msg, Throwable t) {
-		super(msg, t);
 	}
 }

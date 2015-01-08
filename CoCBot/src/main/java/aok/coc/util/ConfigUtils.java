@@ -5,9 +5,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import aok.coc.attack.Attack;
-import aok.coc.attack.Attack2Side;
-
 public class ConfigUtils {
 
 	//----------------------------------------------------------
@@ -70,10 +67,6 @@ public class ConfigUtils {
 
 	public boolean isMatchAllConditions() {
 		return false;
-	}
-	
-	public Attack getAttackStrategy() {
-		return Attack2Side.instance();
 	}
 
 	/**
