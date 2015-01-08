@@ -22,14 +22,14 @@ import com.sun.jna.platform.win32.WinReg.HKEYByReference;
 
 public class Launcher {
 
-	private static final String windowName = "BlueStacks App Player";
-	private static final int BS_RES_X = 860;
-	private static final int BS_RES_Y = 720;
-	
-	private static Logger logger = Logger.getLogger(Launcher.class.getCanonicalName());
+	private static final String	windowName	= "BlueStacks App Player";
+	private static final int	BS_RES_X	= 860;
+	private static final int	BS_RES_Y	= 720;
+
+	private static Logger		logger		= Logger.getLogger(Launcher.class.getCanonicalName());
 
 	public static void main(String[] args) {
-		
+
 		// setup logger
 		ConsoleHandler handler = new ConsoleHandler();
 		logger.setLevel(Level.ALL);
@@ -37,16 +37,16 @@ public class Launcher {
 		logger.addHandler(handler);
 		logger.setUseParentHandlers(false);
 		handler.setLevel(Level.ALL);
-		
+
 		Launcher launcher = new Launcher();
-		
+
 		try {
 			launcher.setup();
 		} catch (BotConfigurationException e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		
+
 		launcher.launch();
 	}
 
@@ -62,41 +62,52 @@ public class Launcher {
 		if (result == 0) {
 			throw new BotConfigurationException(windowName + " is not found.");
 		}
-		
+
 		System.out.println(String.format("The corner locations for the window \"%s\" are %s",
 			windowName, Arrays.toString(rect)));
-		
+
 		Rectangle bsRectangle = new Rectangle(rect[0], rect[1], rect[2] - rect[0], rect[3] - rect[1]);
-		
+
 		// setup resolution
-		setupResolution(bsRectangle);
-		
+		setupResolution();
+
 		RobotUtils.setupWin32(hwnd, bsRectangle);
 	}
 
-	private void setupResolution(Rectangle bsRectangle) throws BotConfigurationException {
-		if (bsRectangle.width == BS_RES_X && bsRectangle.height == BS_RES_Y) {
-			return;
-		}
-		
-		String msg = String.format("%s must run in resolution %dx%d.\n" +
-				"Click YES to change it automatically, NO to do it later.\n",
-			windowName, BS_RES_X, BS_RES_Y);
-		
-		boolean ret = RobotUtils.confirmationBox(msg, "Change resolution");
-		
-		if (!ret) {
-			throw new BotConfigurationException("Re-run when resolution is fixed.");
-		}
-		
+	private void setupResolution() throws BotConfigurationException {
 		// update registry
-		HKEYByReference key = Advapi32Util.registryGetKey(WinReg.HKEY_LOCAL_MACHINE, "SOFTWARE\\BlueStacks\\Guests\\Android\\FrameBuffer\\0", WinNT.KEY_ALL_ACCESS);
-		Advapi32Util.registrySetIntValue(key.getValue(), "WindowWidth", BS_RES_X);
-		Advapi32Util.registrySetIntValue(key.getValue(), "WindowHeight", BS_RES_Y);
-		Advapi32Util.registrySetIntValue(key.getValue(), "GuestWidth", BS_RES_Y);
-		Advapi32Util.registrySetIntValue(key.getValue(), "GuestHeight", BS_RES_Y);
-		Advapi32Util.registrySetIntValue(key.getValue(), "FullScreen", 0);
-		
+		try {
+			HKEYByReference key = Advapi32Util.registryGetKey(WinReg.HKEY_LOCAL_MACHINE, "SOFTWARE\\BlueStacks\\Guests\\Android\\FrameBuffer\\0", WinNT.KEY_READ | WinNT.KEY_WRITE);
+
+			int w1 = Advapi32Util.registryGetIntValue(key.getValue(), "WindowWidth");
+			int h1 = Advapi32Util.registryGetIntValue(key.getValue(), "WindowHeight");
+			int w2 = Advapi32Util.registryGetIntValue(key.getValue(), "GuestWidth");
+			int h2 = Advapi32Util.registryGetIntValue(key.getValue(), "GuestHeight");
+
+			if (w1 == BS_RES_X && h1 == BS_RES_Y &&
+				w2 == BS_RES_X && h2 == BS_RES_Y) {
+				return;
+			}
+
+			String msg = String.format("%s must run in resolution %dx%d.\n" +
+										"Click YES to change it automatically, NO to do it later.\n",
+				windowName, BS_RES_X, BS_RES_Y);
+
+			boolean ret = RobotUtils.confirmationBox(msg, "Change resolution");
+
+			if (!ret) {
+				throw new BotConfigurationException("Re-run when resolution is fixed.");
+			}
+
+			Advapi32Util.registrySetIntValue(key.getValue(), "WindowWidth", BS_RES_X);
+			Advapi32Util.registrySetIntValue(key.getValue(), "WindowHeight", BS_RES_Y);
+			Advapi32Util.registrySetIntValue(key.getValue(), "GuestWidth", BS_RES_X);
+			Advapi32Util.registrySetIntValue(key.getValue(), "GuestHeight", BS_RES_Y);
+			Advapi32Util.registrySetIntValue(key.getValue(), "FullScreen", 0);
+		} catch (Exception e) {
+			throw new BotConfigurationException("Unable to change resolution. Do it manually.", e);
+		}
+
 		RobotUtils.msgBox("Please restart " + windowName);
 	}
 
