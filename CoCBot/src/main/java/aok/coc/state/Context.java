@@ -10,13 +10,8 @@ public class Context {
 		this.current = state;
 	}
 
-	public void handle() {
-		try {
-			current.handle(this);
-		} catch (BotException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void handle() throws BotException {
+		current.handle(this);
 	}
 	
 }

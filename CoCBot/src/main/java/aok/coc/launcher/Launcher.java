@@ -2,10 +2,12 @@ package aok.coc.launcher;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import aok.coc.exception.BotConfigurationException;
+import aok.coc.exception.BotException;
 import aok.coc.state.Context;
 import aok.coc.state.StateIdle;
 import aok.coc.util.ConfigUtils;
@@ -28,15 +30,21 @@ public class Launcher {
 		try {
 			Setup.setup();
 		} catch (BotConfigurationException e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			System.exit(1);
 		}
 
+		// run the bot
 		Launcher launcher = new Launcher();
-		launcher.start();
+		try {
+			launcher.start();
+		} catch (BotException e) {
+			logger.log(Level.SEVERE, e.getMessage(), e);
+			System.exit(2);
+		}
 	}
 
-	private void start() {
+	private void start() throws BotException {
 		ConfigUtils.initialize();
 		Context context = new Context();
 		context.setState(StateIdle.instance());
