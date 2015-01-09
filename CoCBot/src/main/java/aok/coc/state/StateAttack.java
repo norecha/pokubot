@@ -1,12 +1,10 @@
 package aok.coc.state;
 
-import java.io.IOException;
 import java.util.logging.Logger;
 
 import aok.coc.util.ConfigUtils;
 import aok.coc.util.ImageParser;
 import aok.coc.util.RobotUtils;
-import aok.coc.util.coords.Area;
 import aok.coc.util.coords.Clickable;
 
 public class StateAttack implements State {
@@ -25,13 +23,6 @@ public class StateAttack implements State {
 	public void handle(Context context) throws InterruptedException {
 		while (true) {
 			try {
-				try {
-					RobotUtils.saveScreenShot("troop_"+System.currentTimeMillis(), Area.ATTACK_GROUP);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				System.exit(0);
 				logger.info("StateAttack");
 				// attack();
 				if (Thread.interrupted()) {
@@ -39,6 +30,7 @@ public class StateAttack implements State {
 				}
 
 				int[] loot = ImageParser.parseLoot();
+				int[] attackGroup = ImageParser.parseTroopCount();
 
 				int gold = loot[0];
 				int elixir = loot[1];
@@ -55,7 +47,7 @@ public class StateAttack implements State {
 					de >= ConfigUtils.instance().getDarkElixirThreshold()))) {
 
 					// attack
-					ConfigUtils.instance().getAttackStrategy().attack(loot);
+					ConfigUtils.instance().getAttackStrategy().attack(loot, attackGroup);
 
 					RobotUtils.leftClick(Clickable.BUTTON_END_BATTLE, 1200);
 					RobotUtils.leftClick(Clickable.BUTTON_END_BATTLE_QUESTION_OKAY, 1200);

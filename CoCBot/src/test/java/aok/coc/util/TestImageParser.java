@@ -8,8 +8,6 @@ import javax.imageio.ImageIO;
 import org.junit.Assert;
 import org.junit.Test;
 
-import aok.coc.util.ImageParser;
-
 public class TestImageParser {
 
 	private final String[]	imageNames	= new String[] { "zort_1420312983010_0.png", "zort_1420312988100_0.png", "zort_1420312993150_0.png", "zort_1420312998219_0.png", "zort_1420313003290_0.png", "zort_1420313008343_0.png", "zort_1420313013415_0.png", "zort_1420313018469_0.png", "zort_1420313023540_0.png", "zort_1420313028608_0.png", "zort_1420313033674_0.png", "zort_1420313038742_0.png", "zort_1420313043808_0.png", "zort_1420313048879_0.png", "zort_1420313053961_0.png", "zort_1420313059039_0.png", "zort_1420313064108_0.png", "zort_1420313069163_0.png", 
@@ -34,11 +32,27 @@ public class TestImageParser {
 			14, 13, 20, 10, 14, 30, 17, 20, 13, 16, 22, 17, 22, 21, 18, 29, 34, 13, 14, 28, 15
 	};
 	
+	private final String[] troopImageNames = new String[] {"troop_1420776935220.png", "troop_1420820135855.png",
+		"troop_1420820165432.png", "troop_1420820170086.png", "troop_1420820177795.png", "troop_1420820189647.png",
+		"troop_1420820193767.png", "troop_1420820198106.png", "troop_1420820765409.png"
+	};
+	
+	private final int[][] expectedTroops = new int[][] {
+		new int[]{145,55},
+		new int[]{153,46},
+		new int[]{152,46},
+		new int[]{151,46},
+		new int[]{150,46},
+		new int[]{149,46},
+		new int[]{148,46},
+		new int[]{147,46},
+		new int[]{142,46},
+	};
+	
 	private final String imageLocation = "/parser_images/";
 
 	@Test
 	public void testGoldParser() throws IOException {
-		
 		int fail = 0;
 		for (int i = 0; i < imageNames.length; i++) {
 			String s = imageNames[i];
@@ -113,7 +127,24 @@ public class TestImageParser {
 			}
 		}
 		System.out.println("Tropy Success Rate: " + (1 - (float)fail / imageNames.length));
-
 	}
 
+	@Test
+	public void testTroopParser() throws IOException {
+		
+		int fail = 0;
+		for (int i = 0; i < troopImageNames.length; i++) {
+			String s = troopImageNames[i];
+			BufferedImage image = ImageIO.read(TestImageParser.class.getResourceAsStream(imageLocation + s));
+			int[] troops = ImageParser.parseTroopCount(image);
+			
+			try {
+				Assert.assertArrayEquals(expectedTroops[i], troops);
+			} catch (AssertionError e) {
+				fail++;
+				System.err.println(e.getMessage());
+			}
+		}
+		System.out.println("Troop Success Rate: " + (1 - (float)fail / troopImageNames.length));
+	}
 }

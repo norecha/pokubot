@@ -1,46 +1,64 @@
 package aok.coc.attack;
 
+import java.util.logging.Logger;
+
 import aok.coc.util.ImageParser;
+import aok.coc.util.RobotUtils;
 
 public abstract class Attack {
-	
-	public abstract void attack(int[] loot) throws InterruptedException;
-	
-	static int TOP_X = 429;
-	static int TOP_Y = 44;
-	
-	static int LEFT_X = 70;
-	static int LEFT_Y = 307;
-	
-	static int RIGHT_X = 775;
-	static int RIGHT_Y = 307;
-	
-	static int BOTTOM_LEFT_X = 379;
-	static int BOTTOM_LEFT_Y = 565;
-	
-	static int BOTTOM_RIGHT_X = 481;
-	static int BOTTOM_RIGHT_Y = 567;
+	private static final Logger	logger			= Logger.getLogger(Attack.class.getName());
 
-	static final int[][] pointsBetweenFromToInclusive(int fromX, int fromY, int toX, int toY, int count) {
-		
-		if (count < 2) {
+	protected static int		TOP_X			= 429;
+	protected static int		TOP_Y			= 44;
+
+	protected static int		LEFT_X			= 70;
+	protected static int		LEFT_Y			= 307;
+
+	protected static int		RIGHT_X			= 775;
+	protected static int		RIGHT_Y			= 307;
+
+	protected static int		BOTTOM_LEFT_X	= 379;
+	protected static int		BOTTOM_LEFT_Y	= 538;
+
+	protected static int		BOTTOM_RIGHT_X	= 481;
+	protected static int		BOTTOM_RIGHT_Y	= 538;
+
+	protected abstract void doDropUnits(int[] attackGroup) throws InterruptedException;
+
+	public void attack(int[] loot, int[] attackGroup) throws InterruptedException {
+		logger.info("Attacking from 2 sides.");
+		RobotUtils.zoomUp();
+
+		logger.info("Dropping units.");
+		doDropUnits(attackGroup);
+
+		checkLootChange(loot);
+		logger.info("No more loot.");
+	}
+
+	protected static final int[][] pointsBetweenFromToInclusive(int fromX, int fromY, int toX, int toY, int count) {
+
+		if (count < 1) {
 			throw new IllegalArgumentException(count + "");
+		} else if (count == 1) {
+			return new int[][] { { (toX + fromX) / 2, (toY + fromY) / 2 } };
 		}
-		
+
 		int[][] result = new int[count][2];
-		
+
 		double deltaX = (toX - fromX) / (count - 1);
 		double deltaY = (toY - fromY) / (count - 1);
-		
+
 		for (int i = 0; i < count; i++) {
 			result[i][0] = (int) (fromX + deltaX * i);
 			result[i][1] = (int) (fromY + deltaY * i);
 		}
-		
+
 		return result;
 	}
 
-	void checkLootChange(int[] loot) throws InterruptedException {
+	protected void checkLootChange(int[] loot) throws InterruptedException {
+		Thread.sleep(10000);
 		int[] prevLoot = loot;
 		int diff = Integer.MAX_VALUE;
 		int delta = 500;

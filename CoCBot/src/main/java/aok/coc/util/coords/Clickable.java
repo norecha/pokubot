@@ -30,6 +30,17 @@ public enum Clickable {
 		this.y = y;
 		this.color = color;
 	}
+	
+	public static Clickable getButtonAttackUnit(int x) {
+		switch (x) {
+		case 1:
+			return BUTTON_ATTACK_UNIT_1;
+		case 2:
+			return BUTTON_ATTACK_UNIT_2;
+		default:
+			throw new IllegalArgumentException(x + "");
+		}
+	}
 
 	public Integer getX() {
 		return x;
