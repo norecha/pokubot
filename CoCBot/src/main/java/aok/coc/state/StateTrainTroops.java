@@ -1,13 +1,11 @@
 package aok.coc.state;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.logging.Logger;
 
-import aok.coc.util.Clickable;
 import aok.coc.util.ConfigUtils;
 import aok.coc.util.RobotUtils;
+import aok.coc.util.coords.Clickable;
 
 
 public class StateTrainTroops implements State {
@@ -19,20 +17,19 @@ public class StateTrainTroops implements State {
 	}
 
 	@Override
-	public void handle(Context context) {
+	public void handle(Context context) throws InterruptedException {
 		try {
 			logger.info("StateTrainTroops");
+			// first barracks must be opened at this point
 			
-			List<Map<Clickable, Integer>> raxInfo = ConfigUtils.instance().getRaxInfo();
+			List<Clickable> raxInfo = ConfigUtils.instance().getRaxInfo();
 			for (int currRax = 0; currRax < raxInfo.size(); currRax++) {
-				Map<Clickable, Integer> map = raxInfo.get(currRax);
-				for (Entry<Clickable, Integer> entry : map.entrySet()) {
-					Clickable troop = entry.getKey();
-					int count = entry.getValue();
-					
-					for (int i = 0; i < count; i++) {
-						RobotUtils.leftClick(troop, 75);
+				Clickable troop = raxInfo.get(currRax);
+				for (int i = 0; i < RobotUtils.random.nextInt(10) + 5; i++) {
+					if (!RobotUtils.isClickableActive(troop)) {
+						throw new IllegalStateException(troop.name() + " is not found.");
 					}
+					RobotUtils.leftClick(troop, 75);
 				}
 				
 				if (currRax < raxInfo.size() - 1) {
@@ -43,16 +40,12 @@ public class StateTrainTroops implements State {
 				}
 			}
 		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
-			e.printStackTrace();
-			try {
-				RobotUtils.leftClick(Clickable.BUTTON_RAX_CLOSE, 200);
-			} catch (InterruptedException e1) {
-				Thread.currentThread().interrupt();
-				e1.printStackTrace();
-			}
-			context.setState(StateNoAction.instance());
+			RobotUtils.leftClick(Clickable.BUTTON_RAX_CLOSE, 200);
+			throw e;
 		}
+		
+		context.setState(StateMainMenu.instance());
+		Thread.sleep(3000 + RobotUtils.random.nextInt(3000));
 	}
 
 	public static StateTrainTroops instance() {

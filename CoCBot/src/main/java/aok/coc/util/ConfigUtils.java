@@ -1,12 +1,11 @@
 package aok.coc.util;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import aok.coc.attack.Attack;
 import aok.coc.attack.Attack2Side;
+import aok.coc.util.coords.Clickable;
 
 public class ConfigUtils {
 
@@ -72,33 +71,21 @@ public class ConfigUtils {
 		return false;
 	}
 	
+	public boolean isUpgradeWalls() {
+		return true;
+	}
+	
 	public Attack getAttackStrategy() {
 		return Attack2Side.instance();
 	}
 
-	/**
-	 * 
-	 * @return List of Map where each map is from Troop type to number of times they will be trained
-	 */
-	public List<Map<Clickable, Integer>> getRaxInfo() {
-		List<Map<Clickable, Integer>> list = new ArrayList<>();
-
-		// rax 1
-		Map<Clickable, Integer> rax1 = new LinkedHashMap<>();
-		rax1.put(Clickable.BUTTON_RAX_BARB, 60);
-
-		// rax 2
-		Map<Clickable, Integer> rax2 = new LinkedHashMap<>();
-		rax2.put(Clickable.BUTTON_RAX_ARCHER, 60);
-
-		// rax 3
-		Map<Clickable, Integer> rax3 = new LinkedHashMap<>();
-		rax3.put(Clickable.BUTTON_RAX_BARB, 30);
-		rax3.put(Clickable.BUTTON_RAX_ARCHER, 30);
-
-		list.add(rax1);
-		list.add(rax2);
-		list.add(rax3);
+	public List<Clickable> getRaxInfo() {
+		List<Clickable> list = new ArrayList<>();
+		
+		list.add(Clickable.BUTTON_RAX_BARB);
+		list.add(Clickable.BUTTON_RAX_BARB);
+		list.add(Clickable.BUTTON_RAX_ARCHER);
+		list.add(Clickable.BUTTON_RAX_ARCHER);
 
 		return list;
 	}

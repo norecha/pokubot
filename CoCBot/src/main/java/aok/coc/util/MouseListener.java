@@ -5,13 +5,15 @@ import java.util.logging.Logger;
 import org.jnativehook.mouse.NativeMouseEvent;
 import org.jnativehook.mouse.NativeMouseListener;
 
+import aok.coc.util.coords.Clickable;
+
 public class MouseListener implements NativeMouseListener {
 	private static final Logger	logger	= Logger.getLogger(Thread.currentThread().getClass().getName());
 
 	@Override
 	public void nativeMouseClicked(NativeMouseEvent e) {
-		Clickable.BUTTON_RAX_ICON.setX(e.getX());
-		Clickable.BUTTON_RAX_ICON.setY(e.getY());
+		Clickable.UNIT_FIRST_RAX.setX(e.getX());
+		Clickable.UNIT_FIRST_RAX.setY(e.getY());
 	}
 
 	@Override

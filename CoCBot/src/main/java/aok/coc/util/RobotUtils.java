@@ -7,11 +7,15 @@ import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
+
+import aok.coc.util.coords.Area;
+import aok.coc.util.coords.Clickable;
 
 import com.sun.jna.platform.win32.WinDef.HWND;
 
@@ -66,12 +70,16 @@ public class RobotUtils {
 	}
 
 	public static void zoomUp(int notch) throws InterruptedException {
-		System.out.println("Zooming out...");
+		logger.info("Zooming out...");
 		for (int i = 0; i < notch; i++) {
 			User32.INSTANCE.SendMessage(handler, WM_KEYDOWN, 0x28, 0X1500001);
 			Thread.sleep(350);
 		}
 		User32.INSTANCE.SendMessage(handler, WM_KEYDOWN, 0X11, 0X11d0001);
+	}
+
+	public static void zoomUp() throws InterruptedException {
+		zoomUp(20);
 	}
 
 	public static void mouseMove(int x, int y) {
@@ -127,23 +135,26 @@ public class RobotUtils {
 		}
 	}
 
+	public static BufferedImage screenShot(Area area) {
+		return screenShot(area.getX1(), area.getY1(), area.getX2(), area.getY2());
+	}
+
 	public static BufferedImage screenShot(int x1, int y1, int x2, int y2) {
 		return r.createScreenCapture(new Rectangle(x1 + offsetX, y1 + offsetY, x2 - x1, y2 - y1));
 	}
 
-	public static boolean screenShot(String fileName, int x1, int y1, int x2, int y2) {
-		try {
-			if (!(fileName.toLowerCase().endsWith(".png"))) {
-				fileName = fileName + ".png";
-			}
-			BufferedImage img = r.createScreenCapture(new Rectangle(x1 + offsetX, y1 + offsetY, x2 - x1, y2 - y1));
-			File save_path = new File(fileName);
-			ImageIO.write(img, "png", save_path);
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
+	public static File saveScreenShot(String fileName, Area area) throws IOException {
+		return saveScreenShot(fileName, area.getX1(), area.getY1(), area.getX2(), area.getY2());
+	}
+
+	public static File saveScreenShot(String fileName, int x1, int y1, int x2, int y2) throws IOException {
+		if (!(fileName.toLowerCase().endsWith(".png"))) {
+			fileName = fileName + ".png";
 		}
+		BufferedImage img = screenShot(x1, y1, x2, y2);
+		File file = new File(fileName);
+		ImageIO.write(img, "png", file);
+		return file;
 	}
 
 	public static Color pixelGetColor(int x, int y) {

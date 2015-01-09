@@ -10,7 +10,7 @@ public class Context {
 		this.current = state;
 	}
 
-	public void handle() throws BotException {
+	public void handle() throws BotException, InterruptedException {
 		current.handle(this);
 	}
 	

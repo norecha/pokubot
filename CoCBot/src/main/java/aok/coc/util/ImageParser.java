@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.logging.Logger;
 
+import aok.coc.util.coords.Area;
+
 public class ImageParser {
 	private static final Logger		logger			= Logger.getLogger(ImageParser.class.getName());
 
@@ -184,12 +186,12 @@ public class ImageParser {
 			return true;
 		}
 	}
-
+	
 	public static int[] parseLoot() {
-		BufferedImage image = RobotUtils.screenShot(20, 98, 141, 270);
-		// String fileName = "post_zort_" + System.currentTimeMillis();
-		// File save_path = new File(fileName + "_" + 0 + ".png");
-		// ImageIO.write(image, "png", save_path);
+		BufferedImage image = RobotUtils.screenShot(Area.ENEMY_LOOT.getX1(),
+													Area.ENEMY_LOOT.getY1(),
+													Area.ENEMY_LOOT.getX2(),
+													Area.ENEMY_LOOT.getY2());
 
 		int gold = parseGold(image);
 		int elixir = parseElixir(image);

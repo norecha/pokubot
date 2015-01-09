@@ -9,8 +9,7 @@ import java.util.logging.Logger;
 import aok.coc.exception.BotConfigurationException;
 import aok.coc.exception.BotException;
 import aok.coc.state.Context;
-import aok.coc.state.StateIdle;
-import aok.coc.util.ConfigUtils;
+import aok.coc.state.StateAttack;
 
 public class Launcher {
 
@@ -26,31 +25,33 @@ public class Launcher {
 	}
 
 	public static void main(String[] args) {
-		// setup the bot
-		try {
-			Setup.setup();
-		} catch (BotConfigurationException e) {
-			logger.log(Level.SEVERE, e.getMessage(), e);
-			System.exit(1);
-		}
-
 		// run the bot
 		Launcher launcher = new Launcher();
 		try {
 			launcher.start();
-		} catch (BotException e) {
+		} catch (InterruptedException e) {
+			logger.log(Level.SEVERE, e.getMessage(), e);
+			System.exit(1);
+		} catch (BotConfigurationException e) {
 			logger.log(Level.SEVERE, e.getMessage(), e);
 			System.exit(2);
+		} catch (BotException e) {
+			logger.log(Level.SEVERE, e.getMessage(), e);
+			System.exit(3);
 		}
 	}
 
-	private void start() throws BotException {
-		ConfigUtils.initialize();
+	public void start() throws BotConfigurationException, BotException, InterruptedException {
+		// setup the bot
+		Setup.setup();
+		
+		// state pattern
 		Context context = new Context();
-		context.setState(StateIdle.instance());
+		context.setState(StateAttack.instance());
+		
 		while (true) {
 			if (Thread.interrupted()) {
-				break;
+				throw new InterruptedException("Launcher is interrupted.");
 			}
 			context.handle();
 		}

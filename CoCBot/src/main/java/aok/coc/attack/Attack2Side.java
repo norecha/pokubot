@@ -1,13 +1,15 @@
 package aok.coc.attack;
 
-import java.util.Map;
+import java.util.logging.Logger;
 
-import aok.coc.util.Clickable;
 import aok.coc.util.ConfigUtils;
 import aok.coc.util.RobotUtils;
+import aok.coc.util.coords.Clickable;
 
 
 public class Attack2Side extends Attack {
+	
+	private static final Logger	logger	= Logger.getLogger(Attack.class.getName());
 	
 	private static final Attack2Side	instance	= new Attack2Side();
 
@@ -20,24 +22,24 @@ public class Attack2Side extends Attack {
 
 	@Override
 	public void attack(int[] loot) throws InterruptedException {
-		RobotUtils.zoomUp(20);
+		RobotUtils.zoomUp();
 		
 		int totalBarbCount = 0;
 		int totalArcherCount = 0;
-		for (Map<Clickable, Integer> c : ConfigUtils.instance().getRaxInfo()) {
-			if (c.containsKey(Clickable.BUTTON_RAX_BARB)) {
-				totalBarbCount += c.get(Clickable.BUTTON_RAX_BARB);
+		for (Clickable c : ConfigUtils.instance().getRaxInfo()) {
+			if (c == Clickable.BUTTON_RAX_BARB) {
+				totalBarbCount += 60;
 			}
-			if (c.containsKey(Clickable.BUTTON_RAX_ARCHER)) {
-				totalArcherCount += c.get(Clickable.BUTTON_RAX_ARCHER);
+			if (c == Clickable.BUTTON_RAX_ARCHER) {
+				totalArcherCount += 60;
 			}
 		}
-		
-		System.out.println("Dropping units.");
+
+		logger.info("Dropping units.");
 		dropUnits(totalBarbCount, totalArcherCount);
 		
 		checkLootChange(loot);
-		System.out.println("No more loot.");
+		logger.info("No more loot.");
 	}
 
 

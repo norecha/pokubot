@@ -14,6 +14,12 @@ public abstract class Attack {
 	
 	static int RIGHT_X = 775;
 	static int RIGHT_Y = 307;
+	
+	static int BOTTOM_LEFT_X = 379;
+	static int BOTTOM_LEFT_Y = 565;
+	
+	static int BOTTOM_RIGHT_X = 481;
+	static int BOTTOM_RIGHT_Y = 567;
 
 	static final int[][] pointsBetweenFromToInclusive(int fromX, int fromY, int toX, int toY, int count) {
 		

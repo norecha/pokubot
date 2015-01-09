@@ -1,11 +1,13 @@
 package aok.coc.state;
 
+import java.io.IOException;
 import java.util.logging.Logger;
 
-import aok.coc.util.Clickable;
 import aok.coc.util.ConfigUtils;
 import aok.coc.util.ImageParser;
 import aok.coc.util.RobotUtils;
+import aok.coc.util.coords.Area;
+import aok.coc.util.coords.Clickable;
 
 public class StateAttack implements State {
 	private static final Logger			logger		= Logger.getLogger(StateAttack.class.getName());
@@ -20,9 +22,16 @@ public class StateAttack implements State {
 	}
 
 	@Override
-	public void handle(Context context) {
+	public void handle(Context context) throws InterruptedException {
 		while (true) {
 			try {
+				try {
+					RobotUtils.saveScreenShot("troop_"+System.currentTimeMillis(), Area.ATTACK_GROUP);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				System.exit(0);
 				logger.info("StateAttack");
 				// attack();
 				if (Thread.interrupted()) {
@@ -71,6 +80,7 @@ public class StateAttack implements State {
 				// TODO: click yes if attack has already started
 
 				context.setState(StateIdle.instance());
+				throw e;
 			}
 		}
 	}

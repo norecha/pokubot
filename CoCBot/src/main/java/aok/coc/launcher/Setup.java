@@ -1,12 +1,28 @@
 package aok.coc.launcher;
 
 import java.awt.Rectangle;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.Properties;
+import java.util.Scanner;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.jnativehook.GlobalScreen;
+import org.jnativehook.NativeHookException;
+import org.jnativehook.mouse.NativeMouseEvent;
+import org.jnativehook.mouse.NativeMouseListener;
+
 import aok.coc.exception.BotConfigurationException;
+import aok.coc.util.ConfigUtils;
 import aok.coc.util.RobotUtils;
 import aok.coc.util.User32;
+import aok.coc.util.coords.Clickable;
 
 import com.sun.jna.platform.win32.Advapi32Util;
 import com.sun.jna.platform.win32.WinDef.HWND;
@@ -16,6 +32,7 @@ import com.sun.jna.platform.win32.WinReg.HKEYByReference;
 
 public class Setup {
 
+	public static final String	APP_NAME		= "CoCBot";
 	private static final String	BS_WINDOW_NAME	= "BlueStacks App Player";
 	private static final int	BS_RES_X		= 860;
 	private static final int	BS_RES_Y		= 720;
@@ -25,20 +42,143 @@ public class Setup {
 
 	private static final Logger	logger			= Logger.getLogger(Setup.class.getName());
 
-	public static void setup() throws BotConfigurationException {
+	public static void setup() throws BotConfigurationException, InterruptedException {
+		if (!RobotUtils.SYSTEM_OS.toLowerCase().contains("windows")) {
+			throw new BotConfigurationException("Bot is only available for Windows OS.");
+		}
+		// setup configUtils
+		logger.info("Setting up ConfigUtils...");
+		ConfigUtils.initialize();
 
 		// setup bs window handle
-		logger.info(String.format("Setting up %s window.", BS_WINDOW_NAME));
+		logger.info(String.format("Setting up %s window...", BS_WINDOW_NAME));
 		setupBsRect();
 
 		// setup resolution
-		logger.info(String.format("Setting up %s resolution.", BS_WINDOW_NAME));
+		logger.info(String.format("Setting up %s resolution...", BS_WINDOW_NAME));
 		setupResolution();
 
 		// setup RobotUtils
-		logger.info(String.format("Setting up RobotUtils.", BS_WINDOW_NAME));
+		logger.info("Setting up RobotUtils...");
 		RobotUtils.setupWin32(bsHwnd, bsRect);
 
+		// setup barracks
+		logger.info("Setting up Barracks...");
+		setupBarracks();
+	}
+
+	private static void setupBarracks() throws BotConfigurationException, InterruptedException {
+		String appdata = System.getenv("appdata");
+
+		File root = new File(appdata, APP_NAME);
+		if (!root.isDirectory()) {
+			root.mkdir();
+		}
+
+		boolean barracksConfigDone = false;
+		boolean wallsConfigDone = false;
+		String barracksCoordsProperty = "barracks_coords";
+		String wallsCoordsProperty = "walls_coords";
+		File configFile = new File(root, "config.properties");
+		Properties configProperties = new Properties();
+		if (configFile.isFile()) {
+			try (InputStream is = new FileInputStream(configFile)) {
+				configProperties.load(is);
+				if (configProperties.containsKey(barracksCoordsProperty)) {
+					String coords = configProperties.getProperty(barracksCoordsProperty);
+					try (Scanner sc = new Scanner(coords)) {
+						int x = sc.nextInt();
+						int y = sc.nextInt();
+	
+						Clickable.UNIT_FIRST_RAX.setX(x);
+						Clickable.UNIT_FIRST_RAX.setY(y);
+						
+						logger.info(String.format("Found barracks coordinates <%d, %d>", x, y));
+						barracksConfigDone = true;
+					}
+				}
+			} catch (Exception e) {
+				logger.log(Level.SEVERE, "Unable to read configuration file. Trying to run barracks setup again...");
+			}
+		}
+
+		if (!barracksConfigDone) {
+			RobotUtils.zoomUp();
+			boolean confirmed = RobotUtils.confirmationBox("You must configure the location " +
+														"of first Barracks. First Barracks is the leftmost one when you \n" +
+														"scroll through your barracks via orange next arrow on the right. For example, if you \n" +
+														"have 4 barracks, when you select the first one and click 'Train Troops', all \n" +
+														"3 'next' views should also be barracks.\n\n" +
+														"Click Yes to start configuration and click on your first barracks. Do \n" +
+														"NOT click anything else in between. Click Yes and click barracks. \n\n" +
+														"Make sure you are max zoomed out.",
+				"Barracks configuration");
+
+			if (!confirmed) {
+				throw new BotConfigurationException("Cannot proceed without barracks");
+			}
+
+			// read mouse click
+			try {
+				GlobalScreen.registerNativeHook();
+				GlobalScreen.getInstance().addNativeMouseListener(new NativeMouseListener() {
+
+					@Override
+					public void nativeMouseReleased(NativeMouseEvent e) {
+					}
+
+					@Override
+					public void nativeMousePressed(NativeMouseEvent e) {
+					}
+
+					@Override
+					public void nativeMouseClicked(NativeMouseEvent e) {
+						// not relative to window
+						int x = e.getX();
+						int y = e.getY();
+						logger.finest(String.format("clicked %d %d", e.getX(), e.getY()));
+
+						x -= bsRect.x;
+						y -= bsRect.y;
+
+						Clickable.UNIT_FIRST_RAX.setX(x);
+						Clickable.UNIT_FIRST_RAX.setY(y);
+
+						synchronized (GlobalScreen.getInstance()) {
+							GlobalScreen.getInstance().notify();
+						}
+					}
+				});
+
+				logger.info("Waiting for user to click on first barracks.");
+				synchronized (GlobalScreen.getInstance()) {
+					while (Clickable.UNIT_FIRST_RAX.getX() == null) {
+						GlobalScreen.getInstance().wait();
+					}
+				}
+				logger.info(String.format("Saved barracks location to <%d, %d>",
+					Clickable.UNIT_FIRST_RAX.getX(),
+					Clickable.UNIT_FIRST_RAX.getY()));
+
+				GlobalScreen.unregisterNativeHook();
+			} catch (NativeHookException e) {
+				throw new BotConfigurationException("Unable to capture mouse movement.", e);
+			}
+			
+			// try to write to properties file
+			try {
+				configProperties.setProperty(barracksCoordsProperty, Clickable.UNIT_FIRST_RAX.getX() + " " + Clickable.UNIT_FIRST_RAX.getY());
+				if (!configFile.isFile()) {
+					configFile.createNewFile();
+				}
+				try (OutputStream os = new FileOutputStream(configFile)) {
+					configProperties.store(os, null);
+				}
+			} catch (IOException e) {
+				// recoverable. bot can still run since we have coordinates
+				logger.log(Level.SEVERE, "Unable to save configuration file.", e);
+			}
+		}
 	}
 
 	private static void setupBsRect() throws BotConfigurationException {

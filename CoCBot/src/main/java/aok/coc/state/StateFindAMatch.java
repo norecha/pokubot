@@ -2,8 +2,8 @@ package aok.coc.state;
 
 import java.util.logging.Logger;
 
-import aok.coc.util.Clickable;
 import aok.coc.util.RobotUtils;
+import aok.coc.util.coords.Clickable;
 
 public class StateFindAMatch implements State {
 	private static final Logger				logger		= Logger.getLogger(StateFindAMatch.class.getName());
@@ -18,15 +18,13 @@ public class StateFindAMatch implements State {
 	}
 
 	@Override
-	public void handle(Context context) {
+	public void handle(Context context) throws InterruptedException {
 		logger.info("StateFindAMatch");
+		if (Thread.interrupted()) {
+			throw new InterruptedException("StateFindAMatch is interrupted.");
+		}
 		if (RobotUtils.isClickableActive(Clickable.BUTTON_FIND_A_MATCH)) {
-			try {
-				RobotUtils.leftClick(Clickable.BUTTON_FIND_A_MATCH, 200);
-			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
-				e.printStackTrace();
-			}
+			RobotUtils.leftClick(Clickable.BUTTON_FIND_A_MATCH, 200);
 
 			context.setState(StateAttack.instance());
 		} else {
