@@ -156,7 +156,7 @@ public class RobotUtils {
 		ImageIO.write(img, "png", file);
 		return file;
 	}
-
+	
 	public static Color pixelGetColor(int x, int y) {
 		Color pixel = r.getPixelColor(x + offsetX, y + offsetY);
 		return pixel;
@@ -166,8 +166,7 @@ public class RobotUtils {
 		if (clickable.getColor() == null) {
 			throw new IllegalArgumentException(clickable.name());
 		}
-
-		return pixelGetColor(clickable.getX(), clickable.getY()).equals(clickable.getColor());
+		return clickable.getColor().getRGB() == pixelGetColor(clickable.getX(), clickable.getY()).getRGB();
 	}
 
 }

@@ -9,27 +9,26 @@ public abstract class Attack {
 	private static final Logger	logger			= Logger.getLogger(Attack.class.getName());
 
 	protected static int		TOP_X			= 429;
-	protected static int		TOP_Y			= 44;
+	protected static int		TOP_Y			= 32;
 
-	protected static int		LEFT_X			= 70;
+	protected static int		LEFT_X			= 66;
 	protected static int		LEFT_Y			= 307;
 
-	protected static int		RIGHT_X			= 775;
+	protected static int		RIGHT_X			= 801;
 	protected static int		RIGHT_Y			= 307;
 
-	protected static int		BOTTOM_LEFT_X	= 379;
+	protected static int		BOTTOM_LEFT_X	= 349;
 	protected static int		BOTTOM_LEFT_Y	= 538;
 
-	protected static int		BOTTOM_RIGHT_X	= 481;
+	protected static int		BOTTOM_RIGHT_X	= 506;
 	protected static int		BOTTOM_RIGHT_Y	= 538;
 
 	protected abstract void doDropUnits(int[] attackGroup) throws InterruptedException;
 
 	public void attack(int[] loot, int[] attackGroup) throws InterruptedException {
-		logger.info("Attacking from 2 sides.");
+		logger.info("Attacking...");
 		RobotUtils.zoomUp();
 
-		logger.info("Dropping units.");
 		doDropUnits(attackGroup);
 
 		checkLootChange(loot);
@@ -71,6 +70,7 @@ public abstract class Attack {
 			for (int i = 0; i < prevLoot.length; i++) {
 				diff += prevLoot[i] - currLoot[i];
 			}
+			prevLoot = loot;
 		}
 	}
 }

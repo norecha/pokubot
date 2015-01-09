@@ -76,9 +76,9 @@ public class Setup {
 		}
 
 		boolean barracksConfigDone = false;
-		boolean wallsConfigDone = false;
+//		boolean wallsConfigDone = false;
 		String barracksCoordsProperty = "barracks_coords";
-		String wallsCoordsProperty = "walls_coords";
+//		String wallsCoordsProperty = "walls_coords";
 		File configFile = new File(root, "config.properties");
 		Properties configProperties = new Properties();
 		if (configFile.isFile()) {

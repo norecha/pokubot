@@ -39,7 +39,7 @@ public class StateMainMenu implements State {
 
 		// camp is full
 		if (RobotUtils.isClickableActive(Clickable.BUTTON_RAX_FULL)) {
-			System.out.println("Camp is full");
+			logger.info("Camp is full");
 			RobotUtils.leftClick(Clickable.BUTTON_RAX_CLOSE, 200);
 
 			RobotUtils.leftClick(Clickable.BUTTON_ATTACK, 1000);

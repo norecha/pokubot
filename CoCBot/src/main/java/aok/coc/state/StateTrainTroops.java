@@ -26,9 +26,6 @@ public class StateTrainTroops implements State {
 			for (int currRax = 0; currRax < raxInfo.size(); currRax++) {
 				Clickable troop = raxInfo.get(currRax);
 				for (int i = 0; i < RobotUtils.random.nextInt(10) + 5; i++) {
-					if (!RobotUtils.isClickableActive(troop)) {
-						throw new IllegalStateException(troop.name() + " is not found.");
-					}
 					RobotUtils.leftClick(troop, 75);
 				}
 				

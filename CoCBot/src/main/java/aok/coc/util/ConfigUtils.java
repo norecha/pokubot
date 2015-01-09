@@ -56,19 +56,19 @@ public class ConfigUtils {
 	}
 
 	public int getGoldThreshold() {
-		return 100_000;
+		return 150_000;
 	}
 
 	public int getElixirThreshold() {
-		return 100_000;
+		return 150_000;
 	}
 
 	public int getDarkElixirThreshold() {
-		return 0;
+		return 10_000;
 	}
 
 	public boolean isMatchAllConditions() {
-		return false;
+		return true;
 	}
 	
 	public boolean isUpgradeWalls() {
@@ -77,6 +77,10 @@ public class ConfigUtils {
 	
 	public Attack getAttackStrategy() {
 		return Attack4Side.instance();
+	}
+	
+	public boolean isAutoAttackEnabled() {
+		return false;
 	}
 
 	public List<Clickable> getRaxInfo() {

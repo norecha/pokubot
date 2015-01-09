@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 import aok.coc.exception.BotConfigurationException;
 import aok.coc.exception.BotException;
 import aok.coc.state.Context;
-import aok.coc.state.StateAttack;
+import aok.coc.state.StateIdle;
 
 public class Launcher {
 
@@ -47,7 +47,7 @@ public class Launcher {
 		
 		// state pattern
 		Context context = new Context();
-		context.setState(StateAttack.instance());
+		context.setState(StateIdle.instance());
 		
 		while (true) {
 			if (Thread.interrupted()) {

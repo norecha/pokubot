@@ -21,7 +21,7 @@ public class Attack2Side extends Attack {
 
 	@Override
 	protected void doDropUnits(int[] attackGroup) throws InterruptedException {
-		logger.info("Dropping units");
+		logger.info("Dropping units from 2 sides.");
 		
 		for (int unitIdx = 0; unitIdx < attackGroup.length; unitIdx++) {
 			int unitCount = attackGroup[unitIdx];
