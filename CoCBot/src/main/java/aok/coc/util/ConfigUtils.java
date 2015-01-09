@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import aok.coc.attack.Attack;
-import aok.coc.attack.Attack2Side;
+import aok.coc.attack.Attack4Side;
 import aok.coc.util.coords.Clickable;
 
 public class ConfigUtils {
@@ -76,7 +76,7 @@ public class ConfigUtils {
 	}
 	
 	public Attack getAttackStrategy() {
-		return Attack2Side.instance();
+		return Attack4Side.instance();
 	}
 
 	public List<Clickable> getRaxInfo() {
