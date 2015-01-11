@@ -16,10 +16,15 @@ public enum Clickable {
 	BUTTON_RAX_FULL(155, 536, new Color(0xD0404C)),
 	BUTTON_RAX_TRAIN(621, 626, new Color(0x708CB0)),
 	BUTTON_RAX_CLOSE(730, 150, new Color(0xF8FCFF)),
-	BUTTON_ATTACK_UNIT_1(72, 593, null),
-	BUTTON_ATTACK_UNIT_2(145, 600, null),
+	BUTTON_ATTACK_UNIT_1(72, 633, null),
+	BUTTON_ATTACK_UNIT_2(145, 633, null),
+	BUTTON_ATTACK_UNIT_3(217, 633, null),
+	BUTTON_ATTACK_UNIT_4(288, 633, null),
+	BUTTON_ATTACK_UNIT_5(361, 633, null),
 	BUTTON_WALL_UPGRADE(519, 619, new Color(0xD8CCCE)),
-	UNIT_FIRST_RAX(null, null, null);
+	UNIT_FIRST_RAX(null, null, null),
+	UNIT_BLUESTACKS_DC(633, 315, new Color(0x282828)), 
+	UNIT_RECONNECT(435, 400, null);
 	
 	private Integer	x;
 	private Integer y;

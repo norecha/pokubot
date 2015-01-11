@@ -22,7 +22,7 @@ public class StateMainMenu implements State {
 		}
 		RobotUtils.zoomUp();
 
-		Thread.sleep(100 + RobotUtils.random.nextInt(100));
+		RobotUtils.sleepRandom(350);
 		RobotUtils.leftClick(Clickable.UNIT_FIRST_RAX, 500);
 
 		if (!RobotUtils.isClickableActive(Clickable.BUTTON_RAX_TRAIN)) {

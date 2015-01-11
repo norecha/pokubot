@@ -4,6 +4,30 @@
 	<groupId>aok.coc</groupId>
 	<artifactId>cocbot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<repositories>
+		<repository>
+			<id>sikuliRep</id>
+			<url>http://oss.sonatype.org/content/groups/public</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+
+		<repository>
+			<id>com-sikulix</id>
+			<name>com-sikulix</name>
+			<url>https://oss.sonatype.org/content/groups/public</url>
+			<layout>default</layout>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</repository>
+
+	</repositories>
 	<build>
 		<plugins>
 			<plugin>
@@ -26,6 +50,11 @@
 			<groupId>net.java.dev.jna</groupId>
 			<artifactId>jna-platform</artifactId>
 			<version>4.1.0</version>
+		</dependency>
+		<dependency>
+		<groupId>org.sikuli</groupId>
+		<artifactId>sikuli-api</artifactId>
+		<version>1.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

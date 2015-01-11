@@ -56,15 +56,15 @@ public class ConfigUtils {
 	}
 
 	public int getGoldThreshold() {
-		return 150_000;
+		return 0;
 	}
 
 	public int getElixirThreshold() {
-		return 150_000;
+		return 0;
 	}
 
 	public int getDarkElixirThreshold() {
-		return 10_000;
+		return 500;
 	}
 
 	public boolean isMatchAllConditions() {
@@ -73,6 +73,18 @@ public class ConfigUtils {
 	
 	public boolean isUpgradeWalls() {
 		return true;
+	}
+	
+	public boolean doConditionsMatch(int gold, int elixir, int de) {
+		return ((isMatchAllConditions() &&
+			gold >= getGoldThreshold() &&
+			elixir >= getElixirThreshold() &&
+			de >= getDarkElixirThreshold())
+			||
+			(!isMatchAllConditions() &&
+			(gold >= getGoldThreshold() ||
+			elixir >= getElixirThreshold() ||
+			de >= getDarkElixirThreshold())));
 	}
 	
 	public Attack getAttackStrategy() {

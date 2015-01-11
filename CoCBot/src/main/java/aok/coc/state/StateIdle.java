@@ -9,6 +9,8 @@ public class StateIdle implements State {
 	private static final Logger		logger		= Logger.getLogger(StateIdle.class.getName());
 
 	private static final StateIdle	instance	= new StateIdle();
+	
+	boolean reloading = false;
 
 	private StateIdle() {
 	}
@@ -21,6 +23,13 @@ public class StateIdle implements State {
 			if (Thread.interrupted()) {
 				throw new InterruptedException("StateIdle is interrupted.");
 			}
+			
+			if (reloading) {
+				logger.info("reloading...");
+				Thread.sleep(2000);
+				continue;
+			}
+			
 			if (RobotUtils.isClickableActive(Clickable.BUTTON_ATTACK)) {
 				nextState = StateMainMenu.instance();
 				break;
@@ -40,6 +49,14 @@ public class StateIdle implements State {
 
 	public static StateIdle instance() {
 		return instance;
+	}
+
+	public boolean isReloading() {
+		return reloading;
+	}
+
+	public void setReloading(boolean reloading) {
+		this.reloading = reloading;
 	}
 
 }

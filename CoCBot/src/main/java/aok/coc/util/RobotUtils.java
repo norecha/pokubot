@@ -98,6 +98,7 @@ public class RobotUtils {
 	}
 
 	private static void leftClickWin32(int x, int y) {
+		logger.finest("clicking " + x + " " + y);
 		int lParam = makeParam(x, y);
 		User32.INSTANCE.SendMessage(handler, WM_LBUTTONDOWN, 0x00000001, lParam);
 		User32.INSTANCE.SendMessage(handler, WM_LBUTTONUP, 0x00000000, lParam);
@@ -115,6 +116,10 @@ public class RobotUtils {
 			}
 			Thread.sleep(random.nextInt(250) + 750);
 		}
+	}
+
+	public static void sleepRandom(int i) throws InterruptedException {
+		Thread.sleep(i + random.nextInt(i));
 	}
 
 	private static void msgBox(String Text, String Title) {

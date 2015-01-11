@@ -38,15 +38,15 @@ public class TestImageParser {
 	};
 	
 	private final int[][] expectedTroops = new int[][] {
-		new int[]{145,55},
-		new int[]{153,46},
-		new int[]{152,46},
-		new int[]{151,46},
-		new int[]{150,46},
-		new int[]{149,46},
-		new int[]{148,46},
-		new int[]{147,46},
-		new int[]{142,46},
+		new int[]{145,55,1},
+		new int[]{153,46,1},
+		new int[]{152,46,1},
+		new int[]{151,46,1},
+		new int[]{150,46,1},
+		new int[]{149,46,1},
+		new int[]{148,46,1},
+		new int[]{147,46,1},
+		new int[]{142,46,1},
 	};
 	
 	private final String imageLocation = "/parser_images/";
@@ -146,5 +146,18 @@ public class TestImageParser {
 			}
 		}
 		System.out.println("Troop Success Rate: " + (1 - (float)fail / troopImageNames.length));
+	}
+	
+	@Test
+	public void testBKParser() throws IOException {
+		BufferedImage image = ImageIO.read(TestImageParser.class.getResourceAsStream(imageLocation + "troop_1420928729522.png"));
+		int parseBarbKingSlot = ImageParser.parseBarbKingSlot(image);
+		
+		Assert.assertEquals(3, parseBarbKingSlot);
+
+		BufferedImage image2 = ImageIO.read(TestImageParser.class.getResourceAsStream(imageLocation + "troop_1420820765409.png"));
+		int parseBarbKingSlot2 = ImageParser.parseBarbKingSlot(image2);
+		
+		Assert.assertEquals(2, parseBarbKingSlot2);
 	}
 }

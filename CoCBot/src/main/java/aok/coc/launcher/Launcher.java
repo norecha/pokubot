@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 import aok.coc.exception.BotConfigurationException;
 import aok.coc.exception.BotException;
 import aok.coc.state.Context;
-import aok.coc.state.StateIdle;
+import aok.coc.state.StateAttack;
 
 public class Launcher {
 
@@ -47,10 +47,17 @@ public class Launcher {
 		
 		// state pattern
 		Context context = new Context();
-		context.setState(StateIdle.instance());
+		context.setState(StateAttack.instance());
+		
+		// start daemon thread that checks if you are DC'ed etc
+		logger.info("Starting disconnect detector...");
+		Thread dcThread = new Thread(new DisconnectChecker(context), "DisconnectCheckerThread");
+		dcThread.setDaemon(true);
+		dcThread.start();
 		
 		while (true) {
 			if (Thread.interrupted()) {
+				dcThread.interrupt();
 				throw new InterruptedException("Launcher is interrupted.");
 			}
 			context.handle();

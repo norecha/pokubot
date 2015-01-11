@@ -1,14 +1,25 @@
 package aok.coc.util;
 
 import java.awt.Color;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.imageio.ImageIO;
+
+import org.sikuli.core.search.RegionMatch;
+import org.sikuli.core.search.algorithm.TemplateMatcher;
 
 import aok.coc.util.coords.Area;
 
 public class ImageParser {
 	private static final int	VAR	= 5;
+	private static final int	ATTACK_GROUP_UNIT_DIFF = 72;
 
 	private static final Logger		logger			= Logger.getLogger(ImageParser.class.getName());
 
@@ -165,22 +176,58 @@ public class ImageParser {
 	static int[] parseTroopCount(BufferedImage image) {
 		int[] tmp = new int[11]; // max group size
 
-		int xStart = 30;
+		int xStart = 20;
 		final int yStart = 11;
-		final int groupDiffX = 72;
 
 		int no;
 		int curr = 0;
 		while (true) {
-			no = parseNumber(image, 3, xStart, yStart, groupDiffX - 10);
+			no = parseNumber(image, 3, xStart, yStart, ATTACK_GROUP_UNIT_DIFF - 10);
 			if (no == 0) {
 				break;
 			}
 			tmp[curr++] = no;
-			xStart += groupDiffX;
+			xStart += ATTACK_GROUP_UNIT_DIFF;
+		}
+		
+		Integer barbKingSlot = parseBarbKingSlot(image);
+		if (barbKingSlot != null) {
+			tmp[barbKingSlot] = 1;
+			
+			// if BK was found after a 0 slot, new length should be adjusted according to BK
+			// ie [110, 90, 0, BK] -> len = 4
+			curr = Math.max(curr + 1, barbKingSlot + 1);
 		}
 		
 		return Arrays.copyOf(tmp, curr);
+	}
+	
+	static Integer parseBarbKingSlot(BufferedImage image) {
+		Rectangle rectangle = findArea(image, ImageParser.class.getResource("/images/bk.png"));
+		if (rectangle == null) {
+			return null;
+		}
+		
+		return rectangle.x / ATTACK_GROUP_UNIT_DIFF;
+	}
+	
+	static Rectangle findArea(BufferedImage input, URL url) {
+		BufferedImage tar;
+		try {
+			tar = ImageIO.read(url);
+		} catch (IOException e) {
+			logger.log(Level.SEVERE, "Unable to read url " + url, e);
+			return null;
+		}
+		
+		List<RegionMatch> doFindAll = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolution(
+			input, tar, 1, 0.9);
+		
+		if (doFindAll.isEmpty()) {
+			return null;
+		} else {
+			return doFindAll.get(0).getBounds();
+		}
 	}
 
 	static int parseNumber(BufferedImage image, int type, int xStart, int yStart, int maxSearchWidth) {
