@@ -46,6 +46,7 @@ public class Setup {
 		if (!RobotUtils.SYSTEM_OS.toLowerCase().contains("windows")) {
 			throw new BotConfigurationException("Bot is only available for Windows OS.");
 		}
+		
 		// setup configUtils
 		logger.info("Setting up ConfigUtils...");
 		ConfigUtils.initialize();

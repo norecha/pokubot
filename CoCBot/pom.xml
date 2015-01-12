@@ -26,7 +26,10 @@
 				<updatePolicy>always</updatePolicy>
 			</snapshots>
 		</repository>
-
+		<repository>
+			<id>Local project repository</id>
+			<url>file:${project.basedir}/mvn_rep</url>
+		</repository>
 	</repositories>
 	<build>
 		<plugins>
@@ -36,6 +39,28 @@
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<appendAssemblyId>false</appendAssemblyId>
+					<archive>
+						<manifest>
+							<mainClass>aok.coc.launcher.Launcher</mainClass>
+						</manifest>
+					</archive>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -52,9 +77,21 @@
 			<version>4.1.0</version>
 		</dependency>
 		<dependency>
-		<groupId>org.sikuli</groupId>
-		<artifactId>sikuli-api</artifactId>
-		<version>1.0.2</version>
+			<groupId>org.sikuli</groupId>
+			<artifactId>sikuli-api</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+		<!-- local rep -->
+		<dependency>
+			<groupId>org.sikuli</groupId>
+			<artifactId>sikuli-api-standalone</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+		<!-- local rep -->
+		<dependency>
+			<groupId>jnativehook</groupId>
+			<artifactId>jnativehook</artifactId>
+			<version>1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

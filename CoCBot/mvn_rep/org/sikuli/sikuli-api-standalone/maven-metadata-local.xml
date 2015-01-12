@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>org.sikuli</groupId>
+  <artifactId>sikuli-api-standalone</artifactId>
+  <versioning>
+    <release>1.0.2</release>
+    <versions>
+      <version>1.0.2</version>
+    </versions>
+    <lastUpdated>20150112055037</lastUpdated>
+  </versioning>
+</metadata>
