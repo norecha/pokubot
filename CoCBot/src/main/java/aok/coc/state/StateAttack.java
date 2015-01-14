@@ -1,5 +1,6 @@
 package aok.coc.state;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -11,6 +12,7 @@ import javax.sound.sampled.Clip;
 import aok.coc.util.ConfigUtils;
 import aok.coc.util.ImageParser;
 import aok.coc.util.RobotUtils;
+import aok.coc.util.coords.Area;
 import aok.coc.util.coords.Clickable;
 
 public class StateAttack implements State {
@@ -42,6 +44,12 @@ public class StateAttack implements State {
 			int elixir = loot[1];
 			int de = loot[2];
 
+			try {
+				RobotUtils.saveScreenShot("attack_"+System.currentTimeMillis(), Area.ENEMY_BASE);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if (ConfigUtils.instance().doConditionsMatch(gold, elixir, de)) {
 
 				// attack or let user manually attack

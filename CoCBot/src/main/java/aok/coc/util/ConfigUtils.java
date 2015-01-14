@@ -56,11 +56,11 @@ public class ConfigUtils {
 	}
 
 	public int getGoldThreshold() {
-		return 0;
+		return 50_000;
 	}
 
 	public int getElixirThreshold() {
-		return 0;
+		return 50_000;
 	}
 
 	public int getDarkElixirThreshold() {

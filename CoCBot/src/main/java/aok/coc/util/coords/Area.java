@@ -3,7 +3,8 @@ package aok.coc.util.coords;
 public enum Area {
 
 	ENEMY_LOOT(20, 98, 141, 270),
-	ATTACK_GROUP(37, 584, 829, 683);
+	ATTACK_GROUP(37, 584, 829, 683),
+	ENEMY_BASE(34, 30, 834, 540);
 	
 	private int	x1;
 	private int	y1;

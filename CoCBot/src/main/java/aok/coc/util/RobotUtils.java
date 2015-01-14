@@ -73,13 +73,13 @@ public class RobotUtils {
 		logger.info("Zooming out...");
 		for (int i = 0; i < notch; i++) {
 			User32.INSTANCE.SendMessage(handler, WM_KEYDOWN, 0x28, 0X1500001);
-			Thread.sleep(350);
+			Thread.sleep(420);
 		}
 		User32.INSTANCE.SendMessage(handler, WM_KEYDOWN, 0X11, 0X11d0001);
 	}
 
 	public static void zoomUp() throws InterruptedException {
-		zoomUp(20);
+		zoomUp(15);
 	}
 
 	public static void mouseMove(int x, int y) {

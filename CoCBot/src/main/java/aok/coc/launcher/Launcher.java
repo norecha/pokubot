@@ -10,6 +10,8 @@ import aok.coc.exception.BotConfigurationException;
 import aok.coc.exception.BotException;
 import aok.coc.state.Context;
 import aok.coc.state.StateIdle;
+import aok.coc.util.RobotUtils;
+import aok.coc.util.coords.Area;
 
 public class Launcher {
 
@@ -44,6 +46,14 @@ public class Launcher {
 	public void start() throws BotConfigurationException, BotException, InterruptedException {
 		// setup the bot
 		Setup.setup();
+		
+		try {
+			RobotUtils.saveScreenShot("attack_"+System.currentTimeMillis(), Area.ENEMY_BASE);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.exit(0);
 		
 		// state pattern
 		Context context = new Context();
