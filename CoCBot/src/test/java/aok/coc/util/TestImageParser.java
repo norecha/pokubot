@@ -1,15 +1,13 @@
 package aok.coc.util;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.sikuli.core.search.RegionMatch;
-import org.sikuli.core.search.algorithm.TemplateMatcher;
 
 public class TestImageParser {
 
@@ -166,16 +164,13 @@ public class TestImageParser {
 	
 	@Test
 	public void testBaseParser() throws IOException {
-		BufferedImage tar = ImageIO.read(TestImageParser.class.getResourceAsStream("/elixir_images/empty_5.png"));
-		BufferedImage src = ImageIO.read(TestImageParser.class.getResourceAsStream("/full_base_images/attack_1421205259975.png"));
+		// processing: attack_1421204450459.png 1-9
+		File baseDir = new File(TestImageParser.class.getResource("/full_base_images").getFile());
 		
-		List<RegionMatch> doFindAll = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolution(
-			src, tar, 36, 0);
-		
-		System.out.println("len " + doFindAll.size());
-		for (RegionMatch i : doFindAll) {
-			System.out.println(i.getScore());
-			System.out.println(i.getBounds());
+		for (File f : baseDir.listFiles()) {
+			System.out.println("processing " + f.getName());
+			BufferedImage src = ImageIO.read(f);
+			ImageParser.parseCollectorBase(src);
 		}
 	}
 }

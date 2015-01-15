@@ -1,6 +1,6 @@
 package aok.coc.exception;
 
-public abstract class BotException extends Exception {
+public class BotException extends Exception {
 
 	/**
 	 * 

@@ -9,6 +9,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
+import aok.coc.exception.BotException;
 import aok.coc.util.ConfigUtils;
 import aok.coc.util.ImageParser;
 import aok.coc.util.RobotUtils;
@@ -30,7 +31,7 @@ public class StateAttack implements State {
 	}
 
 	@Override
-	public void handle(Context context) throws InterruptedException {
+	public void handle(Context context) throws InterruptedException, BotException {
 		while (true) {
 			logger.info("StateAttack");
 			if (Thread.interrupted()) {
@@ -45,12 +46,14 @@ public class StateAttack implements State {
 			int de = loot[2];
 
 			try {
+				ImageParser.parseCollectorBase();
 				RobotUtils.saveScreenShot("attack_"+System.currentTimeMillis(), Area.ENEMY_BASE);
+				Thread.sleep(3000);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new BotException("",e);
 			}
-			if (ConfigUtils.instance().doConditionsMatch(gold, elixir, de)) {
+			
+			if (!ConfigUtils.instance().doConditionsMatch(gold, elixir, de)) {
 
 				// attack or let user manually attack
 				if (ConfigUtils.instance().isAutoAttackEnabled()) {

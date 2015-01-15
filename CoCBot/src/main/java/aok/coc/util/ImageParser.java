@@ -1,8 +1,11 @@
 package aok.coc.util;
 
 import java.awt.Color;
+import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
@@ -108,6 +111,13 @@ public class ImageParser {
 
 	private static final int[]		widths			= new int[] { 13, 6, 10, 10, 12, 10, 11, 10, 11, 11 };
 
+	// boundaries of base according to Area.ENEMY_BASE
+	private static final Point ENEMY_BASE_LEFT = new Point(13, 313);
+	private static final Point ENEMY_BASE_TOP = new Point(401, 16);
+	private static final Point ENEMY_BASE_RIGHT = new Point(779, 312);
+	private static final Point ENEMY_BASE_BOTTOM = new Point(400, 597);
+	private static final Polygon ENEMY_BASE_POLY = new Polygon();
+	
 	static {
 		offsets[0] = OFFSET_ZERO;
 		offsets[1] = OFFSET_ONE;
@@ -130,6 +140,11 @@ public class ImageParser {
 		colors[7] = COLOR_SEVEN;
 		colors[8] = COLOR_EIGHT;
 		colors[9] = COLOR_NINE;
+		
+		ENEMY_BASE_POLY.addPoint(ENEMY_BASE_LEFT.x, ENEMY_BASE_LEFT.y);
+		ENEMY_BASE_POLY.addPoint(ENEMY_BASE_TOP.x, ENEMY_BASE_TOP.y);
+		ENEMY_BASE_POLY.addPoint(ENEMY_BASE_RIGHT.x, ENEMY_BASE_RIGHT.y);
+		ENEMY_BASE_POLY.addPoint(ENEMY_BASE_BOTTOM.x, ENEMY_BASE_BOTTOM.y);
 	}
 
 	static boolean hasDE(BufferedImage image) {
@@ -186,7 +201,14 @@ public class ImageParser {
 			if (no == 0) {
 				break;
 			}
-			tmp[curr++] = no;
+			if (no >= 5) {
+				tmp[curr] = no;
+			} else {
+				// ignore 1,2,3,4 because they are usually
+				// cc or spells
+				tmp[curr] = 0;
+			}
+			curr++;
 			xStart += ATTACK_GROUP_UNIT_DIFF;
 		}
 		
@@ -289,10 +311,7 @@ public class ImageParser {
 	}
 
 	public static int[] parseLoot() {
-		BufferedImage image = RobotUtils.screenShot(Area.ENEMY_LOOT.getX1(),
-			Area.ENEMY_LOOT.getY1(),
-			Area.ENEMY_LOOT.getX2(),
-			Area.ENEMY_LOOT.getY2());
+		BufferedImage image = RobotUtils.screenShot(Area.ENEMY_LOOT);
 
 		int gold = parseGold(image);
 		int elixir = parseElixir(image);
@@ -301,5 +320,31 @@ public class ImageParser {
 			gold, elixir, de));
 
 		return new int[] { gold, elixir, de };
+	}
+	
+	public static void parseCollectorBase() throws IOException {
+		parseCollectorBase(RobotUtils.screenShot(Area.ENEMY_BASE));
+	}
+	
+	static void parseCollectorBase(BufferedImage image) throws IOException {
+		File tarDir = new File(ImageParser.class.getResource("/elixir_images").getFile());
+		
+		for (File tarFile : tarDir.listFiles()) {
+			BufferedImage tar = ImageIO.read(tarFile);
+			List<RegionMatch> doFindAll = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolution(
+				image, tar, 7, 0.8);
+			
+			int c = 0;
+			for (RegionMatch i : doFindAll) {
+				if (!ENEMY_BASE_POLY.contains(i.x, i.y)) {
+					continue;
+				}
+				c++;
+				System.out.println("\t" + i.getBounds() + " score: " + i.getScore());
+			}
+			if (c > 0) {
+				System.out.printf("\tfound %d elixirs matching %s\n", c, tarFile.getName());
+			}
+		}
 	}
 }
