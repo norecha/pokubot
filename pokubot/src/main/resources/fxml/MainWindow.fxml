@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="418.0" prefWidth="577.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="12.0" layoutY="20.0" text="Gold more than" />
+      <Label layoutX="12.0" layoutY="50.0" text="Elixir more than" />
+      <Label layoutX="12.0" layoutY="110.0" text="Max TH level" />
+      <Label layoutX="12.0" layoutY="80.0" text="DE more than" />
+      <TextField layoutX="127.0" layoutY="15.0" prefHeight="16.0" prefWidth="51.0" text="0" />
+      <TextField layoutX="127.0" layoutY="45.0" prefHeight="16.0" prefWidth="51.0" text="0" />
+      <TextField layoutX="127.0" layoutY="75.0" prefHeight="26.0" prefWidth="51.0" text="0" />
+      <TextField layoutX="127.0" layoutY="105.0" prefHeight="26.0" prefWidth="51.0" />
+      <ScrollPane layoutX="273.0" layoutY="5.0" prefHeight="411.0" prefWidth="297.0" />
+   </children>
+</AnchorPane>
