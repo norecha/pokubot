@@ -1,15 +1,21 @@
 package aok.coc.controller;
 
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.concurrent.Worker.State;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import aok.coc.launcher.BotLauncher;
@@ -18,25 +24,31 @@ import aok.coc.util.ConfigUtils;
 public class MainWindowController {
 
 	@FXML
-	private TextField	goldField;
+	private TextField			goldField;
 	@FXML
-	private TextField	elixirField;
+	private TextField			elixirField;
 	@FXML
-	private TextField	deField;
+	private TextField			deField;
 	@FXML
-	private TextField	maxThField;
+	private TextField			maxThField;
 	@FXML
-	private CheckBox	isMatchAllConditionsCheckBox;
+	private CheckBox			isMatchAllConditionsCheckBox;
 	@FXML
-	Button				startButton;
+	private Button				startButton;
 	@FXML
-	Button				stopButton;
-	@FXML GridPane configGridPane;
+	private Button				stopButton;
+	@FXML
+	private TextArea			textArea;
+	@FXML
+	private GridPane			configGridPane;
 
-	private	BotLauncher	botLauncher = null;
-	Service<Void> setupService = null;
-	Service<Void> runnerService = null;
-	
+	private static final Logger	logger			= Logger.getLogger(MainWindowController.class.getName());
+
+	private BotLauncher			botLauncher		= null;
+	private Service<Void>		setupService	= null;
+	private Service<Void>		runnerService	= null;
+	private boolean				isSetupDone		= false;
+
 	@FXML
 	private void initialize() {
 		ChangeListener<String> intFieldListener = new ChangeListener<String>() {
@@ -56,9 +68,15 @@ public class MainWindowController {
 		elixirField.textProperty().addListener(intFieldListener);
 		deField.textProperty().addListener(intFieldListener);
 		maxThField.textProperty().addListener(intFieldListener);
-		
+
+		for (Handler h : Logger.getLogger("").getHandlers()) {
+			if (h instanceof UILogHandler) {
+				((UILogHandler) h).setTextArea(textArea);
+			}
+		}
+
 		botLauncher = new BotLauncher();
-		
+
 		setupService = new Service<Void>() {
 
 			@Override
@@ -69,23 +87,45 @@ public class MainWindowController {
 					protected Void call() throws Exception {
 						try {
 							botLauncher.setup();
+							return null;
 						} catch (Exception e) {
-							setException(e);
-							e.printStackTrace();
+							logger.log(Level.SEVERE, e.getMessage(), e);
+							throw e;
 						}
-						return null;
 					}
 				};
 			}
 		};
 		setupService.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-			
+
 			@Override
 			public void handle(WorkerStateEvent event) {
 				updateConfigGridPane();
+				isSetupDone = true;
+				logger.info("Setup is succesful.");
 			}
 		});
-		
+
+		setupService.setOnFailed(new EventHandler<WorkerStateEvent>() {
+
+			@Override
+			public void handle(WorkerStateEvent event) {
+				isSetupDone = false;
+				setupService.reset();
+				logger.info("Setup is failed.");
+			}
+		});
+
+		setupService.setOnCancelled(new EventHandler<WorkerStateEvent>() {
+
+			@Override
+			public void handle(WorkerStateEvent event) {
+				isSetupDone = false;
+				setupService.reset();
+				logger.info("Setup is cancelled.");
+			}
+		});
+
 		runnerService = new Service<Void>() {
 
 			@Override
@@ -96,66 +136,64 @@ public class MainWindowController {
 					protected Void call() throws Exception {
 						try {
 							botLauncher.start();
+							return null;
 						} catch (Exception e) {
-							setException(e);
-							e.printStackTrace();
+							logger.log(Level.SEVERE, e.getMessage(), e);
+							throw e;
 						}
-						return null;
 					}
 				};
 			}
 		};
-		
+
 		runnerService.setOnCancelled(new EventHandler<WorkerStateEvent>() {
 
 			@Override
 			public void handle(WorkerStateEvent event) {
-				// TODO Auto-generated method stub
-				System.out.println("cancelled " + event.getSource().getException());
-				event.getSource().getException().printStackTrace();
+				logger.info("runner is cancelled.");
 			}
 		});
-		
 
 		runnerService.setOnFailed(new EventHandler<WorkerStateEvent>() {
 
 			@Override
 			public void handle(WorkerStateEvent event) {
-				// TODO Auto-generated method stub
-				System.out.println("failed ");
-				event.getSource().getException().printStackTrace();
+				logger.info("runner is failed.");
 			}
 		});
 	}
 
 	@FXML
-	public void handleStartButtonAction()  {
-		setupService.start();
+	public void handleStartButtonAction() {
+		if (!isSetupDone && setupService.getState() == State.READY) {
+			setupService.start();
+		}
+
+		if (isSetupDone && runnerService.getState() == State.READY) {
+			runnerService.start();
+		}
 	}
-	
+
 	private void updateConfigGridPane() {
 		goldField.setText(ConfigUtils.instance().getGoldThreshold() + "");
 		elixirField.setText(ConfigUtils.instance().getElixirThreshold() + "");
 		deField.setText(ConfigUtils.instance().getDarkElixirThreshold() + "");
 		maxThField.setText(ConfigUtils.instance().getMaxThThreshold() + "");
-		
+
 		isMatchAllConditionsCheckBox.setSelected(ConfigUtils.instance().isMatchAllConditions());
-		
+
 		configGridPane.setVisible(true);
-		
-		runnerService.start();
 	}
 
 	@FXML
 	public void handleStopButtonAction() {
-		System.out.println("stop clicked");
 		if (setupService.isRunning()) {
-			System.out.println("setup runninginigin");
 			setupService.cancel();
+			setupService.reset();
 		}
 		if (runnerService.isRunning()) {
-			System.out.println("runner runninginigin");
 			runnerService.cancel();
+			runnerService.reset();
 		}
 	}
 

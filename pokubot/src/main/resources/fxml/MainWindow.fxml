@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.chart.*?>
 <?import java.lang.*?>
@@ -7,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="418.0" prefWidth="577.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aok.coc.controller.MainWindowController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="489.0" prefWidth="815.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aok.coc.controller.MainWindowController">
    <children>
       <GridPane fx:id="configGridPane" layoutX="12.0" layoutY="9.0" prefHeight="152.0" prefWidth="211.0" visible="false" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="80.0">
          <columnConstraints>
@@ -40,7 +41,7 @@
             </HBox>
          </children>
       </GridPane>
-      <ScrollPane layoutX="273.0" layoutY="5.0" prefHeight="398.0" prefWidth="307.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="40.0" />
+      <TextArea fx:id="textArea" editable="false" layoutX="260.0" layoutY="14.0" prefHeight="300.0" prefWidth="303.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="40.0" />
       <HBox layoutX="20.0" layoutY="40.0" prefHeight="29.0" prefWidth="211.0">
          <children>
             <Button fx:id="startButton" mnemonicParsing="false" onAction="#handleStartButtonAction" text="Start" />

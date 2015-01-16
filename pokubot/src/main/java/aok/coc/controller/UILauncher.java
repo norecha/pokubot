@@ -1,6 +1,9 @@
 package aok.coc.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -34,12 +37,19 @@ public class UILauncher extends Application {
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(UILauncher.class.getResource("/fxml/MainWindow.fxml"));
 		AnchorPane scene = loader.load();
-		
+
 		primaryStage.setScene(new Scene(scene));
-		
+
 	}
 
 	public static void main(String[] args) {
+		try (InputStream inputStream = UILauncher.class.getResourceAsStream("/logging.properties")) {
+			LogManager.getLogManager().readConfiguration(inputStream);
+		} catch (final IOException e) {
+			Logger.getAnonymousLogger().severe("Could not load default logging.properties file");
+			Logger.getAnonymousLogger().severe(e.getMessage());
+		}
+		
 		launch(args);
 	}
 }
