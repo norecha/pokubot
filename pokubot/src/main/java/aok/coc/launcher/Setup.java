@@ -1,16 +1,7 @@
 package aok.coc.launcher;
 
 import java.awt.Rectangle;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Arrays;
-import java.util.Properties;
-import java.util.Scanner;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.jnativehook.GlobalScreen;
@@ -32,7 +23,7 @@ import com.sun.jna.platform.win32.WinReg.HKEYByReference;
 
 public class Setup {
 
-	public static final String	APP_NAME		= "CoCBot";
+	public static final String	APP_NAME		= "PokuBot";
 	private static final String	BS_WINDOW_NAME	= "BlueStacks App Player";
 	private static final int	BS_RES_X		= 860;
 	private static final int	BS_RES_Y		= 720;
@@ -67,43 +58,11 @@ public class Setup {
 		logger.info("Setting up Barracks...");
 		setupBarracks();
 	}
+	
 
 	private static void setupBarracks() throws BotConfigurationException, InterruptedException {
-		String appdata = System.getenv("appdata");
-
-		File root = new File(appdata, APP_NAME);
-		if (!root.isDirectory()) {
-			root.mkdir();
-		}
-
-		boolean barracksConfigDone = false;
-//		boolean wallsConfigDone = false;
-		String barracksCoordsProperty = "barracks_coords";
-//		String wallsCoordsProperty = "walls_coords";
-		File configFile = new File(root, "config.properties");
-		Properties configProperties = new Properties();
-		if (configFile.isFile()) {
-			try (InputStream is = new FileInputStream(configFile)) {
-				configProperties.load(is);
-				if (configProperties.containsKey(barracksCoordsProperty)) {
-					String coords = configProperties.getProperty(barracksCoordsProperty);
-					try (Scanner sc = new Scanner(coords)) {
-						int x = sc.nextInt();
-						int y = sc.nextInt();
-	
-						Clickable.UNIT_FIRST_RAX.setX(x);
-						Clickable.UNIT_FIRST_RAX.setY(y);
-						
-						logger.info(String.format("Found barracks coordinates <%d, %d>", x, y));
-						barracksConfigDone = true;
-					}
-				}
-			} catch (Exception e) {
-				logger.log(Level.SEVERE, "Unable to read configuration file. Trying to run barracks setup again...");
-			}
-		}
-
-		if (!barracksConfigDone) {
+		
+		if (!ConfigUtils.instance().isBarracksConfigDone()) {
 			RobotUtils.zoomUp();
 			boolean confirmed = RobotUtils.confirmationBox("You must configure the location " +
 														"of first Barracks. First Barracks is the leftmost one when you \n" +
@@ -157,27 +116,15 @@ public class Setup {
 						GlobalScreen.getInstance().wait();
 					}
 				}
-				logger.info(String.format("Saved barracks location to <%d, %d>",
+				logger.info(String.format("Set barracks location to <%d, %d>",
 					Clickable.UNIT_FIRST_RAX.getX(),
 					Clickable.UNIT_FIRST_RAX.getY()));
+				
+				ConfigUtils.instance().setBarracksConfigDone(true);
 
 				GlobalScreen.unregisterNativeHook();
 			} catch (NativeHookException e) {
 				throw new BotConfigurationException("Unable to capture mouse movement.", e);
-			}
-			
-			// try to write to properties file
-			try {
-				configProperties.setProperty(barracksCoordsProperty, Clickable.UNIT_FIRST_RAX.getX() + " " + Clickable.UNIT_FIRST_RAX.getY());
-				if (!configFile.isFile()) {
-					configFile.createNewFile();
-				}
-				try (OutputStream os = new FileOutputStream(configFile)) {
-					configProperties.store(os, null);
-				}
-			} catch (IOException e) {
-				// recoverable. bot can still run since we have coordinates
-				logger.log(Level.SEVERE, "Unable to save configuration file.", e);
 			}
 		}
 	}

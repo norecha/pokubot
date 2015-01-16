@@ -45,16 +45,15 @@ public class StateAttack implements State {
 			int elixir = loot[1];
 			int de = loot[2];
 
-			try {
-				ImageParser.parseCollectorBase();
-				RobotUtils.saveScreenShot("attack_"+System.currentTimeMillis(), Area.ENEMY_BASE);
-				Thread.sleep(3000);
-			} catch (IOException e) {
-				throw new BotException("",e);
-			}
-			
-			if (!ConfigUtils.instance().doConditionsMatch(gold, elixir, de)) {
+			if (ConfigUtils.instance().doConditionsMatch(gold, elixir, de)) {
 
+				try {
+					ImageParser.parseCollectorBase();
+					RobotUtils.saveScreenShot("attack_"+System.currentTimeMillis(), Area.ENEMY_BASE);
+					Thread.sleep(3000);
+				} catch (IOException e) {
+					throw new BotException("",e);
+				}
 				// attack or let user manually attack
 				if (ConfigUtils.instance().isAutoAttackEnabled()) {
 					playAttackReady();
