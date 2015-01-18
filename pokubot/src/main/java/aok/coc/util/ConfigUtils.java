@@ -189,10 +189,6 @@ public class ConfigUtils {
 		return Attack4Side.instance();
 	}
 
-	public boolean isAutoAttackEnabled() {
-		return false;
-	}
-
 	public List<Clickable> getRaxInfo() {
 		List<Clickable> list = new ArrayList<>();
 
