@@ -19,11 +19,11 @@ public class DisconnectChecker implements Runnable {
 	
 	@Override
 	public void run() {
-		logger.info("running dc checker.");
+		logger.info("Running disconnect detector...");
 		try {
 			while (true) {
 				if (Thread.interrupted()) {
-					throw new InterruptedException();
+					throw new InterruptedException("Disconnect detector is interrupted.");
 				}
 				
 				if (RobotUtils.isClickableActive(Clickable.UNIT_BLUESTACKS_DC)) {

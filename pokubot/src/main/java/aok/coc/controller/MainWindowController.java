@@ -15,6 +15,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -41,6 +42,8 @@ public class MainWindowController {
 	private TextArea			textArea;
 	@FXML
 	private GridPane			configGridPane;
+	@FXML
+	private ComboBox<String>	autoAttackComboBox;
 
 	private static final Logger	logger			= Logger.getLogger(MainWindowController.class.getName());
 
@@ -51,81 +54,21 @@ public class MainWindowController {
 
 	@FXML
 	private void initialize() {
-		ChangeListener<String> intFieldListener = new ChangeListener<String>() {
-
-			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				try {
-					if (!newValue.isEmpty()) {
-						Integer.parseInt(newValue);
-					}
-				} catch (NumberFormatException e) {
-					((TextField) ((StringProperty) observable).getBean()).setText(oldValue);
-				}
-			}
-		};
-		goldField.textProperty().addListener(intFieldListener);
-		elixirField.textProperty().addListener(intFieldListener);
-		deField.textProperty().addListener(intFieldListener);
-		maxThField.textProperty().addListener(intFieldListener);
-
 		for (Handler h : Logger.getLogger("").getHandlers()) {
 			if (h instanceof UILogHandler) {
 				((UILogHandler) h).setTextArea(textArea);
 			}
 		}
-
+		
 		botLauncher = new BotLauncher();
+		
+		initializeComboBox();
+		initializeTextFields();
+		initializeSetupService();
+		initializeRunnerService();
+	}
 
-		setupService = new Service<Void>() {
-
-			@Override
-			protected Task<Void> createTask() {
-				return new Task<Void>() {
-
-					@Override
-					protected Void call() throws Exception {
-						try {
-							botLauncher.setup();
-							return null;
-						} catch (Exception e) {
-							logger.log(Level.SEVERE, e.getMessage(), e);
-							throw e;
-						}
-					}
-				};
-			}
-		};
-		setupService.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-
-			@Override
-			public void handle(WorkerStateEvent event) {
-				updateConfigGridPane();
-				isSetupDone = true;
-				logger.info("Setup is succesful.");
-			}
-		});
-
-		setupService.setOnFailed(new EventHandler<WorkerStateEvent>() {
-
-			@Override
-			public void handle(WorkerStateEvent event) {
-				isSetupDone = false;
-				setupService.reset();
-				logger.info("Setup is failed.");
-			}
-		});
-
-		setupService.setOnCancelled(new EventHandler<WorkerStateEvent>() {
-
-			@Override
-			public void handle(WorkerStateEvent event) {
-				isSetupDone = false;
-				setupService.reset();
-				logger.info("Setup is cancelled.");
-			}
-		});
-
+	private void initializeRunnerService() {
 		runnerService = new Service<Void>() {
 
 			@Override
@@ -150,7 +93,7 @@ public class MainWindowController {
 
 			@Override
 			public void handle(WorkerStateEvent event) {
-				logger.info("runner is cancelled.");
+				logger.warning("runner is cancelled.");
 			}
 		});
 
@@ -158,9 +101,91 @@ public class MainWindowController {
 
 			@Override
 			public void handle(WorkerStateEvent event) {
-				logger.info("runner is failed.");
+				logger.severe("runner is failed.");
 			}
 		});
+	}
+
+	private void initializeSetupService() {
+		setupService = new Service<Void>() {
+
+			@Override
+			protected Task<Void> createTask() {
+				return new Task<Void>() {
+
+					@Override
+					protected Void call() throws Exception {
+						try {
+							botLauncher.tearDown();
+							botLauncher.setup();
+							return null;
+						} catch (Exception e) {
+							logger.log(Level.SEVERE, e.getMessage(), e);
+							throw e;
+						}
+					}
+				};
+			}
+		};
+		setupService.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+
+			@Override
+			public void handle(WorkerStateEvent event) {
+				updateConfigGridPane();
+				isSetupDone = true;
+				logger.info("Setup is successful.");
+				logger.info("Click start to run.");
+			}
+		});
+
+		setupService.setOnFailed(new EventHandler<WorkerStateEvent>() {
+
+			@Override
+			public void handle(WorkerStateEvent event) {
+				isSetupDone = false;
+				setupService.reset();
+				logger.severe("Setup is failed.");
+			}
+		});
+
+		setupService.setOnCancelled(new EventHandler<WorkerStateEvent>() {
+
+			@Override
+			public void handle(WorkerStateEvent event) {
+				isSetupDone = false;
+				setupService.reset();
+				logger.warning("Setup is cancelled.");
+			}
+		});
+	}
+
+	private void initializeTextFields() {
+		ChangeListener<String> intFieldListener = new ChangeListener<String>() {
+
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				try {
+					if (!newValue.isEmpty()) {
+						Integer.parseInt(newValue);
+					}
+				} catch (NumberFormatException e) {
+					((TextField) ((StringProperty) observable).getBean()).setText(oldValue);
+				}
+			}
+		};
+		goldField.textProperty().addListener(intFieldListener);
+		elixirField.textProperty().addListener(intFieldListener);
+		deField.textProperty().addListener(intFieldListener);
+		maxThField.textProperty().addListener(intFieldListener);
+	}
+
+	private void initializeComboBox() {
+		autoAttackComboBox.getItems().addAll(
+			"Disabled",
+			"2 Side",
+			"4 Side"
+			);
+		autoAttackComboBox.setValue(autoAttackComboBox.getItems().get(0));
 	}
 
 	@FXML

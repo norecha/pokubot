@@ -22,7 +22,7 @@ public class BotLauncher {
 			Logger.getAnonymousLogger().severe("Could not load default logging.properties file");
 			Logger.getAnonymousLogger().severe(e.getMessage());
 		}
-		
+
 		// run the bot
 		BotLauncher launcher = new BotLauncher();
 		try {
@@ -39,29 +39,37 @@ public class BotLauncher {
 			System.exit(3);
 		}
 	}
-	
+
 	public void setup() throws BotConfigurationException, InterruptedException {
 		// setup the bot
 		Setup.setup();
+	}
+
+	public void tearDown() {
+		Setup.tearDown();
 	}
 
 	public void start() throws BotException, InterruptedException {
 		// state pattern
 		Context context = new Context();
 		context.setState(StateIdle.instance());
-		
+
 		// start daemon thread that checks if you are DC'ed etc
 		logger.info("Starting disconnect detector...");
 		Thread dcThread = new Thread(new DisconnectChecker(context), "DisconnectCheckerThread");
 		dcThread.setDaemon(true);
 		dcThread.start();
-		
-		while (true) {
-			if (Thread.interrupted()) {
-				dcThread.interrupt();
-				throw new InterruptedException("Launcher is interrupted.");
+
+		try {
+			while (true) {
+				if (Thread.interrupted()) {
+					dcThread.interrupt();
+					throw new InterruptedException("Launcher is interrupted.");
+				}
+				context.handle();
 			}
-			context.handle();
+		} finally {
+			dcThread.interrupt();
 		}
 	}
 }

@@ -48,7 +48,7 @@ public class StateAttack implements State {
 			if (ConfigUtils.instance().doConditionsMatch(gold, elixir, de)) {
 
 				try {
-					ImageParser.parseCollectorBase();
+					ImageParser.isCollectorFullBase();
 					RobotUtils.saveScreenShot("attack_"+System.currentTimeMillis(), Area.ENEMY_BASE);
 					Thread.sleep(3000);
 				} catch (IOException e) {

@@ -159,22 +159,26 @@ public class ConfigUtils {
 			configProperties.setProperty(PROPERTY_IS_MATCH_ALL_CONDS, String.valueOf(matchAllConditions));
 			configProperties.setProperty(PROPERTY_BARRACKS_COORDS, Clickable.UNIT_FIRST_RAX.getX() + " " + Clickable.UNIT_FIRST_RAX.getY());
 			configProperties.store(fos, null);
+			logger.info("Settings are saved.");
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, "Unable to save configuration file.", e);
 		}
 	}
 
 	public boolean doConditionsMatch(int gold, int elixir, int de) {
-		// if threshold is 0 or not set. match all values
-		gold = goldThreshold == 0 ? Integer.MAX_VALUE : gold;
-		elixir = elixirThreshold == 0 ? Integer.MAX_VALUE : elixir;
-		de = darkElixirThreshold == 0 ? Integer.MAX_VALUE : de;
+		// if threshold is 0 or not set, do not match based on them
 		
 		if (isMatchAllConditions()) {
+			gold = goldThreshold == 0 ? Integer.MAX_VALUE : gold;
+			elixir = elixirThreshold == 0 ? Integer.MAX_VALUE : elixir;
+			de = darkElixirThreshold == 0 ? Integer.MAX_VALUE : de;
 			return gold >= goldThreshold &&
 					elixir >= elixirThreshold &&
 					de >= darkElixirThreshold;
 		} else {
+			gold = goldThreshold == 0 ? Integer.MIN_VALUE : gold;
+			elixir = elixirThreshold == 0 ? Integer.MIN_VALUE : elixir;
+			de = darkElixirThreshold == 0 ? Integer.MIN_VALUE : de;
 			return gold >= goldThreshold ||
 					elixir >= elixirThreshold ||
 					de >= darkElixirThreshold;
@@ -246,6 +250,10 @@ public class ConfigUtils {
 
 	public void setBarracksConfigDone(boolean barracksConfigDone) {
 		this.barracksConfigDone = barracksConfigDone;
+	}
+
+	public static boolean isInitialized() {
+		return instance.isInitialized;
 	}
 
 }

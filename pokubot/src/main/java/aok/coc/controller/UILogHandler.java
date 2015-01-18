@@ -3,6 +3,7 @@ package aok.coc.controller;
 import java.util.Date;
 import java.util.logging.Formatter;
 import java.util.logging.Handler;
+import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
 import javafx.application.Platform;
@@ -15,6 +16,10 @@ public class UILogHandler extends Handler {
 
 	@Override
 	public void publish(LogRecord record) {
+		if (record.getLevel().intValue() < Level.CONFIG.intValue()) {
+			return;
+		}
+		
 		if (textArea != null) {
 			Platform.runLater(() -> textArea.appendText(formatter.format(record)));
 		}

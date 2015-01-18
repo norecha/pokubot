@@ -18,9 +18,10 @@ import aok.coc.util.coords.Area;
 import aok.coc.util.coords.Clickable;
 
 import com.sun.jna.platform.win32.WinDef.HWND;
+import com.sun.jna.platform.win32.WinDef.POINT;
 
 public class RobotUtils {
-
+//MY_CLIENT_61.638==MY_WINDOW.64.668
 	private static final Logger	logger				= Logger.getLogger(RobotUtils.class.getName());
 
 	public static final String	WORKING_DIR			= System.getProperty("user.dir");
@@ -31,8 +32,6 @@ public class RobotUtils {
 	public static final String	USER_HOME_DIR		= System.getProperty("user.home");
 
 	private static Robot		r;
-	private static Integer		offsetX				= null;
-	private static Integer		offsetY				= null;
 
 	public static Random		random				= new Random();
 
@@ -58,15 +57,12 @@ public class RobotUtils {
 
 	private static HWND			handler				= null;
 
-	public static void setup(Rectangle rect) {
-		offsetX = rect.x;
-		offsetY = rect.y;
-	}
-
-	public static void setupWin32(HWND handler, Rectangle rect) {
+	public static void setupWin32(HWND handler) {
 		RobotUtils.handler = handler;
-		offsetX = rect.x;
-		offsetY = rect.y;
+	}
+	
+	public static boolean clientToScreen(POINT clientPoint) {
+		return User32.INSTANCE.ClientToScreen(handler, clientPoint);
 	}
 
 	public static void zoomUp(int notch) throws InterruptedException {
@@ -80,10 +76,6 @@ public class RobotUtils {
 
 	public static void zoomUp() throws InterruptedException {
 		zoomUp(15);
-	}
-
-	public static void mouseMove(int x, int y) {
-		r.mouseMove(x + offsetX, y + offsetY);
 	}
 
 	public static void leftClick(Clickable clickable, int sleepInMs) throws InterruptedException {
@@ -145,7 +137,9 @@ public class RobotUtils {
 	}
 
 	public static BufferedImage screenShot(int x1, int y1, int x2, int y2) {
-		return r.createScreenCapture(new Rectangle(x1 + offsetX, y1 + offsetY, x2 - x1, y2 - y1));
+		POINT point = new POINT(x1, y1);
+		clientToScreen(point);
+		return r.createScreenCapture(new Rectangle(point.x, point.y, x2 - x1, y2 - y1));
 	}
 
 	public static File saveScreenShot(String fileName, Area area) throws IOException {
@@ -163,7 +157,9 @@ public class RobotUtils {
 	}
 	
 	public static Color pixelGetColor(int x, int y) {
-		Color pixel = r.getPixelColor(x + offsetX, y + offsetY);
+		POINT point = new POINT(x, y);
+		clientToScreen(point);
+		Color pixel = r.getPixelColor(point.x, point.y);
 		return pixel;
 	}
 
@@ -171,7 +167,26 @@ public class RobotUtils {
 		if (clickable.getColor() == null) {
 			throw new IllegalArgumentException(clickable.name());
 		}
-		return clickable.getColor().getRGB() == pixelGetColor(clickable.getX(), clickable.getY()).getRGB();
+		return compareColor(clickable.getColor().getRGB(),
+			pixelGetColor(clickable.getX(), clickable.getY()).getRGB(),
+			5);
+	}
+
+	public static boolean compareColor(int c1, int c2, int var) {
+		int r1 = (c1 >> 16) & 0xFF;
+		int r2 = (c2 >> 16) & 0xFF;
+
+		int g1 = (c1 >> 8) & 0xFF;
+		int g2 = (c2 >> 8) & 0xFF;
+
+		int b1 = (c1 >> 0) & 0xFF;
+		int b2 = (c2 >> 0) & 0xFF;
+
+		if (Math.abs(r1 - r2) > var || Math.abs(g1 - g2) > var || Math.abs(b1 - b2) > var) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 }

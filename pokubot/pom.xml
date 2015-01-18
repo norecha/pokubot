@@ -58,7 +58,7 @@
 					<appendAssemblyId>false</appendAssemblyId>
 					<archive>
 						<manifest>
-							<mainClass>aok.coc.launcher.Launcher</mainClass>
+							<mainClass>aok.coc.controller.UILauncher</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

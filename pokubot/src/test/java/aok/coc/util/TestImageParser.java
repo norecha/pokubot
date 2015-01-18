@@ -166,11 +166,29 @@ public class TestImageParser {
 	public void testBaseParser() throws IOException {
 		// processing: attack_1421204450459.png 1-9
 		File baseDir = new File(TestImageParser.class.getResource("/full_base_images").getFile());
-		
+
+		int fail = 0;
 		for (File f : baseDir.listFiles()) {
-			System.out.println("processing " + f.getName());
+			String name = f.getName();
+			System.out.println("processing " + name);
+			Integer thLevel;
+			try {
+				thLevel = Integer.parseInt(name.substring(name.lastIndexOf('_') + 1, name.lastIndexOf('.')));
+			} catch (NumberFormatException e) {
+				thLevel = null;
+			}
+			int secondIndexOf_ = name.indexOf('_', name.indexOf('_') + 1);
+			String bool = name.substring(secondIndexOf_ + 1, name.lastIndexOf('_'));
+			boolean expected = bool.equals("yes");
 			BufferedImage src = ImageIO.read(f);
-			ImageParser.parseCollectorBase(src);
+			boolean isAttackable = ImageParser.isCollectorFullBase(src);
+			try {
+				Assert.assertEquals(expected, isAttackable);
+			} catch (AssertionError e) {
+				fail++;
+				System.err.println(e.getMessage());
+			}
 		}
+		System.out.println("Base detecter Success Rate: " + (1 - (float)fail / baseDir.listFiles().length));
 	}
 }

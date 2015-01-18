@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
@@ -184,7 +185,7 @@ public class ImageParser {
 	public static int[] parseTroopCount() {
 		BufferedImage image = RobotUtils.screenShot(Area.ATTACK_GROUP);
 		int[] troopCount = parseTroopCount(image);
-		logger.fine("[Troop count: " + Arrays.toString(troopCount) + "]");
+		logger.info("[Troop count: " + Arrays.toString(troopCount) + "]");
 		return troopCount;
 	}
 
@@ -279,7 +280,7 @@ public class ImageParser {
 			for (int j = 0; j < offsets[i].length; j++) {
 				int actual = image.getRGB(xStart + offsets[i][j][0], yStart + offsets[i][j][1]);
 				int expected = colors[i][type][j];
-				if (!compareColor(actual, expected, VAR)) {
+				if (!RobotUtils.compareColor(actual, expected, VAR)) {
 					found = false;
 					break;
 				}
@@ -293,58 +294,57 @@ public class ImageParser {
 		return null;
 	}
 
-	public static boolean compareColor(int c1, int c2, int var) {
-		int r1 = (c1 >> 16) & 0xFF;
-		int r2 = (c2 >> 16) & 0xFF;
-
-		int g1 = (c1 >> 8) & 0xFF;
-		int g2 = (c2 >> 8) & 0xFF;
-
-		int b1 = (c1 >> 0) & 0xFF;
-		int b2 = (c2 >> 0) & 0xFF;
-
-		if (Math.abs(r1 - r2) > var || Math.abs(g1 - g2) > var || Math.abs(b1 - b2) > var) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-
 	public static int[] parseLoot() {
 		BufferedImage image = RobotUtils.screenShot(Area.ENEMY_LOOT);
 
 		int gold = parseGold(image);
 		int elixir = parseElixir(image);
 		int de = parseDarkElixir(image);
-		logger.fine(String.format("[gold: %d, elixir: %d, de: %d]",
+		logger.info(String.format("[gold: %d, elixir: %d, de: %d]",
 			gold, elixir, de));
 
 		return new int[] { gold, elixir, de };
 	}
 	
-	public static void parseCollectorBase() throws IOException {
-		parseCollectorBase(RobotUtils.screenShot(Area.ENEMY_BASE));
+	public static boolean isCollectorFullBase() throws IOException {
+		return isCollectorFullBase(RobotUtils.screenShot(Area.ENEMY_BASE));
 	}
 	
-	static void parseCollectorBase(BufferedImage image) throws IOException {
+	static boolean isCollectorFullBase(BufferedImage image) throws IOException {
 		File tarDir = new File(ImageParser.class.getResource("/elixir_images").getFile());
 		
+		List<Rectangle> matchedElixirs = new ArrayList<>();
+		int attackableElixirs = 0;
 		for (File tarFile : tarDir.listFiles()) {
 			BufferedImage tar = ImageIO.read(tarFile);
 			List<RegionMatch> doFindAll = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolution(
 				image, tar, 7, 0.8);
 			
 			int c = 0;
+			
+			RECT_LOOP:
 			for (RegionMatch i : doFindAll) {
 				if (!ENEMY_BASE_POLY.contains(i.x, i.y)) {
 					continue;
 				}
+				for (Rectangle r : matchedElixirs) {
+					if (r.intersects(i.getBounds())) {
+						break RECT_LOOP;
+					}
+				}
 				c++;
-				System.out.println("\t" + i.getBounds() + " score: " + i.getScore());
+				matchedElixirs.add(i.getBounds());
+				if (tarFile.getName().startsWith("empty")) {
+					attackableElixirs--;
+				} else if (tarFile.getName().startsWith("full")) {
+					attackableElixirs++;
+				}
+				logger.finest("\t" + i.getBounds() + " score: " + i.getScore());
 			}
 			if (c > 0) {
-				System.out.printf("\tfound %d elixirs matching %s\n", c, tarFile.getName());
+				logger.finest(String.format("\tfound %d elixirs matching %s\n", c, tarFile.getName()));
 			}
 		}
+		return attackableElixirs >= 0;
 	}
 }

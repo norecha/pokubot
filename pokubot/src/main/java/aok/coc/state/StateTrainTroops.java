@@ -18,27 +18,22 @@ public class StateTrainTroops implements State {
 
 	@Override
 	public void handle(Context context) throws InterruptedException {
-		try {
-			logger.info("StateTrainTroops");
-			// first barracks must be opened at this point
-			
-			List<Clickable> raxInfo = ConfigUtils.instance().getRaxInfo();
-			for (int currRax = 0; currRax < raxInfo.size(); currRax++) {
-				Clickable troop = raxInfo.get(currRax);
-				for (int i = 0; i < RobotUtils.random.nextInt(10) + 5; i++) {
-					RobotUtils.leftClick(troop, 75);
-				}
-				
-				if (currRax < raxInfo.size() - 1) {
-					// select next rax
-					RobotUtils.leftClick(Clickable.BUTTON_RAX_NEXT, 250);
-				} else {
-					RobotUtils.leftClick(Clickable.BUTTON_RAX_CLOSE, 250);
-				}
+		logger.info("StateTrainTroops");
+		// first barracks must be opened at this point
+		
+		List<Clickable> raxInfo = ConfigUtils.instance().getRaxInfo();
+		for (int currRax = 0; currRax < raxInfo.size(); currRax++) {
+			Clickable troop = raxInfo.get(currRax);
+			for (int i = 0; i < RobotUtils.random.nextInt(10) + 5; i++) {
+				RobotUtils.leftClick(troop, 75);
 			}
-		} catch (InterruptedException e) {
-			RobotUtils.leftClick(Clickable.BUTTON_RAX_CLOSE, 200);
-			throw e;
+			
+			if (currRax < raxInfo.size() - 1) {
+				// select next rax
+				RobotUtils.leftClick(Clickable.BUTTON_RAX_NEXT, 250);
+			} else {
+				RobotUtils.leftClick(Clickable.BUTTON_RAX_CLOSE, 250);
+			}
 		}
 		
 		context.setState(StateMainMenu.instance());

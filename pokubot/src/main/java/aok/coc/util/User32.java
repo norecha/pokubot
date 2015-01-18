@@ -3,6 +3,7 @@ package aok.coc.util;
 import com.sun.jna.Native;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinDef.LRESULT;
+import com.sun.jna.platform.win32.WinDef.POINT;
 import com.sun.jna.win32.StdCallLibrary;
 import com.sun.jna.win32.W32APIOptions;
 
@@ -13,6 +14,8 @@ public interface User32 extends StdCallLibrary {
 	HWND FindWindow(String lpClassName, String lpWindowName);
 
 	int GetWindowRect(HWND handle, int[] rect);
+	boolean ClientToScreen(HWND hWnd, POINT lpPoint);
+	boolean ScreenToClient(HWND hWnd, POINT lpPoint);
 	
 	HWND SetFocus(HWND hWnd);
 	boolean SetForegroundWindow(HWND hWnd);

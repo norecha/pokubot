@@ -1,6 +1,5 @@
 package aok.coc.launcher;
 
-import java.awt.Rectangle;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
@@ -17,6 +16,7 @@ import aok.coc.util.coords.Clickable;
 
 import com.sun.jna.platform.win32.Advapi32Util;
 import com.sun.jna.platform.win32.WinDef.HWND;
+import com.sun.jna.platform.win32.WinDef.POINT;
 import com.sun.jna.platform.win32.WinNT;
 import com.sun.jna.platform.win32.WinReg;
 import com.sun.jna.platform.win32.WinReg.HKEYByReference;
@@ -25,10 +25,9 @@ public class Setup {
 
 	public static final String	APP_NAME		= "PokuBot";
 	private static final String	BS_WINDOW_NAME	= "BlueStacks App Player";
-	private static final int	BS_RES_X		= 860;
-	private static final int	BS_RES_Y		= 720;
+	public static final int		BS_RES_X		= 860;
+	public static final int		BS_RES_Y		= 720;
 
-	private static Rectangle	bsRect			= null;
 	private static HWND			bsHwnd			= null;
 
 	private static final Logger	logger			= Logger.getLogger(Setup.class.getName());
@@ -37,7 +36,7 @@ public class Setup {
 		if (!RobotUtils.SYSTEM_OS.toLowerCase().contains("windows")) {
 			throw new BotConfigurationException("Bot is only available for Windows OS.");
 		}
-		
+
 		// setup configUtils
 		logger.info("Setting up ConfigUtils...");
 		ConfigUtils.initialize();
@@ -52,26 +51,31 @@ public class Setup {
 
 		// setup RobotUtils
 		logger.info("Setting up RobotUtils...");
-		RobotUtils.setupWin32(bsHwnd, bsRect);
+		RobotUtils.setupWin32(bsHwnd);
 
 		// setup barracks
 		logger.info("Setting up Barracks...");
 		setupBarracks();
 	}
-	
+
+	public static void tearDown() {
+		if (ConfigUtils.isInitialized()) {
+			ConfigUtils.close();
+		}
+	}
 
 	private static void setupBarracks() throws BotConfigurationException, InterruptedException {
-		
+
 		if (!ConfigUtils.instance().isBarracksConfigDone()) {
 			RobotUtils.zoomUp();
 			boolean confirmed = RobotUtils.confirmationBox("You must configure the location " +
-														"of first Barracks. First Barracks is the leftmost one when you \n" +
-														"scroll through your barracks via orange next arrow on the right. For example, if you \n" +
-														"have 4 barracks, when you select the first one and click 'Train Troops', all \n" +
-														"3 'next' views should also be barracks.\n\n" +
-														"Click Yes to start configuration and click on your first barracks. Do \n" +
-														"NOT click anything else in between. Click Yes and click barracks. \n\n" +
-														"Make sure you are max zoomed out.",
+															"of first Barracks. First Barracks is the leftmost one when you \n" +
+															"scroll through your barracks via orange next arrow on the right. For example, if you \n" +
+															"have 4 barracks, when you select the first one and click 'Train Troops', all \n" +
+															"3 'next' views should also be barracks.\n\n" +
+															"Click Yes to start configuration and click on your first barracks. Do \n" +
+															"NOT click anything else in between. Click Yes and click barracks. \n\n" +
+															"Make sure you are max zoomed out.",
 				"Barracks configuration");
 
 			if (!confirmed) {
@@ -97,13 +101,13 @@ public class Setup {
 						int x = e.getX();
 						int y = e.getY();
 						logger.finest(String.format("clicked %d %d", e.getX(), e.getY()));
-
-						x -= bsRect.x;
-						y -= bsRect.y;
-
-						Clickable.UNIT_FIRST_RAX.setX(x);
-						Clickable.UNIT_FIRST_RAX.setY(y);
-
+						
+						POINT screenPoint = new POINT(x, y);
+						User32.INSTANCE.ScreenToClient(bsHwnd, screenPoint);
+						
+						Clickable.UNIT_FIRST_RAX.setX(screenPoint.x);
+						Clickable.UNIT_FIRST_RAX.setY(screenPoint.y);
+						
 						synchronized (GlobalScreen.getInstance()) {
 							GlobalScreen.getInstance().notify();
 						}
@@ -119,7 +123,7 @@ public class Setup {
 				logger.info(String.format("Set barracks location to <%d, %d>",
 					Clickable.UNIT_FIRST_RAX.getX(),
 					Clickable.UNIT_FIRST_RAX.getY()));
-				
+
 				ConfigUtils.instance().setBarracksConfigDone(true);
 
 				GlobalScreen.unregisterNativeHook();
@@ -141,10 +145,8 @@ public class Setup {
 			throw new BotConfigurationException(BS_WINDOW_NAME + " is not found.");
 		}
 
-		logger.fine(String.format("The corner locations for the window \"%s\" are %s",
+		logger.finest(String.format("The corner locations for the window \"%s\" are %s",
 			BS_WINDOW_NAME, Arrays.toString(rect)));
-
-		bsRect = new Rectangle(rect[0], rect[1], rect[2] - rect[0], rect[3] - rect[1]);
 	}
 
 	private static void setupResolution() throws BotConfigurationException {
@@ -177,11 +179,13 @@ public class Setup {
 			Advapi32Util.registrySetIntValue(key.getValue(), "GuestWidth", BS_RES_X);
 			Advapi32Util.registrySetIntValue(key.getValue(), "GuestHeight", BS_RES_Y);
 			Advapi32Util.registrySetIntValue(key.getValue(), "FullScreen", 0);
+
+			throw new BotConfigurationException("Please restart " + BS_WINDOW_NAME);
+		} catch (BotConfigurationException e) {
+			throw e;
 		} catch (Exception e) {
 			throw new BotConfigurationException("Unable to change resolution. Do it manually.", e);
 		}
-
-		RobotUtils.msgBox("Please restart " + BS_WINDOW_NAME);
 	}
 
 }
