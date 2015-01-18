@@ -81,12 +81,15 @@ public class RobotUtils {
 	public static void leftClick(Clickable clickable, int sleepInMs) throws InterruptedException {
 		leftClickWin32(clickable.getX(), clickable.getY());
 		Thread.sleep(sleepInMs + random.nextInt(sleepInMs));
-		//		mouseClick("left", clickable.getX() + offsetX, clickable.getY() + offsetY);
 	}
 
 	public static void leftClick(int x, int y) {
 		leftClickWin32(x, y);
-		//		mouseClick("left", x + offsetX, y + offsetY);
+	}
+
+	public static void leftClick(int x, int y, int sleepInMs) throws InterruptedException {
+		leftClickWin32(x, y);
+		Thread.sleep(sleepInMs + random.nextInt(sleepInMs));
 	}
 
 	private static void leftClickWin32(int x, int y) {

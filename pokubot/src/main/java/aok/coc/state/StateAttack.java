@@ -1,5 +1,6 @@
 package aok.coc.state;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,6 +13,7 @@ import aok.coc.exception.BotException;
 import aok.coc.util.ConfigUtils;
 import aok.coc.util.ImageParser;
 import aok.coc.util.RobotUtils;
+import aok.coc.util.coords.Area;
 import aok.coc.util.coords.Clickable;
 
 public class StateAttack implements State {
@@ -45,13 +47,13 @@ public class StateAttack implements State {
 
 			if (ConfigUtils.instance().doConditionsMatch(gold, elixir, de)) {
 
-//				try {
-//					ImageParser.isCollectorFullBase();
-//					RobotUtils.saveScreenShot("attack_"+System.currentTimeMillis(), Area.ENEMY_BASE);
-//					Thread.sleep(3000);
-//				} catch (IOException e) {
-//					throw new BotException("",e);
-//				}
+				try {
+					ImageParser.isCollectorFullBase();
+					RobotUtils.saveScreenShot("attack_"+System.currentTimeMillis(), Area.ENEMY_BASE);
+					Thread.sleep(3000);
+				} catch (IOException e) {
+					throw new BotException("",e);
+				}
 				// attack or let user manually attack
 				if (ConfigUtils.instance().getAttackStrategy() != null) {
 					playAttackReady();
@@ -97,7 +99,7 @@ public class StateAttack implements State {
 	}
 
 	private void playAttackReady() {
-		String[] clips = new String[] { "/fight.wav", "/finishim.wav" };
+		String[] clips = new String[] { "/fight.wav", "/finishim.wav", "/getoverhere.wav" };
 		try (Clip clip = AudioSystem.getClip();
 				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
 					this.getClass().getResourceAsStream(clips[RobotUtils.random.nextInt(clips.length)]))) {

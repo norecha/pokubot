@@ -170,7 +170,6 @@ public class TestImageParser {
 		int fail = 0;
 		for (File f : baseDir.listFiles()) {
 			String name = f.getName();
-			System.out.println("processing " + name);
 			Integer thLevel;
 			try {
 				thLevel = Integer.parseInt(name.substring(name.lastIndexOf('_') + 1, name.lastIndexOf('.')));
@@ -183,7 +182,7 @@ public class TestImageParser {
 			BufferedImage src = ImageIO.read(f);
 			boolean isAttackable = ImageParser.isCollectorFullBase(src);
 			try {
-				Assert.assertEquals(expected, isAttackable);
+				Assert.assertEquals(name, expected, isAttackable);
 			} catch (AssertionError e) {
 				fail++;
 				System.err.println(e.getMessage());

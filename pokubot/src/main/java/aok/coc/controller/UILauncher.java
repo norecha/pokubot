@@ -2,6 +2,7 @@ package aok.coc.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Handler;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
@@ -34,6 +35,12 @@ public class UILauncher extends Application {
 			Logger.getAnonymousLogger().severe(e.getMessage());
 		}
 		
-		launch(args);
+		try {
+			launch(args);
+		} finally {
+			for (Handler h : Logger.getLogger("").getHandlers()) {
+				h.close();
+			}
+		}
 	}
 }

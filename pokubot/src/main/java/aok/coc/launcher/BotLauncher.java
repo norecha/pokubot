@@ -2,6 +2,7 @@ package aok.coc.launcher;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -37,6 +38,10 @@ public class BotLauncher {
 		} catch (BotException e) {
 			logger.log(Level.SEVERE, e.getMessage(), e);
 			System.exit(3);
+		} finally {
+			for (Handler h : Logger.getLogger("").getHandlers()) {
+				h.close();
+			}
 		}
 	}
 

@@ -6,7 +6,7 @@ import aok.coc.util.RobotUtils;
 import aok.coc.util.coords.Clickable;
 
 
-public class Attack2Side extends Attack {
+public class Attack2Side extends AbstractAttack {
 	
 	private static final Logger	logger	= Logger.getLogger(Attack2Side.class.getName());
 	
@@ -34,8 +34,7 @@ public class Attack2Side extends Attack {
 			} else if (unitCount == 1) { // BK etc
 				// drop from top
 				logger.finest("dropping to: " + TOP_X + "," + TOP_Y);
-				RobotUtils.leftClick(TOP_X, TOP_Y);
-				Thread.sleep(150 + RobotUtils.random.nextInt(100));
+				RobotUtils.leftClick(TOP_X, TOP_Y, PAUSE_BETWEEN_UNIT_DROP);
 			} else {
 				int[][] topToRightPoints = pointsBetweenFromToInclusive(TOP_X, TOP_Y, RIGHT_X, RIGHT_Y,
 					unitCount / 2 + unitCount % 2);
@@ -45,8 +44,7 @@ public class Attack2Side extends Attack {
 				// drop units
 				for (int[][] points : new int[][][]{topToRightPoints, topToLeftPoints}) {
 					for (int[] point : points) {
-						RobotUtils.leftClick(point[0], point[1]);
-						Thread.sleep(150 + RobotUtils.random.nextInt(100));
+						RobotUtils.leftClick(point[0], point[1], PAUSE_BETWEEN_UNIT_DROP);
 					}
 				}
 			}

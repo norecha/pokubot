@@ -184,6 +184,12 @@ public class ImageParser {
 	
 	public static int[] parseTroopCount() {
 		BufferedImage image = RobotUtils.screenShot(Area.ATTACK_GROUP);
+		try {
+			RobotUtils.saveScreenShot("tez",Area.ATTACK_GROUP);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		int[] troopCount = parseTroopCount(image);
 		logger.info("[Troop count: " + Arrays.toString(troopCount) + "]");
 		return troopCount;
@@ -345,6 +351,7 @@ public class ImageParser {
 				logger.finest(String.format("\tfound %d elixirs matching %s\n", c, tarFile.getName()));
 			}
 		}
-		return attackableElixirs >= 0;
+		// -1 incase one of them is being upgraded
+		return attackableElixirs >= -1;
 	}
 }

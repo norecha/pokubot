@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 import aok.coc.util.RobotUtils;
 import aok.coc.util.coords.Clickable;
 
-public class Attack4Side extends Attack {
+public class Attack4Side extends AbstractAttack {
 	private static final Logger			logger		= Logger.getLogger(Attack4Side.class.getName());
 
 	private static final Attack4Side	instance	= new Attack4Side();
@@ -41,18 +41,14 @@ public class Attack4Side extends Attack {
 				// drop units
 				for (int[][] points : new int[][][]{topToRightPoints, rightToBottomPoints, bottomToLeftPoints, leftToTopPoints}) {
 					for (int[] point : points) {
-						logger.finest("dropping to: " + point[0] + "," + point[1]);
-						RobotUtils.leftClick(point[0], point[1]);
-						Thread.sleep(150 + RobotUtils.random.nextInt(100));
+						RobotUtils.leftClick(point[0], point[1], PAUSE_BETWEEN_UNIT_DROP);
 					}
 				}
 			// if less, just drop from top
 			} else {
 				int[] point = new int[]{TOP_X, TOP_Y};
 				for (int i = 0; i < unitCount; i++) {
-					logger.finest("dropping to: " + point[0] + "," + point[1]);
-					RobotUtils.leftClick(point[0], point[1]);
-					Thread.sleep(150 + RobotUtils.random.nextInt(100));
+					RobotUtils.leftClick(point[0], point[1], PAUSE_BETWEEN_UNIT_DROP);
 				}
 			}
 		}

@@ -12,8 +12,8 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import aok.coc.attack.Attack;
-import aok.coc.attack.Attack4Side;
+import aok.coc.attack.AbstractAttack;
+import aok.coc.attack.Attack4SideParallel;
 import aok.coc.launcher.Setup;
 import aok.coc.util.coords.Clickable;
 
@@ -185,8 +185,8 @@ public class ConfigUtils {
 		}
 	}
 
-	public Attack getAttackStrategy() {
-		return Attack4Side.instance();
+	public AbstractAttack getAttackStrategy() {
+		return Attack4SideParallel.instance();
 	}
 
 	public List<Clickable> getRaxInfo() {

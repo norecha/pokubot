@@ -8,7 +8,7 @@ import java.awt.Color;
  */
 public enum Clickable {
 	
-	BUTTON_ATTACK(86, 623, new Color(0xA24717)),
+	BUTTON_ATTACK(63, 599, new Color(0xF0E8D8)), // make sure to pick a solid spot, some parts are transparent
 	BUTTON_FIND_A_MATCH(148, 529, new Color(0xD84B00)),
 	BUTTON_SHIELD_DISABLE(512, 397, null),
 	BUTTON_NEXT(816, 484, new Color(0xECAC28)),
@@ -20,6 +20,7 @@ public enum Clickable {
 	BUTTON_RAX_ARCHER(331, 333, null),
 	BUTTON_RAX_FULL(156, 507, new Color(0xD04048)),
 	BUTTON_RAX_TRAIN(614, 584, new Color(0xF8F4F8)),
+	BUTTON_RAX_MAX_TRAIN(565,584, new Color(0xF7F5F4)),
 	BUTTON_RAX_CLOSE(729, 145, new Color(0xF8FCFF)),
 	BUTTON_ATTACK_UNIT_1(72, 600, null),
 	BUTTON_ATTACK_UNIT_2(145, 600, null),
@@ -46,6 +47,12 @@ public enum Clickable {
 			return BUTTON_ATTACK_UNIT_1;
 		case 2:
 			return BUTTON_ATTACK_UNIT_2;
+		case 3:
+			return BUTTON_ATTACK_UNIT_3;
+		case 4:
+			return BUTTON_ATTACK_UNIT_4;
+		case 5:
+			return BUTTON_ATTACK_UNIT_5;
 		default:
 			throw new IllegalArgumentException(x + "");
 		}

@@ -25,17 +25,26 @@ public class StateMainMenu implements State {
 		RobotUtils.sleepRandom(350);
 		RobotUtils.leftClick(Clickable.UNIT_FIRST_RAX, 500);
 
-		if (!RobotUtils.isClickableActive(Clickable.BUTTON_RAX_TRAIN)) {
+		boolean maxThActive = RobotUtils.isClickableActive(Clickable.BUTTON_RAX_MAX_TRAIN);
+		boolean lowThActive = RobotUtils.isClickableActive(Clickable.BUTTON_RAX_TRAIN);
+		if (!maxThActive  && !lowThActive) {
 			// maybe rax was already open and we closed it back. try one more time
 			RobotUtils.leftClick(Clickable.UNIT_FIRST_RAX, 500);
 
+			maxThActive = RobotUtils.isClickableActive(Clickable.BUTTON_RAX_MAX_TRAIN);
+			lowThActive = RobotUtils.isClickableActive(Clickable.BUTTON_RAX_TRAIN);
 			// if still not active, throw exception
-			if (!RobotUtils.isClickableActive(Clickable.BUTTON_RAX_TRAIN)) {
+			if (!maxThActive  && !lowThActive) {
 				logger.severe("Unable to locate barracks.");
 				throw new BotConfigurationException("Barracks location is not correct.");
 			}
 		}
-		RobotUtils.leftClick(Clickable.BUTTON_RAX_TRAIN, 500);
+		
+		if (maxThActive) {
+			RobotUtils.leftClick(Clickable.BUTTON_RAX_MAX_TRAIN, 500);
+		} else {
+			RobotUtils.leftClick(Clickable.BUTTON_RAX_TRAIN, 500);
+		}
 
 		// camp is full
 		if (RobotUtils.isClickableActive(Clickable.BUTTON_RAX_FULL)) {
