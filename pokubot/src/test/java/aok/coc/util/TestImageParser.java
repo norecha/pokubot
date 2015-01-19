@@ -9,6 +9,8 @@ import javax.imageio.ImageIO;
 import org.junit.Assert;
 import org.junit.Test;
 
+import aok.coc.exception.BotException;
+
 public class TestImageParser {
 
 	private final String[]	imageNames	= new String[] { "zort_1420312983010_0.png", "zort_1420312988100_0.png", "zort_1420312993150_0.png", "zort_1420312998219_0.png", "zort_1420313003290_0.png", "zort_1420313008343_0.png", "zort_1420313013415_0.png", "zort_1420313018469_0.png", "zort_1420313023540_0.png", "zort_1420313028608_0.png", "zort_1420313033674_0.png", "zort_1420313038742_0.png", "zort_1420313043808_0.png", "zort_1420313048879_0.png", "zort_1420313053961_0.png", "zort_1420313059039_0.png", "zort_1420313064108_0.png", "zort_1420313069163_0.png", 
@@ -163,7 +165,7 @@ public class TestImageParser {
 	}
 	
 	@Test
-	public void testBaseParser() throws IOException {
+	public void testBaseParser() throws IOException, BotException {
 		// processing: attack_1421204450459.png 1-9
 		File baseDir = new File(TestImageParser.class.getResource("/full_base_images").getFile());
 

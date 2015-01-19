@@ -44,6 +44,10 @@ public class MainWindowController {
 	private GridPane			configGridPane;
 	@FXML
 	private ComboBox<String>	autoAttackComboBox;
+	@FXML
+	private CheckBox detectEmptyCollectorsCheckBox;
+	@FXML
+	private CheckBox playSoundCheckBox;
 
 	private static final Logger	logger			= Logger.getLogger(MainWindowController.class.getName());
 
@@ -62,7 +66,6 @@ public class MainWindowController {
 		
 		botLauncher = new BotLauncher();
 		
-		initializeComboBox();
 		initializeTextFields();
 		initializeSetupService();
 		initializeRunnerService();
@@ -131,6 +134,7 @@ public class MainWindowController {
 
 			@Override
 			public void handle(WorkerStateEvent event) {
+				initializeComboBox();
 				updateConfigGridPane();
 				isSetupDone = true;
 				logger.info("Setup is successful.");
@@ -181,9 +185,7 @@ public class MainWindowController {
 
 	private void initializeComboBox() {
 		autoAttackComboBox.getItems().addAll(
-			"Disabled",
-			"2 Side",
-			"4 Side"
+			ConfigUtils.instance().getAttackStrategies()
 			);
 		autoAttackComboBox.setValue(autoAttackComboBox.getItems().get(0));
 	}
@@ -206,6 +208,9 @@ public class MainWindowController {
 		maxThField.setText(ConfigUtils.instance().getMaxThThreshold() + "");
 
 		isMatchAllConditionsCheckBox.setSelected(ConfigUtils.instance().isMatchAllConditions());
+		detectEmptyCollectorsCheckBox.setSelected(ConfigUtils.instance().isDetectEmptyCollectors());
+		playSoundCheckBox.setSelected(ConfigUtils.instance().isPlaySound());
+		autoAttackComboBox.getSelectionModel().select(ConfigUtils.instance().getAttackStrategy().getClass().getSimpleName());
 
 		configGridPane.setVisible(true);
 	}
@@ -241,6 +246,9 @@ public class MainWindowController {
 		}
 
 		ConfigUtils.instance().setMatchAllConditions(isMatchAllConditionsCheckBox.isSelected());
+		ConfigUtils.instance().setDetectEmptyCollectors(detectEmptyCollectorsCheckBox.isSelected());
+		ConfigUtils.instance().setPlaySound(playSoundCheckBox.isSelected());
+		ConfigUtils.instance().setAttackStrategy(autoAttackComboBox.getValue());
 
 		ConfigUtils.instance().save();
 	}

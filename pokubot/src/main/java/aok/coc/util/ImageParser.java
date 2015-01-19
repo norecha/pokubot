@@ -19,6 +19,7 @@ import javax.imageio.ImageIO;
 import org.sikuli.core.search.RegionMatch;
 import org.sikuli.core.search.algorithm.TemplateMatcher;
 
+import aok.coc.exception.BotException;
 import aok.coc.util.coords.Area;
 
 public class ImageParser {
@@ -184,12 +185,6 @@ public class ImageParser {
 	
 	public static int[] parseTroopCount() {
 		BufferedImage image = RobotUtils.screenShot(Area.ATTACK_GROUP);
-		try {
-			RobotUtils.saveScreenShot("tez",Area.ATTACK_GROUP);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		int[] troopCount = parseTroopCount(image);
 		logger.info("[Troop count: " + Arrays.toString(troopCount) + "]");
 		return troopCount;
@@ -312,17 +307,22 @@ public class ImageParser {
 		return new int[] { gold, elixir, de };
 	}
 	
-	public static boolean isCollectorFullBase() throws IOException {
+	public static boolean isCollectorFullBase() throws BotException {
 		return isCollectorFullBase(RobotUtils.screenShot(Area.ENEMY_BASE));
 	}
 	
-	static boolean isCollectorFullBase(BufferedImage image) throws IOException {
+	static boolean isCollectorFullBase(BufferedImage image) throws BotException {
 		File tarDir = new File(ImageParser.class.getResource("/elixir_images").getFile());
 		
 		List<Rectangle> matchedElixirs = new ArrayList<>();
 		int attackableElixirs = 0;
 		for (File tarFile : tarDir.listFiles()) {
-			BufferedImage tar = ImageIO.read(tarFile);
+			BufferedImage tar;
+			try {
+				tar = ImageIO.read(tarFile);
+			} catch (IOException e) {
+				throw new BotException("Unable to read elixir file", e);
+			}
 			List<RegionMatch> doFindAll = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolution(
 				image, tar, 7, 0.8);
 			

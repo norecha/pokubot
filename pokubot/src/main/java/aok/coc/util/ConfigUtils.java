@@ -13,7 +13,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import aok.coc.attack.AbstractAttack;
+import aok.coc.attack.Attack2Side;
+import aok.coc.attack.Attack4Side;
 import aok.coc.attack.Attack4SideParallel;
+import aok.coc.attack.ManualAttack;
 import aok.coc.launcher.Setup;
 import aok.coc.util.coords.Clickable;
 
@@ -45,25 +48,37 @@ public class ConfigUtils {
 
 	//----------------------------------------------------------
 
-	private boolean				isInitialized				= false;
+	private boolean				isInitialized						= false;
 	private File				configFile;
 
-	private static final String	PROPERTY_GOLD				= "gold";
-	private static final String	PROPERTY_ELIXIR				= "elixir";
-	private static final String	PROPERTY_DE					= "de";
-	private static final String	PROPERTY_MAX_TH				= "max_th";
-	private static final String	PROPERTY_IS_MATCH_ALL_CONDS	= "match_all";
-	private static final String	PROPERTY_BARRACKS_COORDS	= "barracks_coords";
+	private static final String	PROPERTY_GOLD						= "gold";
+	private static final String	PROPERTY_ELIXIR						= "elixir";
+	private static final String	PROPERTY_DE							= "de";
+	private static final String	PROPERTY_MAX_TH						= "max_th";
+	private static final String	PROPERTY_IS_MATCH_ALL_CONDS			= "match_all";
+	private static final String	PROPERTY_BARRACKS_COORDS			= "barracks_coords";
+	private static final String	PROPERTY_DETECT_EMPTY_COLLECTORS	= "detect_empty_collectors";
+	private static final String	PROPERTY_PLAY_SOUND					= "play_sound";
+	private static final String	PROPERTY_ATTACK_STRAT				= "attack_strat";
 
-	private int					goldThreshold				= 0;
-	private int					elixirThreshold				= 0;
-	private int					darkElixirThreshold			= 0;
-	private int					maxThThreshold				= 0;
+	private int					goldThreshold						= 0;
+	private int					elixirThreshold						= 0;
+	private int					darkElixirThreshold					= 0;
+	private int					maxThThreshold						= 0;
 
-	private boolean				matchAllConditions			= false;
-	private boolean				barracksConfigDone			= false;
+	private boolean				matchAllConditions					= false;
+	private boolean				barracksConfigDone					= false;
+	private boolean				detectEmptyCollectors				= false;
+	private boolean				playSound							= false;
+	private AbstractAttack		attackStrategy						= ManualAttack.instance();
 
-	private static final Logger	logger						= Logger.getLogger(ConfigUtils.class.getName());
+	private final AbstractAttack[]	availableAttacks					= new AbstractAttack[] {
+																	ManualAttack.instance(),
+																	Attack2Side.instance(),
+																	Attack4Side.instance(),
+																	Attack4SideParallel.instance() };
+
+	private static final Logger	logger								= Logger.getLogger(ConfigUtils.class.getName());
 
 	public synchronized static void initialize() throws IllegalStateException {
 		// Throw exception if called twice
@@ -108,6 +123,21 @@ public class ConfigUtils {
 				String matchAllCondsProperty = configProperties.getProperty(PROPERTY_IS_MATCH_ALL_CONDS);
 				if (matchAllCondsProperty != null) {
 					instance.matchAllConditions = Boolean.parseBoolean(matchAllCondsProperty);
+				}
+
+				String detectEmptyCollectorsProperty = configProperties.getProperty(PROPERTY_DETECT_EMPTY_COLLECTORS);
+				if (detectEmptyCollectorsProperty != null) {
+					instance.detectEmptyCollectors = Boolean.parseBoolean(detectEmptyCollectorsProperty);
+				}
+
+				String playSoundProperty = configProperties.getProperty(PROPERTY_PLAY_SOUND);
+				if (playSoundProperty != null) {
+					instance.playSound = Boolean.parseBoolean(playSoundProperty);
+				}
+
+				String attackStratProperty = configProperties.getProperty(PROPERTY_ATTACK_STRAT);
+				if (attackStratProperty != null) {
+					instance.setAttackStrategy(attackStratProperty);
 				}
 
 				String barracksCoordsProperty = configProperties.getProperty(PROPERTY_BARRACKS_COORDS);
@@ -157,6 +187,9 @@ public class ConfigUtils {
 			configProperties.setProperty(PROPERTY_DE, String.valueOf(darkElixirThreshold));
 			configProperties.setProperty(PROPERTY_MAX_TH, String.valueOf(maxThThreshold));
 			configProperties.setProperty(PROPERTY_IS_MATCH_ALL_CONDS, String.valueOf(matchAllConditions));
+			configProperties.setProperty(PROPERTY_DETECT_EMPTY_COLLECTORS, String.valueOf(detectEmptyCollectors));
+			configProperties.setProperty(PROPERTY_PLAY_SOUND, String.valueOf(playSound));
+			configProperties.setProperty(PROPERTY_ATTACK_STRAT, String.valueOf(attackStrategy.getClass().getSimpleName()));
 			configProperties.setProperty(PROPERTY_BARRACKS_COORDS, Clickable.UNIT_FIRST_RAX.getX() + " " + Clickable.UNIT_FIRST_RAX.getY());
 			configProperties.store(fos, null);
 			logger.info("Settings are saved.");
@@ -167,7 +200,7 @@ public class ConfigUtils {
 
 	public boolean doConditionsMatch(int gold, int elixir, int de) {
 		// if threshold is 0 or not set, do not match based on them
-		
+
 		if (isMatchAllConditions()) {
 			gold = goldThreshold == 0 ? Integer.MAX_VALUE : gold;
 			elixir = elixirThreshold == 0 ? Integer.MAX_VALUE : elixir;
@@ -187,6 +220,16 @@ public class ConfigUtils {
 
 	public AbstractAttack getAttackStrategy() {
 		return Attack4SideParallel.instance();
+	}
+
+	public String[] getAttackStrategies() {
+		
+		String[] result = new String[availableAttacks.length];
+		for (int i = 0; i < availableAttacks.length; i++) {
+			AbstractAttack a = availableAttacks[i];
+			result[i] = a.getClass().getSimpleName();
+		}
+		return result;
 	}
 
 	public List<Clickable> getRaxInfo() {
@@ -250,6 +293,36 @@ public class ConfigUtils {
 
 	public static boolean isInitialized() {
 		return instance.isInitialized;
+	}
+
+	public boolean isDetectEmptyCollectors() {
+		return detectEmptyCollectors;
+	}
+
+	public void setDetectEmptyCollectors(boolean detectEmptyCollectors) {
+		this.detectEmptyCollectors = detectEmptyCollectors;
+	}
+
+	public boolean isPlaySound() {
+		return playSound;
+	}
+
+	public void setPlaySound(boolean playSound) {
+		this.playSound = playSound;
+	}
+
+	public void setAttackStrategy(String attackStrategy) {
+		boolean found = false;
+		for (AbstractAttack attack : availableAttacks) {
+			if (attack.getClass().getSimpleName().equals(attackStrategy)) {
+				this.attackStrategy = attack;
+				found = true;
+				break;
+			}
+		}
+		if (!found) {
+			throw new IllegalArgumentException(attackStrategy);
+		}
 	}
 
 }

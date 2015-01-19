@@ -61,17 +61,25 @@ public class BotLauncher {
 
 		// start daemon thread that checks if you are DC'ed etc
 		logger.info("Starting disconnect detector...");
-		Thread dcThread = new Thread(new DisconnectChecker(context), "DisconnectCheckerThread");
+		Thread dcThread = new Thread(new DisconnectChecker(context, Thread.currentThread()), "DisconnectCheckerThread");
 		dcThread.setDaemon(true);
 		dcThread.start();
 
 		try {
 			while (true) {
 				if (Thread.interrupted()) {
-					dcThread.interrupt();
-					throw new InterruptedException("Launcher is interrupted.");
+					throw new InterruptedException("BotLauncher is interrupted.");
 				}
-				context.handle();
+				try {
+					context.handle();
+				} catch (InterruptedException e) {
+					if (!context.isTempInterrupted()) {
+						throw e;
+					} else {
+						// keep looping in case of disconnect checker interrupting.
+						context.setTempInterrupted(false);
+					}
+				}
 			}
 		} finally {
 			dcThread.interrupt();
