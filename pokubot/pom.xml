@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>aok.coc</groupId>
 	<artifactId>pokubot</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<repositories>
 		<repository>
 			<id>sikuliRep</id>
@@ -59,6 +59,8 @@
 					<archive>
 						<manifest>
 							<mainClass>aok.coc.controller.UILauncher</mainClass>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
 						</manifest>
 					</archive>
 				</configuration>

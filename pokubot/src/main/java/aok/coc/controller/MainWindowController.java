@@ -16,11 +16,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import aok.coc.launcher.BotLauncher;
 import aok.coc.util.ConfigUtils;
+import aok.coc.util.coords.Clickable;
 
 public class MainWindowController {
 
@@ -45,9 +47,19 @@ public class MainWindowController {
 	@FXML
 	private ComboBox<String>	autoAttackComboBox;
 	@FXML
-	private CheckBox detectEmptyCollectorsCheckBox;
+	private CheckBox			detectEmptyCollectorsCheckBox;
 	@FXML
-	private CheckBox playSoundCheckBox;
+	private CheckBox			playSoundCheckBox;
+	@FXML
+	private Label				versionLabel;
+	@FXML
+	private ComboBox<String>	rax1ComboBox;
+	@FXML
+	private ComboBox<String>	rax2ComboBox;
+	@FXML
+	private ComboBox<String>	rax3ComboBox;
+	@FXML
+	private ComboBox<String>	rax4ComboBox;
 
 	private static final Logger	logger			= Logger.getLogger(MainWindowController.class.getName());
 
@@ -63,12 +75,20 @@ public class MainWindowController {
 				((UILogHandler) h).setTextArea(textArea);
 			}
 		}
-		
+
 		botLauncher = new BotLauncher();
-		
+
+		initializeLabels();
 		initializeTextFields();
 		initializeSetupService();
 		initializeRunnerService();
+	}
+
+	private void initializeLabels() {
+		String version = getClass().getPackage().getImplementationVersion();
+		if (version != null) {
+			versionLabel.setText("PokuBot v" + version);
+		}
 	}
 
 	private void initializeRunnerService() {
@@ -84,7 +104,7 @@ public class MainWindowController {
 							botLauncher.start();
 							return null;
 						} catch (Exception e) {
-							logger.log(Level.SEVERE, e.getMessage(), e);
+							logger.log(Level.SEVERE, "runner: " + e.getMessage(), e);
 							throw e;
 						}
 					}
@@ -97,6 +117,7 @@ public class MainWindowController {
 			@Override
 			public void handle(WorkerStateEvent event) {
 				logger.warning("runner is cancelled.");
+				runnerService.reset();
 			}
 		});
 
@@ -105,6 +126,7 @@ public class MainWindowController {
 			@Override
 			public void handle(WorkerStateEvent event) {
 				logger.severe("runner is failed.");
+				runnerService.reset();
 			}
 		});
 	}
@@ -188,6 +210,26 @@ public class MainWindowController {
 			ConfigUtils.instance().getAttackStrategies()
 			);
 		autoAttackComboBox.setValue(autoAttackComboBox.getItems().get(0));
+
+		Clickable[] availableTroops = ConfigUtils.instance().getAvailableTroops();
+		String[] troops = new String[availableTroops.length];
+		for (int i = 0; i < availableTroops.length; i++) {
+			Clickable c = availableTroops[i];
+			troops[i] = c.getDescription();
+		}
+
+		rax1ComboBox.getItems().addAll(
+			troops
+			);
+		rax2ComboBox.getItems().addAll(
+			troops
+			);
+		rax3ComboBox.getItems().addAll(
+			troops
+			);
+		rax4ComboBox.getItems().addAll(
+			troops
+			);
 	}
 
 	@FXML
@@ -211,6 +253,10 @@ public class MainWindowController {
 		detectEmptyCollectorsCheckBox.setSelected(ConfigUtils.instance().isDetectEmptyCollectors());
 		playSoundCheckBox.setSelected(ConfigUtils.instance().isPlaySound());
 		autoAttackComboBox.getSelectionModel().select(ConfigUtils.instance().getAttackStrategy().getClass().getSimpleName());
+		rax1ComboBox.getSelectionModel().select(ConfigUtils.instance().getRaxInfo()[0].getDescription());
+		rax2ComboBox.getSelectionModel().select(ConfigUtils.instance().getRaxInfo()[1].getDescription());
+		rax3ComboBox.getSelectionModel().select(ConfigUtils.instance().getRaxInfo()[2].getDescription());
+		rax4ComboBox.getSelectionModel().select(ConfigUtils.instance().getRaxInfo()[3].getDescription());
 
 		configGridPane.setVisible(true);
 	}
@@ -249,6 +295,10 @@ public class MainWindowController {
 		ConfigUtils.instance().setDetectEmptyCollectors(detectEmptyCollectorsCheckBox.isSelected());
 		ConfigUtils.instance().setPlaySound(playSoundCheckBox.isSelected());
 		ConfigUtils.instance().setAttackStrategy(autoAttackComboBox.getValue());
+		ConfigUtils.instance().getRaxInfo()[0] = Clickable.fromDescription(rax1ComboBox.getValue());
+		ConfigUtils.instance().getRaxInfo()[1] = Clickable.fromDescription(rax2ComboBox.getValue());
+		ConfigUtils.instance().getRaxInfo()[2] = Clickable.fromDescription(rax3ComboBox.getValue());
+		ConfigUtils.instance().getRaxInfo()[3] = Clickable.fromDescription(rax4ComboBox.getValue());
 
 		ConfigUtils.instance().save();
 	}

@@ -36,6 +36,9 @@ public class Setup {
 		if (!RobotUtils.SYSTEM_OS.toLowerCase().contains("windows")) {
 			throw new BotConfigurationException("Bot is only available for Windows OS.");
 		}
+		
+		// disable display off
+//		Kernel32.INSTANCE.SetThreadExecutionState(Kernel32.ES_SYSTEM_REQUIRED | Kernel32.ES_CONTINUOUS | Kernel32.ES_DISPLAY_REQUIRED);
 
 		// setup configUtils
 		logger.info("Setting up ConfigUtils...");

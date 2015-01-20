@@ -151,10 +151,15 @@ public class ImageParser {
 
 	static boolean hasDE(BufferedImage image) {
 		int deCheck = image.getRGB(20, 0);
-		if (deCheck == new Color(128, 117, 43).getRGB()) {
+		if (RobotUtils.compareColor(deCheck, new Color(128, 117, 43).getRGB(), 2)) {
 			return true;
-		} else if (deCheck == 0xffb1a841) {
+		} else if (RobotUtils.compareColor(deCheck, 0xffb1a841, 2)) {
 			return false;
+//		}
+//		if (deCheck == new Color(128, 117, 43).getRGB()) {
+//			return true;
+//		} else if (deCheck == 0xffb1a841) {
+//			return false;
 		} else {
 			throw new IllegalArgumentException(Integer.toHexString(deCheck));
 		}
@@ -351,7 +356,7 @@ public class ImageParser {
 				logger.finest(String.format("\tfound %d elixirs matching %s\n", c, tarFile.getName()));
 			}
 		}
-		// -1 incase one of them is being upgraded
-		return attackableElixirs >= -1;
+		
+		return attackableElixirs >= 0;
 	}
 }

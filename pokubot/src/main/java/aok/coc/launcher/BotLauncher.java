@@ -11,10 +11,13 @@ import aok.coc.exception.BotConfigurationException;
 import aok.coc.exception.BotException;
 import aok.coc.state.Context;
 import aok.coc.state.StateIdle;
+;
 
 public class BotLauncher {
 
 	private static final Logger	logger	= Logger.getLogger(BotLauncher.class.getName());
+	
+	private boolean waitingForDcChecker = false;
 
 	public static void main(String[] args) {
 		try (InputStream inputStream = BotLauncher.class.getResourceAsStream("/logging.properties")) {
@@ -54,35 +57,73 @@ public class BotLauncher {
 		Setup.tearDown();
 	}
 
-	public void start() throws BotException, InterruptedException {
+	public void start() throws InterruptedException, BotException {
 		// state pattern
 		Context context = new Context();
-		context.setState(StateIdle.instance());
 
 		// start daemon thread that checks if you are DC'ed etc
 		logger.info("Starting disconnect detector...");
-		Thread dcThread = new Thread(new DisconnectChecker(context, Thread.currentThread()), "DisconnectCheckerThread");
+		Thread dcThread = new Thread(new DisconnectChecker(context, Thread.currentThread(), this), "DisconnectCheckerThread");
 		dcThread.setDaemon(true);
 		dcThread.start();
 
 		try {
 			while (true) {
-				if (Thread.interrupted()) {
-					throw new InterruptedException("BotLauncher is interrupted.");
-				}
-				try {
-					context.handle();
-				} catch (InterruptedException e) {
-					if (!context.isTempInterrupted()) {
-						throw e;
-					} else {
-						// keep looping in case of disconnect checker interrupting.
-						context.setTempInterrupted(false);
-					}
-				}
+				context.setState(StateIdle.instance());
+				loop(context);
 			}
 		} finally {
 			dcThread.interrupt();
 		}
+	}
+
+	private void loop(Context context) throws InterruptedException, BotException {
+		Exception botException; // throw in case of timeout
+		try {
+			while (true) {
+				if (Thread.interrupted()) {
+					throw new InterruptedException("BotLauncher is interrupted.");
+				}
+				context.handle();
+			}
+		} catch (InterruptedException e) {
+			// either by dc checker
+			if (context.isDisconnected()) {
+				logger.info("Interrupted by dc checker.");
+				context.setDisconnected(false);
+				context.setWaitDone(false);
+				return;
+			// or by user
+			} else {
+				logger.info("Interrupted by user.");
+				throw e;
+			}
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, e.getMessage(), e);
+			botException = e;
+		}
+		
+		final long timeout = 10 * 60 * 1000;
+		// wait for dc checker to wake me up
+		synchronized (context) {
+			while (!context.isWaitDone()) {
+				long tBefore = System.currentTimeMillis();
+				
+				logger.info("Waiting for dc checker to wake me up...");
+				this.waitingForDcChecker = true;
+				context.wait(timeout);
+				
+				if ((System.currentTimeMillis() - tBefore) > timeout) {
+					throw new BotException("Timed Out.", botException);
+				}
+			}
+			context.setWaitDone(false);
+		}
+		this.waitingForDcChecker = false;
+		logger.info("Woken up. Launching again...");
+	}
+
+	public boolean isWaitingForDcChecker() {
+		return waitingForDcChecker;
 	}
 }

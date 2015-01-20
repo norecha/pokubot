@@ -69,7 +69,7 @@ public class RobotUtils {
 		logger.info("Zooming out...");
 		for (int i = 0; i < notch; i++) {
 			User32.INSTANCE.SendMessage(handler, WM_KEYDOWN, 0x28, 0X1500001);
-			Thread.sleep(420);
+			Thread.sleep(450);
 		}
 		User32.INSTANCE.SendMessage(handler, WM_KEYDOWN, 0X11, 0X11d0001);
 	}
@@ -170,6 +170,10 @@ public class RobotUtils {
 		if (clickable.getColor() == null) {
 			throw new IllegalArgumentException(clickable.name());
 		}
+		
+		System.out.print("isclickable:" + clickable.name());
+		System.out.println("expected: " + Integer.toHexString(clickable.getColor().getRGB()) + " " +
+				"actual: " + Integer.toHexString(pixelGetColor(clickable.getX(), clickable.getY()).getRGB()));
 		return compareColor(clickable.getColor().getRGB(),
 			pixelGetColor(clickable.getX(), clickable.getY()).getRGB(),
 			5);

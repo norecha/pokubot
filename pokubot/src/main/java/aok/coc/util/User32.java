@@ -14,10 +14,21 @@ public interface User32 extends StdCallLibrary {
 	HWND FindWindow(String lpClassName, String lpWindowName);
 
 	int GetWindowRect(HWND handle, int[] rect);
+
 	boolean ClientToScreen(HWND hWnd, POINT lpPoint);
+
 	boolean ScreenToClient(HWND hWnd, POINT lpPoint);
-	
+
 	HWND SetFocus(HWND hWnd);
+
 	boolean SetForegroundWindow(HWND hWnd);
+
 	LRESULT SendMessage(HWND hWnd, int Msg, int wParam, int lParam);
+
+	int SetThreadExecutionState(int EXECUTION_STATE);
+
+	int	ES_DISPLAY_REQUIRED	= 0x00000002;
+	int	ES_SYSTEM_REQUIRED	= 0x00000001;
+	int	ES_CONTINUOUS		= 0x80000000;
+
 }

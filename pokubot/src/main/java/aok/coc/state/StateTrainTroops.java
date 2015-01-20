@@ -1,6 +1,5 @@
 package aok.coc.state;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 import aok.coc.util.ConfigUtils;
@@ -21,14 +20,19 @@ public class StateTrainTroops implements State {
 		logger.info("StateTrainTroops");
 		// first barracks must be opened at this point
 		
-		List<Clickable> raxInfo = ConfigUtils.instance().getRaxInfo();
-		for (int currRax = 0; currRax < raxInfo.size(); currRax++) {
-			Clickable troop = raxInfo.get(currRax);
-			for (int i = 0; i < RobotUtils.random.nextInt(10) + 5; i++) {
+		Clickable[] raxInfo = ConfigUtils.instance().getRaxInfo();
+		for (int currRax = 0; currRax < raxInfo.length; currRax++) {
+			Clickable troop = raxInfo[currRax];
+			
+			if (troop == Clickable.BUTTON_RAX_NO_UNIT) {
+				continue;
+			}
+			
+			for (int i = 0; i < RobotUtils.random.nextInt(5) + 5; i++) {
 				RobotUtils.leftClick(troop, 75);
 			}
 			
-			if (currRax < raxInfo.size() - 1) {
+			if (currRax < raxInfo.length - 1) {
 				// select next rax
 				RobotUtils.leftClick(Clickable.BUTTON_RAX_NEXT, 250);
 			} else {
@@ -37,7 +41,7 @@ public class StateTrainTroops implements State {
 		}
 		
 		context.setState(StateMainMenu.instance());
-		Thread.sleep(3000 + RobotUtils.random.nextInt(3000));
+		Thread.sleep(6000 + RobotUtils.random.nextInt(6000));
 	}
 
 	public static StateTrainTroops instance() {

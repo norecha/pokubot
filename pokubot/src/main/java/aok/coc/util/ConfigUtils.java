@@ -5,8 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -17,6 +15,7 @@ import aok.coc.attack.Attack2Side;
 import aok.coc.attack.Attack4Side;
 import aok.coc.attack.Attack4SideParallel;
 import aok.coc.attack.ManualAttack;
+import aok.coc.exception.BotConfigurationException;
 import aok.coc.launcher.Setup;
 import aok.coc.util.coords.Clickable;
 
@@ -48,37 +47,63 @@ public class ConfigUtils {
 
 	//----------------------------------------------------------
 
-	private boolean				isInitialized						= false;
-	private File				configFile;
+	private boolean					isInitialized						= false;
+	private File					configFile;
 
-	private static final String	PROPERTY_GOLD						= "gold";
-	private static final String	PROPERTY_ELIXIR						= "elixir";
-	private static final String	PROPERTY_DE							= "de";
-	private static final String	PROPERTY_MAX_TH						= "max_th";
-	private static final String	PROPERTY_IS_MATCH_ALL_CONDS			= "match_all";
-	private static final String	PROPERTY_BARRACKS_COORDS			= "barracks_coords";
-	private static final String	PROPERTY_DETECT_EMPTY_COLLECTORS	= "detect_empty_collectors";
-	private static final String	PROPERTY_PLAY_SOUND					= "play_sound";
-	private static final String	PROPERTY_ATTACK_STRAT				= "attack_strat";
+	private static final String		PROPERTY_GOLD						= "gold";
+	private static final String		PROPERTY_ELIXIR						= "elixir";
+	private static final String		PROPERTY_DE							= "de";
+	private static final String		PROPERTY_MAX_TH						= "max_th";
+	private static final String		PROPERTY_IS_MATCH_ALL_CONDS			= "match_all";
+	private static final String		PROPERTY_BARRACKS_COORDS			= "barracks_coords";
+	private static final String		PROPERTY_DETECT_EMPTY_COLLECTORS	= "detect_empty_collectors";
+	private static final String		PROPERTY_PLAY_SOUND					= "play_sound";
+	private static final String		PROPERTY_ATTACK_STRAT				= "attack_strat";
+	private static final String		PROPERTY_RAX_INFO					= "rax_info";
 
-	private int					goldThreshold						= 0;
-	private int					elixirThreshold						= 0;
-	private int					darkElixirThreshold					= 0;
-	private int					maxThThreshold						= 0;
+	// default values
+	private int						goldThreshold						= 0;
+	private int						elixirThreshold						= 0;
+	private int						darkElixirThreshold					= 0;
+	private int						maxThThreshold						= 0;
 
-	private boolean				matchAllConditions					= false;
-	private boolean				barracksConfigDone					= false;
-	private boolean				detectEmptyCollectors				= false;
-	private boolean				playSound							= false;
-	private AbstractAttack		attackStrategy						= ManualAttack.instance();
+	private boolean					matchAllConditions					= false;
+	private boolean					barracksConfigDone					= false;
+	private boolean					detectEmptyCollectors				= false;
+	private boolean					playSound							= false;
+
+	private final Clickable[]		raxInfo								= new Clickable[] {
+																		Clickable.BUTTON_RAX_BARB,
+																		Clickable.BUTTON_RAX_BARB,
+																		Clickable.BUTTON_RAX_ARCHER,
+																		Clickable.BUTTON_RAX_ARCHER,
+																		};
+
+	// default values end
+
+	private AbstractAttack			attackStrategy						= ManualAttack.instance();
+
+	private final Clickable[]		availableTroops						= new Clickable[] {
+																		Clickable.BUTTON_RAX_NO_UNIT,
+																		Clickable.BUTTON_RAX_BARB,
+																		Clickable.BUTTON_RAX_ARCHER,
+																		Clickable.BUTTON_RAX_GIANT,
+																		Clickable.BUTTON_RAX_GOBLIN,
+																		Clickable.BUTTON_RAX_WB,
+																		Clickable.BUTTON_RAX_BALLOON,
+																		Clickable.BUTTON_RAX_WIZARD,
+																		Clickable.BUTTON_RAX_HEALER,
+																		Clickable.BUTTON_RAX_DRAGON,
+																		Clickable.BUTTON_RAX_PEKKA
+																		};
 
 	private final AbstractAttack[]	availableAttacks					= new AbstractAttack[] {
-																	ManualAttack.instance(),
-																	Attack2Side.instance(),
-																	Attack4Side.instance(),
-																	Attack4SideParallel.instance() };
+																		ManualAttack.instance(),
+																		Attack2Side.instance(),
+																		Attack4Side.instance(),
+																		Attack4SideParallel.instance() };
 
-	private static final Logger	logger								= Logger.getLogger(ConfigUtils.class.getName());
+	private static final Logger		logger								= Logger.getLogger(ConfigUtils.class.getName());
 
 	public synchronized static void initialize() throws IllegalStateException {
 		// Throw exception if called twice
@@ -140,6 +165,11 @@ public class ConfigUtils {
 					instance.setAttackStrategy(attackStratProperty);
 				}
 
+				String raxInfoProperty = configProperties.getProperty(PROPERTY_RAX_INFO);
+				if (raxInfoProperty != null) {
+					instance.setRaxInfo(raxInfoProperty);
+				}
+
 				String barracksCoordsProperty = configProperties.getProperty(PROPERTY_BARRACKS_COORDS);
 				if (barracksCoordsProperty != null) {
 					try (Scanner sc = new Scanner(barracksCoordsProperty)) {
@@ -191,6 +221,17 @@ public class ConfigUtils {
 			configProperties.setProperty(PROPERTY_PLAY_SOUND, String.valueOf(playSound));
 			configProperties.setProperty(PROPERTY_ATTACK_STRAT, String.valueOf(attackStrategy.getClass().getSimpleName()));
 			configProperties.setProperty(PROPERTY_BARRACKS_COORDS, Clickable.UNIT_FIRST_RAX.getX() + " " + Clickable.UNIT_FIRST_RAX.getY());
+			
+			StringBuilder raxProp = new StringBuilder();
+			for (int i = 0; i < raxInfo.length; i++) {
+				Clickable unit = raxInfo[i];
+				if (i > 0) {
+					raxProp.append(", ");
+				}
+				raxProp.append(unit.getDescription());
+			}
+			configProperties.setProperty(PROPERTY_RAX_INFO, raxProp.toString());
+			
 			configProperties.store(fos, null);
 			logger.info("Settings are saved.");
 		} catch (Exception e) {
@@ -223,24 +264,13 @@ public class ConfigUtils {
 	}
 
 	public String[] getAttackStrategies() {
-		
+
 		String[] result = new String[availableAttacks.length];
 		for (int i = 0; i < availableAttacks.length; i++) {
 			AbstractAttack a = availableAttacks[i];
 			result[i] = a.getClass().getSimpleName();
 		}
 		return result;
-	}
-
-	public List<Clickable> getRaxInfo() {
-		List<Clickable> list = new ArrayList<>();
-
-		list.add(Clickable.BUTTON_RAX_BARB);
-		list.add(Clickable.BUTTON_RAX_BARB);
-		list.add(Clickable.BUTTON_RAX_ARCHER);
-		list.add(Clickable.BUTTON_RAX_ARCHER);
-
-		return list;
 	}
 
 	public int getGoldThreshold() {
@@ -323,6 +353,25 @@ public class ConfigUtils {
 		if (!found) {
 			throw new IllegalArgumentException(attackStrategy);
 		}
+	}
+
+	public Clickable[] getAvailableTroops() {
+		return availableTroops;
+	}
+
+	public void setRaxInfo(String raxInfoProperty) throws BotConfigurationException {
+		String[] splits = raxInfoProperty.split("\\s*,\\s*");
+		if (splits.length != 4) {
+			throw new BotConfigurationException("There must be 4 rax in config file");
+		}
+		for (int i = 0; i < splits.length; i++) {
+			String split = splits[i];
+			raxInfo[i] = Clickable.fromDescription(split);
+		}
+	}
+
+	public Clickable[] getRaxInfo() {
+		return raxInfo;
 	}
 
 }
