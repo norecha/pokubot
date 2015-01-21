@@ -1,5 +1,6 @@
 package aok.coc.state;
 
+import java.net.URL;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -98,9 +99,9 @@ public class StateAttack implements State {
 			return;
 		}
 		String[] clips = new String[] { "/fight.wav", "/finishim.wav", "/getoverhere.wav" };
+		URL resource = this.getClass().getResource(clips[RobotUtils.random.nextInt(clips.length)]);
 		try (Clip clip = AudioSystem.getClip();
-				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
-					this.getClass().getResourceAsStream(clips[RobotUtils.random.nextInt(clips.length)]))) {
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(resource)) {
 
 			clip.open(audioInputStream);
 			clip.start();
