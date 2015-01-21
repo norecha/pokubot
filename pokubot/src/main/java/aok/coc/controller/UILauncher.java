@@ -34,7 +34,7 @@ public class UILauncher extends Application {
 			Logger.getAnonymousLogger().severe("Could not load default logging.properties file");
 			Logger.getAnonymousLogger().severe(e.getMessage());
 		}
-		
+
 		try {
 			launch(args);
 		} finally {

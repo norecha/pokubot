@@ -171,9 +171,6 @@ public class RobotUtils {
 			throw new IllegalArgumentException(clickable.name());
 		}
 		
-		System.out.print("isclickable:" + clickable.name());
-		System.out.println("expected: " + Integer.toHexString(clickable.getColor().getRGB()) + " " +
-				"actual: " + Integer.toHexString(pixelGetColor(clickable.getX(), clickable.getY()).getRGB()));
 		return compareColor(clickable.getColor().getRGB(),
 			pixelGetColor(clickable.getX(), clickable.getY()).getRGB(),
 			5);

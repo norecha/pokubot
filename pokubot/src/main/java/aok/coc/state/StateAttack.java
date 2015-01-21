@@ -46,7 +46,9 @@ public class StateAttack implements State {
 
 			if (ConfigUtils.instance().doConditionsMatch(gold, elixir, de) &&
 				(!ConfigUtils.instance().isDetectEmptyCollectors() || ImageParser.isCollectorFullBase())) {
-				
+			
+//			// debug
+//			if (true) {
 				// attack or let user manually attack
 				if (ConfigUtils.instance().getAttackStrategy() != ManualAttack.instance()) {
 					playAttackReady();

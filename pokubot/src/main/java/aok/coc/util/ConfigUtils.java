@@ -14,6 +14,8 @@ import aok.coc.attack.AbstractAttack;
 import aok.coc.attack.Attack2Side;
 import aok.coc.attack.Attack4Side;
 import aok.coc.attack.Attack4SideParallel;
+import aok.coc.attack.Attack4SideParallelFull2Wave;
+import aok.coc.attack.Attack4SideParallelHalf2Wave;
 import aok.coc.attack.ManualAttack;
 import aok.coc.exception.BotConfigurationException;
 import aok.coc.launcher.Setup;
@@ -101,7 +103,10 @@ public class ConfigUtils {
 																		ManualAttack.instance(),
 																		Attack2Side.instance(),
 																		Attack4Side.instance(),
-																		Attack4SideParallel.instance() };
+																		Attack4SideParallel.instance(),
+																		Attack4SideParallelHalf2Wave.instance(),
+																		Attack4SideParallelFull2Wave.instance(),
+																		};
 
 	private static final Logger		logger								= Logger.getLogger(ConfigUtils.class.getName());
 
@@ -260,7 +265,7 @@ public class ConfigUtils {
 	}
 
 	public AbstractAttack getAttackStrategy() {
-		return Attack4SideParallel.instance();
+		return this.attackStrategy;
 	}
 
 	public String[] getAttackStrategies() {

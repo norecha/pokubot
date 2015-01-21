@@ -24,7 +24,7 @@ public abstract class AbstractAttack {
 	protected static int		BOTTOM_RIGHT_X	= 537;
 	protected static int		BOTTOM_RIGHT_Y	= 538;
 	
-	protected static final int	PAUSE_BETWEEN_UNIT_DROP = 62;
+	protected static final int	PAUSE_BETWEEN_UNIT_DROP = 65;
 
 	protected abstract void doDropUnits(int[] attackGroup) throws InterruptedException;
 
@@ -40,8 +40,8 @@ public abstract class AbstractAttack {
 
 	protected static final int[][] pointsBetweenFromToInclusive(int fromX, int fromY, int toX, int toY, int count) {
 
-		if (count < 1) {
-			throw new IllegalArgumentException(count + "");
+		if (count <= 0) {
+			return new int[0][0];
 		} else if (count == 1) {
 			return new int[][] { { (toX + fromX) / 2, (toY + fromY) / 2 } };
 		}

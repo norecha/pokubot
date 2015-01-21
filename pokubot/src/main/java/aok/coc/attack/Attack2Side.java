@@ -29,23 +29,15 @@ public class Attack2Side extends AbstractAttack {
 			// select unit
 			RobotUtils.leftClick(Clickable.getButtonAttackUnit(unitIdx + 1), 100);
 			
-			if (unitCount == 0) {
-				continue;
-			} else if (unitCount == 1) { // BK etc
-				// drop from top
-				logger.finest("dropping to: " + TOP_X + "," + TOP_Y);
-				RobotUtils.leftClick(TOP_X, TOP_Y, PAUSE_BETWEEN_UNIT_DROP);
-			} else {
-				int[][] topToRightPoints = pointsBetweenFromToInclusive(TOP_X, TOP_Y, RIGHT_X, RIGHT_Y,
-					unitCount / 2 + unitCount % 2);
-				int[][] topToLeftPoints = pointsBetweenFromToInclusive(TOP_X, TOP_Y, LEFT_X, LEFT_Y,
-					unitCount / 2);
-				
-				// drop units
-				for (int[][] points : new int[][][]{topToRightPoints, topToLeftPoints}) {
-					for (int[] point : points) {
-						RobotUtils.leftClick(point[0], point[1], PAUSE_BETWEEN_UNIT_DROP);
-					}
+			int[][] topToRightPoints = pointsBetweenFromToInclusive(TOP_X, TOP_Y, RIGHT_X, RIGHT_Y,
+				unitCount / 2 + unitCount % 2);
+			int[][] topToLeftPoints = pointsBetweenFromToInclusive(TOP_X, TOP_Y, LEFT_X, LEFT_Y,
+				unitCount / 2);
+			
+			// drop units
+			for (int[][] points : new int[][][]{topToRightPoints, topToLeftPoints}) {
+				for (int[] point : points) {
+					RobotUtils.leftClick(point[0], point[1], PAUSE_BETWEEN_UNIT_DROP);
 				}
 			}
 		}

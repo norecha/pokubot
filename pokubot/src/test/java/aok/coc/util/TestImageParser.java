@@ -3,6 +3,9 @@ package aok.coc.util;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
@@ -12,6 +15,15 @@ import org.junit.Test;
 import aok.coc.exception.BotException;
 
 public class TestImageParser {
+	
+	static {
+		try (InputStream inputStream = TestImageParser.class.getResourceAsStream("/logging.properties")) {
+			LogManager.getLogManager().readConfiguration(inputStream);
+		} catch (final IOException e) {
+			Logger.getAnonymousLogger().severe("Could not load default logging.properties file");
+			Logger.getAnonymousLogger().severe(e.getMessage());
+		}
+	}
 
 	private final String[]	imageNames	= new String[] { "zort_1420312983010_0.png", "zort_1420312988100_0.png", "zort_1420312993150_0.png", "zort_1420312998219_0.png", "zort_1420313003290_0.png", "zort_1420313008343_0.png", "zort_1420313013415_0.png", "zort_1420313018469_0.png", "zort_1420313023540_0.png", "zort_1420313028608_0.png", "zort_1420313033674_0.png", "zort_1420313038742_0.png", "zort_1420313043808_0.png", "zort_1420313048879_0.png", "zort_1420313053961_0.png", "zort_1420313059039_0.png", "zort_1420313064108_0.png", "zort_1420313069163_0.png", 
 			"zort_1420313074233_0.png", "zort_1420313079309_0.png", "zort_1420317535502_0.png" };
