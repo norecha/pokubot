@@ -4,6 +4,7 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javafx.application.HostServices;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -11,14 +12,18 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker.State;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import aok.coc.launcher.BotLauncher;
 import aok.coc.util.ConfigUtils;
@@ -60,6 +65,14 @@ public class MainWindowController {
 	private ComboBox<String>	rax3ComboBox;
 	@FXML
 	private ComboBox<String>	rax4ComboBox;
+	@FXML
+	private Hyperlink			githubLink;
+	@FXML
+	private Hyperlink			donateLink;
+	@FXML
+	private ImageView			heartImage;
+	@FXML
+	private Label				donateLabel;
 
 	private static final Logger	logger			= Logger.getLogger(MainWindowController.class.getName());
 
@@ -67,6 +80,8 @@ public class MainWindowController {
 	private Service<Void>		setupService	= null;
 	private Service<Void>		runnerService	= null;
 	private boolean				isSetupDone		= false;
+
+	private HostServices		hostServices	= null;
 
 	@FXML
 	private void initialize() {
@@ -78,16 +93,42 @@ public class MainWindowController {
 
 		botLauncher = new BotLauncher();
 
+		initializeLinks();
 		initializeLabels();
 		initializeTextFields();
 		initializeSetupService();
 		initializeRunnerService();
 	}
 
+	private void initializeLinks() {
+		githubLink.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent t) {
+				hostServices.showDocument(githubLink.getText());
+				githubLink.setVisited(false);
+			}
+		});
+
+		Image heartIcon = new Image(getClass().getResourceAsStream("/images/heart.png"));
+		donateLink.setGraphic(new ImageView(heartIcon));
+
+		donateLink.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				hostServices.showDocument("https://github.com/norecha/pokubot#donate");
+				donateLink.setVisited(false);
+			}
+		});
+	}
+
 	private void initializeLabels() {
 		String version = getClass().getPackage().getImplementationVersion();
 		if (version != null) {
 			versionLabel.setText("PokuBot v" + version);
+		} else {
+			versionLabel.setText("");
 		}
 	}
 
@@ -301,6 +342,10 @@ public class MainWindowController {
 		ConfigUtils.instance().getRaxInfo()[3] = Clickable.fromDescription(rax4ComboBox.getValue());
 
 		ConfigUtils.instance().save();
+	}
+
+	public void setHostServices(HostServices hostServices) {
+		this.hostServices = hostServices;
 	}
 
 }

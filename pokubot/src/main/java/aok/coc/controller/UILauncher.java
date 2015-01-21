@@ -22,6 +22,7 @@ public class UILauncher extends Application {
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(UILauncher.class.getResource("/fxml/MainWindow.fxml"));
 		AnchorPane scene = loader.load();
+		loader.<MainWindowController>getController().setHostServices(this.getHostServices());
 
 		primaryStage.setScene(new Scene(scene));
 		primaryStage.show();

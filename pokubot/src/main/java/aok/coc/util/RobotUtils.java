@@ -79,20 +79,26 @@ public class RobotUtils {
 	}
 
 	public static void leftClick(Clickable clickable, int sleepInMs) throws InterruptedException {
-		leftClickWin32(clickable.getX(), clickable.getY());
+		boolean randomize = clickable != Clickable.UNIT_FIRST_RAX;
+		leftClickWin32(clickable.getX(), clickable.getY(), randomize);
 		Thread.sleep(sleepInMs + random.nextInt(sleepInMs));
 	}
 
 	public static void leftClick(int x, int y) {
-		leftClickWin32(x, y);
+		leftClickWin32(x, y, false);
 	}
 
 	public static void leftClick(int x, int y, int sleepInMs) throws InterruptedException {
-		leftClickWin32(x, y);
+		leftClickWin32(x, y, false);
 		Thread.sleep(sleepInMs + random.nextInt(sleepInMs));
 	}
 
-	private static void leftClickWin32(int x, int y) {
+	private static void leftClickWin32(int x, int y, boolean randomize) {
+		// randomize coordinates little bit
+		if (randomize) {
+			x += -1 + random.nextInt(3);
+			y += -1 + random.nextInt(3);
+		}
 		logger.finest("clicking " + x + " " + y);
 		int lParam = makeParam(x, y);
 		User32.INSTANCE.SendMessage(handler, WM_LBUTTONDOWN, 0x00000001, lParam);
