@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import org.junit.Assert;
 import org.junit.Test;
 
+import aok.coc.exception.BotBadBaseException;
 import aok.coc.exception.BotException;
 
 public class TestImageParser {
@@ -67,7 +68,7 @@ public class TestImageParser {
 	private final String imageLocation = "/parser_images/";
 
 	@Test
-	public void testGoldParser() throws IOException {
+	public void testGoldParser() throws IOException, BotBadBaseException {
 		int fail = 0;
 		for (int i = 0; i < imageNames.length; i++) {
 			String s = imageNames[i];
@@ -86,7 +87,7 @@ public class TestImageParser {
 	}
 
 	@Test
-	public void testElixirParser() throws IOException {
+	public void testElixirParser() throws IOException, BotBadBaseException {
 		
 		int fail = 0;
 		for (int i = 0; i < imageNames.length; i++) {
@@ -106,7 +107,7 @@ public class TestImageParser {
 	}
 
 	@Test
-	public void testDarkElixirParser() throws IOException {
+	public void testDarkElixirParser() throws IOException, BotBadBaseException {
 		
 		int fail = 0;
 		for (int i = 0; i < imageNames.length; i++) {
@@ -126,7 +127,7 @@ public class TestImageParser {
 	}
 
 	@Test
-	public void testTrophyParser() throws IOException {
+	public void testTrophyParser() throws IOException, BotBadBaseException {
 		
 		int fail = 0;
 		for (int i = 0; i < imageNames.length; i++) {

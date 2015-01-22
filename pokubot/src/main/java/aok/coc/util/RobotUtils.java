@@ -8,6 +8,8 @@ import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -69,7 +71,7 @@ public class RobotUtils {
 		logger.info("Zooming out...");
 		for (int i = 0; i < notch; i++) {
 			User32.INSTANCE.SendMessage(handler, WM_KEYDOWN, 0x28, 0X1500001);
-			Thread.sleep(450);
+			Thread.sleep(1000);
 		}
 		User32.INSTANCE.SendMessage(handler, WM_KEYDOWN, 0X11, 0X11d0001);
 	}
@@ -151,16 +153,21 @@ public class RobotUtils {
 		return r.createScreenCapture(new Rectangle(point.x, point.y, x2 - x1, y2 - y1));
 	}
 
-	public static File saveScreenShot(String fileName, Area area) throws IOException {
-		return saveScreenShot(fileName, area.getX1(), area.getY1(), area.getX2(), area.getY2());
+	public static File saveScreenShot(Area area, String filePathFirst, String... filePathRest) throws IOException {
+		return saveScreenShot(area.getX1(), area.getY1(), area.getX2(), area.getY2(), filePathFirst, filePathRest);
 	}
 
-	public static File saveScreenShot(String fileName, int x1, int y1, int x2, int y2) throws IOException {
-		if (!(fileName.toLowerCase().endsWith(".png"))) {
-			fileName = fileName + ".png";
+	public static File saveScreenShot(int x1, int y1, int x2, int y2, String filePathFirst, String... filePathRest) throws IOException {
+		Path path = Paths.get(filePathFirst, filePathRest).toAbsolutePath();
+		String fileName = path.getFileName().toString();
+		if (!(path.getFileName().toString().toLowerCase().endsWith(".png"))) {
+			fileName = path.getFileName().toString() + ".png";
 		}
 		BufferedImage img = screenShot(x1, y1, x2, y2);
-		File file = new File(fileName);
+		File file = new File(path.getParent().toString(), fileName);
+		if (!file.getParentFile().isDirectory()) {
+			file.getParentFile().mkdirs();
+		}
 		ImageIO.write(img, "png", file);
 		return file;
 	}
@@ -177,9 +184,13 @@ public class RobotUtils {
 			throw new IllegalArgumentException(clickable.name());
 		}
 		
-		return compareColor(clickable.getColor().getRGB(),
-			pixelGetColor(clickable.getX(), clickable.getY()).getRGB(),
-			5);
+		int tarColor = clickable.getColor().getRGB();
+		int actualColor = pixelGetColor(clickable.getX(), clickable.getY()).getRGB();
+		if (clickable == Clickable.BUTTON_RAX_MAX_TRAIN || clickable == Clickable.BUTTON_RAX_TRAIN) {
+			logger.finest("isClickableActive: " + clickable.name() + " " + Integer.toHexString(tarColor)
+				+ " " + Integer.toHexString(actualColor));
+		}
+		return compareColor(tarColor, actualColor, 5);
 	}
 
 	public static boolean compareColor(int c1, int c2, int var) {

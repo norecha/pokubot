@@ -28,6 +28,7 @@ import javax.imageio.ImageIO;
 import org.sikuli.core.search.RegionMatch;
 import org.sikuli.core.search.algorithm.TemplateMatcher;
 
+import aok.coc.exception.BotBadBaseException;
 import aok.coc.exception.BotException;
 import aok.coc.util.coords.Area;
 
@@ -158,38 +159,33 @@ public class ImageParser {
 		ENEMY_BASE_POLY.addPoint(ENEMY_BASE_BOTTOM.x, ENEMY_BASE_BOTTOM.y);
 	}
 
-	static boolean hasDE(BufferedImage image) {
+	static boolean hasDE(BufferedImage image) throws BotBadBaseException {
 		int deCheck = image.getRGB(20, 0);
 		if (RobotUtils.compareColor(deCheck, new Color(128, 117, 43).getRGB(), 2)) {
 			return true;
 		} else if (RobotUtils.compareColor(deCheck, 0xffb1a841, 2)) {
 			return false;
-			//		}
-			//		if (deCheck == new Color(128, 117, 43).getRGB()) {
-			//			return true;
-			//		} else if (deCheck == 0xffb1a841) {
-			//			return false;
 		} else {
-			throw new IllegalArgumentException(Integer.toHexString(deCheck));
+			throw new BotBadBaseException("de: " + Integer.toHexString(deCheck));
 		}
 	}
 
-	public static int parseGold(BufferedImage image) {
+	public static int parseGold(BufferedImage image) throws BotBadBaseException {
 		return parseNumber(image, 0, 33, 0 + (hasDE(image) ? 0 : 1), image.getWidth() - 43);
 	}
 
-	public static int parseElixir(BufferedImage image) {
+	public static int parseElixir(BufferedImage image) throws BotBadBaseException {
 		return parseNumber(image, 1, 33, 29 + (hasDE(image) ? 0 : 1), image.getWidth() - 43);
 	}
 
-	public static int parseDarkElixir(BufferedImage image) {
+	public static int parseDarkElixir(BufferedImage image) throws BotBadBaseException {
 		if (!hasDE(image)) {
 			return 0;
 		}
 		return parseNumber(image, 2, 33, 57, image.getWidth() - 43);
 	}
 
-	public static int parseTropy(BufferedImage image) {
+	public static int parseTropy(BufferedImage image) throws BotBadBaseException {
 		if (!hasDE(image)) {
 			return parseNumber(image, 3, 33, 62, image.getWidth() - 43);
 		} else {
@@ -309,7 +305,7 @@ public class ImageParser {
 		return null;
 	}
 
-	public static int[] parseLoot() {
+	public static int[] parseLoot() throws BotBadBaseException {
 		BufferedImage image = RobotUtils.screenShot(Area.ENEMY_LOOT);
 
 		int gold = parseGold(image);
@@ -376,8 +372,12 @@ public class ImageParser {
 					logger.finest(String.format("\tfound %d elixirs matching %s\n", c, next.getFileName().toString()));
 				}
 			}
-
-			return attackableElixirs >= 0;
+			
+			boolean result = attackableElixirs >= 0;
+			if (result == false) {
+				logger.info("empty collectors");
+			}
+			return result;
 		} catch (Exception e) {
 			throw new BotException(e.getMessage(), e);
 		} finally {

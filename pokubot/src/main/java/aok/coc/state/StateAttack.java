@@ -1,5 +1,6 @@
 package aok.coc.state;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -10,10 +11,12 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
 import aok.coc.attack.ManualAttack;
+import aok.coc.exception.BotBadBaseException;
 import aok.coc.exception.BotException;
 import aok.coc.util.ConfigUtils;
 import aok.coc.util.ImageParser;
 import aok.coc.util.RobotUtils;
+import aok.coc.util.coords.Area;
 import aok.coc.util.coords.Clickable;
 
 public class StateAttack implements State {
@@ -38,7 +41,17 @@ public class StateAttack implements State {
 				throw new InterruptedException("StateAttack is interrupted.");
 			}
 
-			int[] loot = ImageParser.parseLoot();
+			int[] loot;
+			try {
+				loot = ImageParser.parseLoot();
+			} catch (BotBadBaseException e) {
+				try {
+					RobotUtils.saveScreenShot(Area.ENEMY_LOOT, "bug", "bad_base_" + System.currentTimeMillis());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				throw e;
+			}
 			int[] attackGroup = ImageParser.parseTroopCount();
 
 			int gold = loot[0];
@@ -85,7 +98,9 @@ public class StateAttack implements State {
 				break;
 			} else {
 				// next
-				RobotUtils.leftClick(Clickable.BUTTON_NEXT, 100);
+				// make sure you dont immediately check for next button because you may see the original one
+				RobotUtils.leftClick(Clickable.BUTTON_NEXT, 666);
+				
 				RobotUtils.sleepTillClickableIsActive(Clickable.BUTTON_NEXT);
 
 				// to avoid server/client sync from nexting too fast

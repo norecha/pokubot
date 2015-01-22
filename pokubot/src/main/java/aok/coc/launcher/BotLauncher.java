@@ -11,7 +11,6 @@ import aok.coc.exception.BotConfigurationException;
 import aok.coc.exception.BotException;
 import aok.coc.state.Context;
 import aok.coc.state.StateIdle;
-;
 
 public class BotLauncher {
 
