@@ -43,7 +43,7 @@ In case barracks configuration went wrong and you want to reset it, you can dele
 * Rax 4: archer
 
 ###Issues
-Bot is still in its early stages, I have not tested with different machines. If there are bugs/suggestions, create an issue.
+Bot is still in its early stages, I have not tested with different machines. If there are bugs/suggestions, create an issue and attach the log file.
 
 ###Donate
 If you like PokuBot consider a donation to support further development. Click
