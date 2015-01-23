@@ -17,6 +17,7 @@ An open source Clash of Clans bot.
 * You must run BlueStacks window on foreground, make sure nothing gets in front of it. I will add background mode in the future.
 * Bot uses down arrow key to zoom up, make sure that key zooms up for you as well.
 * Do not click CTRL key when bot is running, if you make a ctrl and mouse click, you will see BlueStacks is zooming(If not you are lucky, mine does). It will interfere with bot's clicks.
+* Make sure your display&pc never goes to sleep.(power settings)
 
 ###Instructions
 Download the latest version of PokuBot from [releases page](https://github.com/norecha/pokubot/releases) and run the .jar file.
