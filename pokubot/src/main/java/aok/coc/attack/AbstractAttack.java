@@ -28,7 +28,7 @@ public abstract class AbstractAttack {
 
 	protected abstract void doDropUnits(int[] attackGroup) throws InterruptedException;
 
-	public void attack(int[] loot, int[] attackGroup) throws InterruptedException, BotBadBaseException {
+	public void attack(int[] loot, int[] attackGroup) throws InterruptedException {
 		logger.info("Attacking...");
 		RobotUtils.zoomUp();
 
@@ -59,7 +59,7 @@ public abstract class AbstractAttack {
 		return result;
 	}
 
-	protected void sleepUntilLootDoesNotChange(int[] loot) throws InterruptedException, BotBadBaseException {
+	protected void sleepUntilLootDoesNotChange(int[] loot) throws InterruptedException {
 		Thread.sleep(10000);
 		int[] prevLoot = loot;
 		int diff = Integer.MAX_VALUE;

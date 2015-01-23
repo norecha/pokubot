@@ -44,7 +44,10 @@ public enum Clickable {
 	BUTTON_ATTACK_UNIT_7(505, 600, null),
 	UNIT_FIRST_RAX(null, null, null),
 	UNIT_BLUESTACKS_DC(699, 343, new Color(0x282828)), // 160,250 to 700,420
-	UNIT_RECONNECT(435, 400, null);
+	UNIT_RECONNECT(435, 400, null),
+	
+	BUTTON_WAS_ATTACKED_OKAY(432, 507, new Color(0x5CAC10)),
+	BUTTON_WAS_ATTACKED_HEADLINE(437, 158, new Color(0x585450));
 
 	private Integer	x;
 	private Integer	y;

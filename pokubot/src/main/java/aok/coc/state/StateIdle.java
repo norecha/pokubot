@@ -30,7 +30,11 @@ public class StateIdle implements State {
 				continue;
 			}
 			
-			if (RobotUtils.isClickableActive(Clickable.BUTTON_ATTACK)) {
+			if (RobotUtils.isClickableActive(Clickable.BUTTON_WAS_ATTACKED_HEADLINE) || 
+				RobotUtils.isClickableActive(Clickable.BUTTON_WAS_ATTACKED_OKAY)) {
+				logger.info("Was attacked.");
+				RobotUtils.leftClick(Clickable.BUTTON_WAS_ATTACKED_OKAY, 250);
+			} else if (RobotUtils.isClickableActive(Clickable.BUTTON_ATTACK)) {
 				nextState = StateMainMenu.instance();
 				break;
 			} else if (RobotUtils.isClickableActive(Clickable.BUTTON_NEXT)) {
