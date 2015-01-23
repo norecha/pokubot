@@ -19,7 +19,7 @@ An open source Clash of Clans bot.
 * Do not click CTRL key when bot is running, if you make a ctrl and mouse click, you will see BlueStacks is zooming(If not you are lucky, mine does). It will interfere with bots clicks.
 
 ###Instructions
-Download the latest version of PokuBot from [here](https://github.com/norecha/pokubot/releases) and run the .jar file.
+Download the latest version of PokuBot from [releases page](https://github.com/norecha/pokubot/releases) and run the .jar file.
 
 Make sure you are running it with java 8, not with an older version of Java.
 Right click to .jar file, Properties -> Open with -> Change -> Browse.
@@ -41,6 +41,9 @@ In case barracks configuration went wrong and you want to reset it, you can dele
 * Rax 2: barb
 * Rax 3: archer
 * Rax 4: archer
+
+###Issues
+Bot is still in its early stages, I have not tested with different machines. If there are bugs/suggestions, create an issue.
 
 ###Donate
 If you like PokuBot consider a donation to support further development. Click
