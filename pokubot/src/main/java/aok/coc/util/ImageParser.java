@@ -233,11 +233,29 @@ public class ImageParser {
 			curr = Math.max(curr + 1, barbKingSlot + 1);
 		}
 
+		Integer archerQueenSlot = parseArcherQueenSlot(image);
+		if (archerQueenSlot != null) {
+			tmp[archerQueenSlot] = 1;
+
+			// if AQ was found after a 0 slot, new length should be adjusted according to AQ
+			// ie [110, 90, 0, AQ] -> len = 4
+			curr = Math.max(curr + 1, archerQueenSlot + 1);
+		}
+
 		return Arrays.copyOf(tmp, curr);
 	}
 
 	static Integer parseBarbKingSlot(BufferedImage image) {
 		Rectangle rectangle = findArea(image, ImageParser.class.getResource("/images/bk.png"));
+		if (rectangle == null) {
+			return null;
+		}
+
+		return rectangle.x / ATTACK_GROUP_UNIT_DIFF;
+	}
+
+	static Integer parseArcherQueenSlot(BufferedImage image) {
+		Rectangle rectangle = findArea(image, ImageParser.class.getResource("/images/aq.png"));
 		if (rectangle == null) {
 			return null;
 		}

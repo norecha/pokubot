@@ -25,6 +25,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
+import org.kohsuke.github.GHRelease;
+import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GitHub;
+
 import aok.coc.launcher.BotLauncher;
 import aok.coc.util.ConfigUtils;
 import aok.coc.util.coords.Clickable;
@@ -73,6 +79,8 @@ public class MainWindowController {
 	private ImageView			heartImage;
 	@FXML
 	private Label				donateLabel;
+	@FXML
+	private Label				updateLabel;
 
 	private static final Logger	logger			= Logger.getLogger(MainWindowController.class.getName());
 
@@ -98,6 +106,7 @@ public class MainWindowController {
 		initializeTextFields();
 		initializeSetupService();
 		initializeRunnerService();
+		checkForUpdate();
 	}
 
 	private void initializeLinks() {
@@ -346,6 +355,29 @@ public class MainWindowController {
 
 	public void setHostServices(HostServices hostServices) {
 		this.hostServices = hostServices;
+	}
+
+	private void checkForUpdate() {
+		try {
+			String current = getClass().getPackage().getImplementationVersion();
+			if (current == null) {
+				// IDE run
+				return;
+			}
+			DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(current);
+			GitHub github = GitHub.connectAnonymously();
+			GHRepository repository = github.getRepository("norecha/pokubot");
+			for (GHRelease r : repository.listReleases()) {
+				String release = r.getName().substring(1);
+				DefaultArtifactVersion releaseVersion = new DefaultArtifactVersion(release);
+				if (currentVersion.compareTo(releaseVersion) < 0) {
+					updateLabel.setVisible(true);
+					return;
+				}
+			}
+		} catch (Exception e) {
+			logger.log(Level.WARNING, "Unable to get latest version", e);
+		}
 	}
 
 }

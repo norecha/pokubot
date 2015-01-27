@@ -35,10 +35,9 @@ public class StateTrainTroops implements State {
 			if (currRax < raxInfo.length - 1) {
 				// select next rax
 				RobotUtils.leftClick(Clickable.BUTTON_RAX_NEXT, 250);
-			} else {
-				RobotUtils.leftClick(Clickable.BUTTON_RAX_CLOSE, 250);
 			}
 		}
+		RobotUtils.leftClick(Clickable.BUTTON_RAX_CLOSE, 250);
 		
 		context.setState(StateMainMenu.instance());
 		Thread.sleep(6000 + RobotUtils.random.nextInt(6000));
