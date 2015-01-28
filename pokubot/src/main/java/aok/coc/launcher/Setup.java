@@ -162,11 +162,24 @@ public class Setup {
 			int w2 = Advapi32Util.registryGetIntValue(key.getValue(), "GuestWidth");
 			int h2 = Advapi32Util.registryGetIntValue(key.getValue(), "GuestHeight");
 
+			HWND control = User32.INSTANCE.GetDlgItem(bsHwnd, 0);
+			int[] rect = new int[4];
+			User32.INSTANCE.GetWindowRect(control, rect);
+			
+			int bsX = rect[2] - rect[0];
+			int bsY = rect[3] - rect[1];
+			
+			if (bsX == BS_RES_X && bsY == BS_RES_Y) {
+				return;
+			}
+			
+			logger.warning(String.format("%s resolution is <%d, %d>", BS_WINDOW_NAME, bsX, bsY));
+			
 			if (w1 == BS_RES_X && h1 == BS_RES_Y &&
 				w2 == BS_RES_X && h2 == BS_RES_Y) {
 				return;
 			}
-
+			
 			String msg = String.format("%s must run in resolution %dx%d.\n" +
 										"Click YES to change it automatically, NO to do it later.\n",
 				BS_WINDOW_NAME, BS_RES_X, BS_RES_Y);

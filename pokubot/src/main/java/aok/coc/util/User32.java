@@ -25,10 +25,5 @@ public interface User32 extends StdCallLibrary {
 
 	LRESULT SendMessage(HWND hWnd, int Msg, int wParam, int lParam);
 
-	int SetThreadExecutionState(int EXECUTION_STATE);
-
-	int	ES_DISPLAY_REQUIRED	= 0x00000002;
-	int	ES_SYSTEM_REQUIRED	= 0x00000001;
-	int	ES_CONTINUOUS		= 0x80000000;
-
+	HWND GetDlgItem(HWND hDlg, int nIDDlgItem);
 }
