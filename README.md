@@ -5,7 +5,7 @@ An open source Clash of Clans bot.
 * Auto train troops(all troops)
 * Auto opponent finder matching gold, elixir, dark elixir criterias
 * Auto attack with different attack strategies
-* Attack with Barb King and use the ability. (I'm th8 and don't have AQ yet, once I get a picture it will be working too :) )
+* Attack with Barb King/Archer Queen and use the ability.
 * Or you can just use it to find opponents, be notified when there is a match, and attack manually.
 * Detect empty collectors
 * Disconnect detector. You cannot run game for more than 6 hours at a time, you will be disconnected after that for 5 min, it will reload you again. Or in case something goes wrong and bot dies, you will get disconnected from inactivity, and it will log you back in and start again.
@@ -42,6 +42,8 @@ In case barracks configuration went wrong and you want to reset it, you can dele
 * Rax 2: barb
 * Rax 3: archer
 * Rax 4: archer
+
+*If one or more of your rax are upgrading, you need to set remaining ones to "No Unit"
 
 ###Issues
 Bot is still in its early stages, I have not tested with different machines. If there are bugs/suggestions, create an issue and attach the log file.
