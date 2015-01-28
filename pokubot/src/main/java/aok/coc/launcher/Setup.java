@@ -150,6 +150,13 @@ public class Setup {
 
 		logger.finest(String.format("The corner locations for the window \"%s\" are %s",
 			BS_WINDOW_NAME, Arrays.toString(rect)));
+		
+		// set bs always on top
+		int SWP_NOSIZE = 0x0001;
+		int SWP_NOMOVE = 0x0002;
+		int TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE;
+		
+		User32.INSTANCE.SetWindowPos(bsHwnd, -1, 0, 0, 0, 0, TOPMOST_FLAGS);
 	}
 
 	private static void setupResolution() throws BotConfigurationException {

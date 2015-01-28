@@ -26,4 +26,6 @@ public interface User32 extends StdCallLibrary {
 	LRESULT SendMessage(HWND hWnd, int Msg, int wParam, int lParam);
 
 	HWND GetDlgItem(HWND hDlg, int nIDDlgItem);
+	
+	boolean SetWindowPos(HWND hWnd, int hWndInsertAfter, int X, int Y, int cx, int cy, int uFlags);
 }
