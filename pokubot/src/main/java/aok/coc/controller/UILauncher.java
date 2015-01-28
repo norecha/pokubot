@@ -25,6 +25,7 @@ public class UILauncher extends Application {
 		loader.<MainWindowController>getController().setHostServices(this.getHostServices());
 
 		primaryStage.setScene(new Scene(scene));
+		primaryStage.setAlwaysOnTop(true);
 		primaryStage.show();
 	}
 
