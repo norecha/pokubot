@@ -28,7 +28,7 @@ public class StateTrainTroops implements State {
 				continue;
 			}
 			
-			for (int i = 0; i < RobotUtils.random.nextInt(5) + 5; i++) {
+			for (int i = 0; i < RobotUtils.random.nextInt(5) + 10; i++) {
 				RobotUtils.leftClick(troop, 75);
 			}
 			
@@ -40,7 +40,7 @@ public class StateTrainTroops implements State {
 		RobotUtils.leftClick(Clickable.BUTTON_RAX_CLOSE, 250);
 		
 		context.setState(StateMainMenu.instance());
-		Thread.sleep(6000 + RobotUtils.random.nextInt(6000));
+		RobotUtils.sleepRandom(5000);
 	}
 
 	public static StateTrainTroops instance() {
