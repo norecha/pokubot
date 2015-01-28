@@ -43,6 +43,8 @@ In case barracks configuration went wrong and you want to reset it, you can dele
 * Rax 3: archer
 * Rax 4: archer
 
+*If one or more of your rax are upgrading, you need to set remaining ones to "No Unit"
+
 ###Issues
 Bot is still in its early stages, I have not tested with different machines. If there are bugs/suggestions, create an issue and attach the log file.
 
