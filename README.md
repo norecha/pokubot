@@ -18,7 +18,7 @@ An open source Clash of Clans bot.
 * Bot uses down arrow key to zoom up, make sure that key zooms up for you as well.
 * Do not click CTRL key when bot is running, if you make a ctrl and mouse click, you will see BlueStacks is zooming(If not you are lucky, mine does). It will interfere with bot's clicks.
 * Make sure your display&pc never goes to sleep.(power settings)
-* You need to have at least level 4 barracks(it should have boost and boost all options)
+* You need to have at least level 4 barracks(it should have boost and boost all options because bot will click train button according to that. It will not boost it for you automatically.)
 
 ###Instructions
 Download the latest version of PokuBot from [releases page](https://github.com/norecha/pokubot/releases) and run the .jar file.
