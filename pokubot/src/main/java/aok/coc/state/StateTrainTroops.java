@@ -28,13 +28,13 @@ public class StateTrainTroops implements State {
 				continue;
 			}
 			
-			for (int i = 0; i < RobotUtils.random.nextInt(5) + 10; i++) {
+			for (int i = 0; i < RobotUtils.random.nextInt(5) + 15; i++) {
 				RobotUtils.leftClick(troop, 75);
 			}
 			
 			if (currRax < raxInfo.length - 1) {
 				// select next rax
-				RobotUtils.leftClick(Clickable.BUTTON_RAX_NEXT, 250);
+				RobotUtils.leftClick(Clickable.BUTTON_RAX_NEXT, 350);
 			}
 		}
 		RobotUtils.leftClick(Clickable.BUTTON_RAX_CLOSE, 250);

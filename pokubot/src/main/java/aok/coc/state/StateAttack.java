@@ -104,7 +104,7 @@ public class StateAttack implements State {
 				RobotUtils.sleepTillClickableIsActive(Clickable.BUTTON_NEXT);
 
 				// to avoid server/client sync from nexting too fast
-				RobotUtils.sleepRandom(400);
+				RobotUtils.sleepRandom(750);
 			}
 		}
 	}

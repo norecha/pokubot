@@ -161,9 +161,11 @@ public class ImageParser {
 
 	static boolean hasDE(BufferedImage image) throws BotBadBaseException {
 		int deCheck = image.getRGB(20, 0);
-		if (RobotUtils.compareColor(deCheck, new Color(128, 117, 43).getRGB(), 2)) {
+		
+		// 0x80752B
+		if (RobotUtils.compareColor(deCheck, new Color(128, 117, 43).getRGB(), 7)) {
 			return true;
-		} else if (RobotUtils.compareColor(deCheck, 0xffb1a841, 2)) {
+		} else if (RobotUtils.compareColor(deCheck, 0xffb1a841, 7)) {
 			return false;
 		} else {
 			throw new BotBadBaseException("de: " + Integer.toHexString(deCheck));
@@ -323,9 +325,7 @@ public class ImageParser {
 		return null;
 	}
 
-	public static int[] parseLoot() throws BotBadBaseException {
-		BufferedImage image = RobotUtils.screenShot(Area.ENEMY_LOOT);
-
+	static int[] parseLoot(BufferedImage image) throws BotBadBaseException {
 		int gold = parseGold(image);
 		int elixir = parseElixir(image);
 		int de = parseDarkElixir(image);
@@ -333,6 +333,12 @@ public class ImageParser {
 			gold, elixir, de));
 
 		return new int[] { gold, elixir, de };
+	}
+
+	public static int[] parseLoot() throws BotBadBaseException {
+		BufferedImage image = RobotUtils.screenShot(Area.ENEMY_LOOT);
+
+		return parseLoot(image);
 	}
 
 	public static boolean isCollectorFullBase() throws BotException {
@@ -368,10 +374,15 @@ public class ImageParser {
 
 				int c = 0;
 
-				RECT_LOOP: for (RegionMatch i : doFindAll) {
+				RECT_LOOP:
+				for (RegionMatch i : doFindAll) {
+					
+					// if matched area is out of enemy poly
 					if (!ENEMY_BASE_POLY.contains(i.x, i.y)) {
 						continue;
 					}
+					
+					// check if it's an existing match
 					for (Rectangle r : matchedElixirs) {
 						if (r.intersects(i.getBounds())) {
 							break RECT_LOOP;
