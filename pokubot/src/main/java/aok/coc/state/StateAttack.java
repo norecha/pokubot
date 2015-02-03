@@ -48,7 +48,7 @@ public class StateAttack implements State {
 				try {
 					RobotUtils.saveScreenShot(Area.ENEMY_LOOT, "bug", "bad_base_" + System.currentTimeMillis());
 				} catch (IOException e1) {
-					e1.printStackTrace();
+					logger.log(Level.SEVERE, e1.getMessage(), e1);
 				}
 				throw e;
 			}

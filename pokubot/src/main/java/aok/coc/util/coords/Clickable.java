@@ -30,7 +30,6 @@ public enum Clickable {
 	BUTTON_RAX_DRAGON(542, 451, null, "Dragon"),
 	BUTTON_RAX_PEKKA(642, 451, null, "Pekka"),
 	
-	
 	BUTTON_RAX_FULL(156, 507, new Color(0xD04048)),
 	BUTTON_RAX_TRAIN(614, 584, new Color(0xF8F4F8)),
 	BUTTON_RAX_MAX_TRAIN(565, 584, new Color(0xF7F5F4)),

@@ -150,13 +150,8 @@ public class MainWindowController {
 
 					@Override
 					protected Void call() throws Exception {
-						try {
-							botLauncher.start();
-							return null;
-						} catch (Exception e) {
-							logger.log(Level.SEVERE, "runner: " + e.getMessage(), e);
-							throw e;
-						}
+						botLauncher.start();
+						return null;
 					}
 				};
 			}
@@ -175,7 +170,7 @@ public class MainWindowController {
 
 			@Override
 			public void handle(WorkerStateEvent event) {
-				logger.severe("runner is failed.");
+				logger.log(Level.SEVERE, "runner is failed: " + runnerService.getException().getMessage(), runnerService.getException());
 				runnerService.reset();
 			}
 		});
@@ -190,14 +185,9 @@ public class MainWindowController {
 
 					@Override
 					protected Void call() throws Exception {
-						try {
-							botLauncher.tearDown();
-							botLauncher.setup();
-							return null;
-						} catch (Exception e) {
-							logger.log(Level.SEVERE, e.getMessage(), e);
-							throw e;
-						}
+						botLauncher.tearDown();
+						botLauncher.setup();
+						return null;
 					}
 				};
 			}
@@ -220,7 +210,7 @@ public class MainWindowController {
 			public void handle(WorkerStateEvent event) {
 				isSetupDone = false;
 				setupService.reset();
-				logger.severe("Setup is failed.");
+				logger.log(Level.SEVERE, "Setup is failed:" + setupService.getException().getMessage(), setupService.getException());
 			}
 		});
 
