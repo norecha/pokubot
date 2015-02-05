@@ -11,8 +11,8 @@ import org.jnativehook.mouse.NativeMouseListener;
 import aok.coc.exception.BotConfigurationException;
 import aok.coc.util.ConfigUtils;
 import aok.coc.util.RobotUtils;
-import aok.coc.util.User32;
 import aok.coc.util.coords.Clickable;
+import aok.coc.util.w32.User32;
 
 import com.sun.jna.platform.win32.Advapi32Util;
 import com.sun.jna.platform.win32.WinDef.HWND;
@@ -150,13 +150,6 @@ public class Setup {
 
 		logger.finest(String.format("The corner locations for the window \"%s\" are %s",
 			BS_WINDOW_NAME, Arrays.toString(rect)));
-		
-		// set bs always on top
-		int SWP_NOSIZE = 0x0001;
-		int SWP_NOMOVE = 0x0002;
-		int TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE;
-		
-		User32.INSTANCE.SetWindowPos(bsHwnd, -1, 0, 0, 0, 0, TOPMOST_FLAGS);
 	}
 
 	private static void setupResolution() throws BotConfigurationException {

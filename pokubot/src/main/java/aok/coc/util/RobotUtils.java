@@ -2,7 +2,6 @@ package aok.coc.util;
 
 import java.awt.AWTException;
 import java.awt.Color;
-import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
@@ -18,12 +17,21 @@ import javax.swing.JOptionPane;
 
 import aok.coc.util.coords.Area;
 import aok.coc.util.coords.Clickable;
+import aok.coc.util.w32.GDI32;
+import aok.coc.util.w32.User32;
 
+import com.sun.jna.Memory;
+import com.sun.jna.platform.win32.WinDef.DWORD;
+import com.sun.jna.platform.win32.WinDef.HBITMAP;
+import com.sun.jna.platform.win32.WinDef.HDC;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinDef.POINT;
+import com.sun.jna.platform.win32.WinGDI;
+import com.sun.jna.platform.win32.WinGDI.BITMAPINFO;
+import com.sun.jna.platform.win32.WinNT.HANDLE;
 
 public class RobotUtils {
-//MY_CLIENT_61.638==MY_WINDOW.64.668
+
 	private static final Logger	logger				= Logger.getLogger(RobotUtils.class.getName());
 
 	public static final String	WORKING_DIR			= System.getProperty("user.dir");
@@ -57,23 +65,23 @@ public class RobotUtils {
 	public static final int		WM_KEYUP			= 0x101;
 	public static final int		WM_MOUSEWHEEL		= 0x20A;
 
-	private static HWND			handler				= null;
+	private static HWND			handle				= null;
 
 	public static void setupWin32(HWND handler) {
-		RobotUtils.handler = handler;
+		RobotUtils.handle = handler;
 	}
-	
+
 	public static boolean clientToScreen(POINT clientPoint) {
-		return User32.INSTANCE.ClientToScreen(handler, clientPoint);
+		return User32.INSTANCE.ClientToScreen(handle, clientPoint);
 	}
 
 	public static void zoomUp(int notch) throws InterruptedException {
 		logger.info("Zooming out...");
 		for (int i = 0; i < notch; i++) {
-			User32.INSTANCE.SendMessage(handler, WM_KEYDOWN, 0x28, 0X1500001);
+			User32.INSTANCE.SendMessage(handle, WM_KEYDOWN, 0x28, 0X1500001);
+			User32.INSTANCE.SendMessage(handle, WM_KEYDOWN, 0X11, 0X11d0001);
 			Thread.sleep(1000);
 		}
-		User32.INSTANCE.SendMessage(handler, WM_KEYDOWN, 0X11, 0X11d0001);
 	}
 
 	public static void zoomUp() throws InterruptedException {
@@ -103,8 +111,8 @@ public class RobotUtils {
 		}
 		logger.finest("clicking " + x + " " + y);
 		int lParam = makeParam(x, y);
-		User32.INSTANCE.SendMessage(handler, WM_LBUTTONDOWN, 0x00000001, lParam);
-		User32.INSTANCE.SendMessage(handler, WM_LBUTTONUP, 0x00000000, lParam);
+		User32.INSTANCE.SendMessage(handle, WM_LBUTTONDOWN, 0x00000001, lParam);
+		User32.INSTANCE.SendMessage(handle, WM_LBUTTONUP, 0x00000000, lParam);
 	}
 
 	private static int makeParam(int low, int high) {
@@ -143,14 +151,42 @@ public class RobotUtils {
 		}
 	}
 
-	public static BufferedImage screenShot(Area area) {
-		return screenShot(area.getX1(), area.getY1(), area.getX2(), area.getY2());
+	public static BufferedImage screenShotBackGround(int x1, int y1, int x2, int y2) {
+		HDC hdcWindow = User32.INSTANCE.GetDC(handle);
+		HDC hdcMemDC = GDI32.INSTANCE.CreateCompatibleDC(hdcWindow);
+
+		int width = x2 - x1;
+		int height = y2 - y1;
+
+		HBITMAP hBitmap = GDI32.INSTANCE.CreateCompatibleBitmap(hdcWindow, width, height);
+
+		HANDLE hOld = GDI32.INSTANCE.SelectObject(hdcMemDC, hBitmap);
+		GDI32.INSTANCE.BitBlt(hdcMemDC, 0, 0, width, height, hdcWindow, x1, y1, new DWORD(0x00CC0020));
+
+		GDI32.INSTANCE.SelectObject(hdcMemDC, hOld);
+		GDI32.INSTANCE.DeleteDC(hdcMemDC);
+
+		BITMAPINFO bmi = new BITMAPINFO();
+		bmi.bmiHeader.biWidth = width;
+		bmi.bmiHeader.biHeight = -height;
+		bmi.bmiHeader.biPlanes = 1;
+		bmi.bmiHeader.biBitCount = 32;
+		bmi.bmiHeader.biCompression = WinGDI.BI_RGB;
+
+		Memory buffer = new Memory(width * height * 4);
+		GDI32.INSTANCE.GetDIBits(hdcWindow, hBitmap, 0, height, buffer, bmi, WinGDI.DIB_RGB_COLORS);
+
+		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		image.setRGB(0, 0, width, height, buffer.getIntArray(0, width * height), 0, width);
+
+		GDI32.INSTANCE.DeleteObject(hBitmap);
+		User32.INSTANCE.ReleaseDC(handle, hdcWindow);
+
+		return image;
 	}
 
-	public static BufferedImage screenShot(int x1, int y1, int x2, int y2) {
-		POINT point = new POINT(x1, y1);
-		clientToScreen(point);
-		return r.createScreenCapture(new Rectangle(point.x, point.y, x2 - x1, y2 - y1));
+	public static BufferedImage screenShot(Area area) {
+		return screenShotBackGround(area.getX1(), area.getY1(), area.getX2(), area.getY2());
 	}
 
 	public static File saveScreenShot(Area area, String filePathFirst, String... filePathRest) throws IOException {
@@ -163,7 +199,7 @@ public class RobotUtils {
 		if (!(path.getFileName().toString().toLowerCase().endsWith(".png"))) {
 			fileName = path.getFileName().toString() + ".png";
 		}
-		BufferedImage img = screenShot(x1, y1, x2, y2);
+		BufferedImage img = screenShotBackGround(x1, y1, x2, y2);
 		File file = new File(path.getParent().toString(), fileName);
 		if (!file.getParentFile().isDirectory()) {
 			file.getParentFile().mkdirs();
@@ -171,24 +207,26 @@ public class RobotUtils {
 		ImageIO.write(img, "png", file);
 		return file;
 	}
-	
+
 	public static Color pixelGetColor(int x, int y) {
-		POINT point = new POINT(x, y);
-		clientToScreen(point);
-		Color pixel = r.getPixelColor(point.x, point.y);
-		return pixel;
+		BufferedImage image = screenShotBackGround(x, y, x + 1, y + 1);
+		return new Color(image.getRGB(0, 0));
+//		POINT point = new POINT(x, y);
+//		clientToScreen(point);
+//		Color pixel = r.getPixelColor(point.x, point.y);
+//		return pixel;
 	}
 
 	public static boolean isClickableActive(Clickable clickable) {
 		if (clickable.getColor() == null) {
 			throw new IllegalArgumentException(clickable.name());
 		}
-		
+
 		int tarColor = clickable.getColor().getRGB();
 		int actualColor = pixelGetColor(clickable.getX(), clickable.getY()).getRGB();
 		if (clickable == Clickable.BUTTON_RAX_MAX_TRAIN || clickable == Clickable.BUTTON_RAX_TRAIN) {
 			logger.finest("isClickableActive: " + clickable.name() + " " + Integer.toHexString(tarColor)
-				+ " " + Integer.toHexString(actualColor));
+							+ " " + Integer.toHexString(actualColor));
 		}
 		return compareColor(tarColor, actualColor, 5);
 	}
