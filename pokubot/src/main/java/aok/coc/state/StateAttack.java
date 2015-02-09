@@ -109,7 +109,7 @@ public class StateAttack implements State {
 		}
 	}
 
-	private void playAttackReady() {
+	void playAttackReady() {
 		if (!ConfigUtils.instance().isPlaySound()) {
 			return;
 		}
