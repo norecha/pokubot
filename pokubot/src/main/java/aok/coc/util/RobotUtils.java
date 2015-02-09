@@ -21,11 +21,14 @@ import aok.coc.util.w32.GDI32;
 import aok.coc.util.w32.User32;
 
 import com.sun.jna.Memory;
+import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinDef.DWORD;
 import com.sun.jna.platform.win32.WinDef.HBITMAP;
 import com.sun.jna.platform.win32.WinDef.HDC;
 import com.sun.jna.platform.win32.WinDef.HWND;
+import com.sun.jna.platform.win32.WinDef.LPARAM;
 import com.sun.jna.platform.win32.WinDef.POINT;
+import com.sun.jna.platform.win32.WinDef.WPARAM;
 import com.sun.jna.platform.win32.WinGDI;
 import com.sun.jna.platform.win32.WinGDI.BITMAPINFO;
 import com.sun.jna.platform.win32.WinNT.HANDLE;
@@ -54,6 +57,7 @@ public class RobotUtils {
 	}
 
 	// user32
+	public static final int		WM_NULL				= 0x000;
 	public static final int		WM_COMMAND			= 0x111;
 	public static final int		WM_LBUTTONDOWN		= 0x201;
 	public static final int		WM_LBUTTONUP		= 0x202;
@@ -64,6 +68,8 @@ public class RobotUtils {
 	public static final int		WM_KEYDOWN			= 0x100;
 	public static final int		WM_KEYUP			= 0x101;
 	public static final int		WM_MOUSEWHEEL		= 0x20A;
+	public static final int		VK_CONTROL			= 0x11;
+	public static final int		VK_DOWN				= 0x28;
 
 	private static HWND			handle				= null;
 
@@ -77,11 +83,23 @@ public class RobotUtils {
 
 	public static void zoomUp(int notch) throws InterruptedException {
 		logger.info("Zooming out...");
+		int lParam = 0x00000001 | (0x50 /*scancode*/<< 16) | 0x01000000 /*extended*/;
+
+		WPARAM wparam = new WinDef.WPARAM(VK_DOWN);
+		LPARAM lparamDown = new WinDef.LPARAM(lParam);
+		LPARAM lparamUp = new WinDef.LPARAM(lParam | 1 << 30 | 1 << 31);
+
 		for (int i = 0; i < notch; i++) {
-			User32.INSTANCE.SendMessage(handle, WM_KEYDOWN, 0x28, 0X1500001);
-			User32.INSTANCE.SendMessage(handle, WM_KEYDOWN, 0X11, 0X11d0001);
+			while (isCtrlKeyDown()) {
+			}
+			User32.INSTANCE.PostMessage(handle, WM_KEYDOWN, wparam, lparamDown);
+			User32.INSTANCE.PostMessage(handle, WM_KEYUP, wparam, lparamUp);
 			Thread.sleep(1000);
 		}
+	}
+
+	private static boolean isCtrlKeyDown() {
+		return User32.INSTANCE.GetKeyState(VK_CONTROL) < 0;
 	}
 
 	public static void zoomUp() throws InterruptedException {
@@ -111,6 +129,9 @@ public class RobotUtils {
 		}
 		logger.finest("clicking " + x + " " + y);
 		int lParam = makeParam(x, y);
+		
+		while (isCtrlKeyDown()) {
+		}
 		User32.INSTANCE.SendMessage(handle, WM_LBUTTONDOWN, 0x00000001, lParam);
 		User32.INSTANCE.SendMessage(handle, WM_LBUTTONUP, 0x00000000, lParam);
 	}
@@ -211,10 +232,6 @@ public class RobotUtils {
 	public static Color pixelGetColor(int x, int y) {
 		BufferedImage image = screenShotBackGround(x, y, x + 1, y + 1);
 		return new Color(image.getRGB(0, 0));
-//		POINT point = new POINT(x, y);
-//		clientToScreen(point);
-//		Color pixel = r.getPixelColor(point.x, point.y);
-//		return pixel;
 	}
 
 	public static boolean isClickableActive(Clickable clickable) {

@@ -25,8 +25,15 @@ public interface User32 extends com.sun.jna.platform.win32.User32 {
 	LRESULT SendMessage(HWND hWnd, int Msg, int wParam, int lParam);
 
 	HWND GetDlgItem(HWND hDlg, int nIDDlgItem);
-	
+
 	boolean SetWindowPos(HWND hWnd, int hWndInsertAfter, int X, int Y, int cx, int cy, int uFlags);
-	
+
 	HDC GetWindowDC(HWND hWnd);
+
+	boolean BlockInput(boolean block);
+
+	@Override
+	short GetAsyncKeyState(int key);
+
+	short GetKeyState(int key);
 }

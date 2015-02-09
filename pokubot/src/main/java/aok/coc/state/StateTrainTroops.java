@@ -24,12 +24,10 @@ public class StateTrainTroops implements State {
 		for (int currRax = 0; currRax < raxInfo.length; currRax++) {
 			Clickable troop = raxInfo[currRax];
 			
-			if (troop == Clickable.BUTTON_RAX_NO_UNIT) {
-				continue;
-			}
-			
-			for (int i = 0; i < RobotUtils.random.nextInt(5) + 15; i++) {
-				RobotUtils.leftClick(troop, 75);
+			if (troop != Clickable.BUTTON_RAX_NO_UNIT) {
+				for (int i = 0; i < RobotUtils.random.nextInt(5) + 15; i++) {
+					RobotUtils.leftClick(troop, 75);
+				}
 			}
 			
 			if (currRax < raxInfo.length - 1) {
