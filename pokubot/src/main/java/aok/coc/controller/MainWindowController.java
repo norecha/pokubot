@@ -347,6 +347,10 @@ public class MainWindowController {
 		this.hostServices = hostServices;
 	}
 
+	/**
+	 * GitHub dependency is only used here and unused parts are excluded. Make sure
+	 * it works fine if it is used somewhere else.
+	 */
 	private void checkForUpdate() {
 		try {
 			String current = getClass().getPackage().getImplementationVersion();
