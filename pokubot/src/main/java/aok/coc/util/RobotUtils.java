@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 
 import aok.coc.util.coords.Area;
 import aok.coc.util.coords.Clickable;
+import aok.coc.util.w32.User32;
 
 import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinDef.HWND;

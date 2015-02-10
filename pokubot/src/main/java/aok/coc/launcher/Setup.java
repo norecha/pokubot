@@ -11,8 +11,8 @@ import org.jnativehook.mouse.NativeMouseListener;
 import aok.coc.exception.BotConfigurationException;
 import aok.coc.util.ConfigUtils;
 import aok.coc.util.RobotUtils;
-import aok.coc.util.User32;
 import aok.coc.util.coords.Clickable;
+import aok.coc.util.w32.User32;
 
 import com.sun.jna.platform.win32.Advapi32Util;
 import com.sun.jna.platform.win32.WinDef.HWND;
