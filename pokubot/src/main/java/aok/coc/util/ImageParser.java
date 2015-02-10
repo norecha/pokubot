@@ -264,6 +264,19 @@ public class ImageParser {
 
 		return rectangle.x / ATTACK_GROUP_UNIT_DIFF;
 	}
+	
+	public static Point findTrainButton() {
+		BufferedImage image = RobotUtils.screenShot(Area.BARRACKS_BUTTONS);
+		Rectangle rectangle = findArea(image, ImageParser.class.getResource("/images/train.png"));
+		if (rectangle == null) {
+			return null;
+		}
+		
+		Point ret = rectangle.getLocation();
+		ret.x += Area.BARRACKS_BUTTONS.getX1();
+		ret.y += Area.BARRACKS_BUTTONS.getY1();
+		return ret;
+	}
 
 	static Rectangle findArea(BufferedImage input, URL url) {
 		BufferedImage tar;
