@@ -1,8 +1,6 @@
 package aok.coc.util;
 
-import java.awt.AWTException;
 import java.awt.Color;
-import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -44,17 +42,7 @@ public class RobotUtils {
 	public static final String	USER_NAME			= System.getProperty("user.name");
 	public static final String	USER_HOME_DIR		= System.getProperty("user.home");
 
-	private static Robot		r;
-
 	public static Random		random				= new Random();
-
-	static {
-		try {
-			r = new Robot();
-		} catch (AWTException e) {
-			e.printStackTrace();
-		}
-	}
 
 	// user32
 	public static final int		WM_NULL				= 0x000;
