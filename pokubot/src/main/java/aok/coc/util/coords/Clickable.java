@@ -31,8 +31,6 @@ public enum Clickable {
 	BUTTON_RAX_PEKKA(642, 451, null, "Pekka"),
 	
 	BUTTON_RAX_FULL(156, 507, new Color(0xD04048)),
-	BUTTON_RAX_TRAIN(614, 584, new Color(0xF8F4F8)),
-	BUTTON_RAX_MAX_TRAIN(565, 584, new Color(0xF7F5F4)),
 	BUTTON_RAX_CLOSE(729, 145, new Color(0xF8FCFF)),
 	BUTTON_ATTACK_UNIT_1(72, 600, null),
 	BUTTON_ATTACK_UNIT_2(145, 600, null),

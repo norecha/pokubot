@@ -1,8 +1,10 @@
 package aok.coc.state;
 
+import java.awt.Point;
 import java.util.logging.Logger;
 
 import aok.coc.exception.BotConfigurationException;
+import aok.coc.util.ImageParser;
 import aok.coc.util.RobotUtils;
 import aok.coc.util.coords.Clickable;
 
@@ -24,27 +26,19 @@ public class StateMainMenu implements State {
 
 		RobotUtils.sleepRandom(350);
 		RobotUtils.leftClick(Clickable.UNIT_FIRST_RAX, 500);
-
-		boolean maxThActive = RobotUtils.isClickableActive(Clickable.BUTTON_RAX_MAX_TRAIN);
-		boolean lowThActive = RobotUtils.isClickableActive(Clickable.BUTTON_RAX_TRAIN);
-		if (!maxThActive  && !lowThActive) {
+		
+		Point trainButton = ImageParser.findTrainButton();
+		if (trainButton == null) {
 			// maybe rax was already open and we closed it back. try one more time
 			RobotUtils.leftClick(Clickable.UNIT_FIRST_RAX, 500);
-
-			maxThActive = RobotUtils.isClickableActive(Clickable.BUTTON_RAX_MAX_TRAIN);
-			lowThActive = RobotUtils.isClickableActive(Clickable.BUTTON_RAX_TRAIN);
-			// if still not active, throw exception
-			if (!maxThActive  && !lowThActive) {
-				logger.severe("Unable to locate barracks.");
-				throw new BotConfigurationException("Barracks location is not correct.");
-			}
+			trainButton = ImageParser.findTrainButton();
 		}
 		
-		if (maxThActive) {
-			RobotUtils.leftClick(Clickable.BUTTON_RAX_MAX_TRAIN, 500);
-		} else {
-			RobotUtils.leftClick(Clickable.BUTTON_RAX_TRAIN, 500);
+		if (trainButton == null) {
+			throw new BotConfigurationException("Barracks location is not correct.");
 		}
+
+		RobotUtils.leftClick(trainButton.x, trainButton.y, 500);
 
 		// camp is full
 		if (RobotUtils.isClickableActive(Clickable.BUTTON_RAX_FULL)) {

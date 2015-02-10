@@ -241,10 +241,6 @@ public class RobotUtils {
 
 		int tarColor = clickable.getColor().getRGB();
 		int actualColor = pixelGetColor(clickable.getX(), clickable.getY()).getRGB();
-		if (clickable == Clickable.BUTTON_RAX_MAX_TRAIN || clickable == Clickable.BUTTON_RAX_TRAIN) {
-			logger.finest("isClickableActive: " + clickable.name() + " " + Integer.toHexString(tarColor)
-							+ " " + Integer.toHexString(actualColor));
-		}
 		return compareColor(tarColor, actualColor, 5);
 	}
 
