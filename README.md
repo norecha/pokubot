@@ -1,5 +1,5 @@
 ##PokuBot
-An open source Clash of Clans bot.
+An open source Clash of Clans bot. Read [FAQ](https://github.com/norecha/pokubot#faq) for most common issues.
 
 ###Features
 * Auto train troops(all troops)
@@ -49,6 +49,18 @@ In case barracks configuration went wrong and you want to reset it, you can dele
 
 ###Issues
 Bot is still in its early stages, I have not tested with different machines. If there are bugs/suggestions, create an issue and attach the log file.
+
+###FAQ
+* Stuck in StateIdle
+
+  Your resolution is not right. If bot fails to automatically change it, you need to manually change values from registry. Google how to change resolution for bluestacks. You need to **restart** your bs(from system tray icon) after you change resolution. If it still looks wrong, restart your pc.
+* Not attacking, bot dies after first opponent.
+
+  Change your in-game language to English.
+* Boost does not work
+  
+  Do not boost your first barracks(the one bot clicks), boost rest for now
+
 
 ###Donate
 If you like PokuBot consider a donation to support further development. Click
