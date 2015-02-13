@@ -9,6 +9,7 @@ An open source Clash of Clans bot. Read [FAQ](https://github.com/norecha/pokubot
 * Or you can just use it to find opponents, be notified when there is a match, and attack manually.
 * Detect empty collectors
 * Disconnect detector. You cannot run game for more than 6 hours at a time, you will be disconnected after that for 5 min, it will reload you again. Or in case something goes wrong and bot dies, you will get disconnected from inactivity, and it will log you back in and start again.
+* Boost on first barracks is not supported for now, because its options changes when it is boosted, so as a workaround boost your remaining barracks.
 
 ###Requirements
 * Windows OS
