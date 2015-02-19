@@ -29,6 +29,13 @@ public enum Clickable {
 	BUTTON_RAX_HEALER(432, 451, null, "Healer"),
 	BUTTON_RAX_DRAGON(542, 451, null, "Dragon"),
 	BUTTON_RAX_PEKKA(642, 451, null, "Pekka"),
+	// dark units
+	BUTTON_RAX_MINION(212, 324, null, "Minion"),
+	BUTTON_RAX_HOG(331, 333, null, "Hog Rider"),
+	BUTTON_RAX_VALKYRIE(432, 333, null, "Valkyrie"),
+	BUTTON_RAX_GOLEM(542, 333, null, "Golem"),
+	BUTTON_RAX_WITCH(642, 333, null, "Witch"),
+	BUTTON_RAX_LAVA(212, 451, null, "Lava Hound"),
 	
 	BUTTON_RAX_FULL(156, 507, new Color(0xD04048)),
 	BUTTON_RAX_CLOSE(729, 145, new Color(0xF8FCFF)),

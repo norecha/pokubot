@@ -17,7 +17,6 @@ import aok.coc.attack.Attack4SideParallel;
 import aok.coc.attack.Attack4SideParallelFull2Wave;
 import aok.coc.attack.Attack4SideParallelHalf2Wave;
 import aok.coc.attack.ManualAttack;
-import aok.coc.exception.BotConfigurationException;
 import aok.coc.launcher.Setup;
 import aok.coc.util.coords.Clickable;
 
@@ -79,6 +78,7 @@ public class ConfigUtils {
 																		Clickable.BUTTON_RAX_BARB,
 																		Clickable.BUTTON_RAX_ARCHER,
 																		Clickable.BUTTON_RAX_ARCHER,
+																		Clickable.BUTTON_RAX_NO_UNIT
 																		};
 
 	// default values end
@@ -97,6 +97,16 @@ public class ConfigUtils {
 																		Clickable.BUTTON_RAX_HEALER,
 																		Clickable.BUTTON_RAX_DRAGON,
 																		Clickable.BUTTON_RAX_PEKKA
+																		};
+	
+	private final Clickable[]		availableDarkTroops					= new Clickable[] {
+																		Clickable.BUTTON_RAX_NO_UNIT,
+																		Clickable.BUTTON_RAX_MINION,
+																		Clickable.BUTTON_RAX_HOG,
+																		Clickable.BUTTON_RAX_VALKYRIE,
+																		Clickable.BUTTON_RAX_GOLEM,
+																		Clickable.BUTTON_RAX_WITCH,
+																		Clickable.BUTTON_RAX_LAVA
 																		};
 
 	private final AbstractAttack[]	availableAttacks					= new AbstractAttack[] {
@@ -364,12 +374,13 @@ public class ConfigUtils {
 		return availableTroops;
 	}
 
-	public void setRaxInfo(String raxInfoProperty) throws BotConfigurationException {
+	public Clickable[] getAvailableDarkTroops() {
+		return availableDarkTroops;
+	}
+
+	public void setRaxInfo(String raxInfoProperty) {
 		String[] splits = raxInfoProperty.split("\\s*,\\s*");
-		if (splits.length != 4) {
-			throw new BotConfigurationException("There must be 4 rax in config file");
-		}
-		for (int i = 0; i < splits.length; i++) {
+		for (int i = 0; i < splits.length && i < 5; i++) {
 			String split = splits[i];
 			raxInfo[i] = Clickable.fromDescription(split);
 		}

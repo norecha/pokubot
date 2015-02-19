@@ -72,6 +72,8 @@ public class MainWindowController {
 	@FXML
 	private ComboBox<String>	rax4ComboBox;
 	@FXML
+	private ComboBox<String>	darkRaxComboBox;
+	@FXML
 	private Hyperlink			githubLink;
 	@FXML
 	private Hyperlink			donateLink;
@@ -98,6 +100,8 @@ public class MainWindowController {
 				((UILogHandler) h).setTextArea(textArea);
 			}
 		}
+
+		configGridPane.setVisible(false);
 
 		botLauncher = new BotLauncher();
 
@@ -270,6 +274,17 @@ public class MainWindowController {
 		rax4ComboBox.getItems().addAll(
 			troops
 			);
+
+		Clickable[] availableDarkTroops = ConfigUtils.instance().getAvailableDarkTroops();
+		String[] darkTroops = new String[availableDarkTroops.length];
+		for (int i = 0; i < availableDarkTroops.length; i++) {
+			Clickable c = availableDarkTroops[i];
+			darkTroops[i] = c.getDescription();
+		}
+
+		darkRaxComboBox.getItems().addAll(
+			darkTroops
+			);
 	}
 
 	@FXML
@@ -297,6 +312,7 @@ public class MainWindowController {
 		rax2ComboBox.getSelectionModel().select(ConfigUtils.instance().getRaxInfo()[1].getDescription());
 		rax3ComboBox.getSelectionModel().select(ConfigUtils.instance().getRaxInfo()[2].getDescription());
 		rax4ComboBox.getSelectionModel().select(ConfigUtils.instance().getRaxInfo()[3].getDescription());
+		darkRaxComboBox.getSelectionModel().select(ConfigUtils.instance().getRaxInfo()[4].getDescription());
 
 		configGridPane.setVisible(true);
 	}
@@ -339,6 +355,7 @@ public class MainWindowController {
 		ConfigUtils.instance().getRaxInfo()[1] = Clickable.fromDescription(rax2ComboBox.getValue());
 		ConfigUtils.instance().getRaxInfo()[2] = Clickable.fromDescription(rax3ComboBox.getValue());
 		ConfigUtils.instance().getRaxInfo()[3] = Clickable.fromDescription(rax4ComboBox.getValue());
+		ConfigUtils.instance().getRaxInfo()[4] = Clickable.fromDescription(darkRaxComboBox.getValue());
 
 		ConfigUtils.instance().save();
 	}
