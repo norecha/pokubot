@@ -17,7 +17,6 @@ import aok.coc.attack.Attack4SideParallel;
 import aok.coc.attack.Attack4SideParallelFull2Wave;
 import aok.coc.attack.Attack4SideParallelHalf2Wave;
 import aok.coc.attack.ManualAttack;
-import aok.coc.exception.BotConfigurationException;
 import aok.coc.launcher.Setup;
 import aok.coc.util.coords.Clickable;
 
@@ -364,15 +363,13 @@ public class ConfigUtils {
 		return availableTroops;
 	}
 
-	public void setRaxInfo(String raxInfoProperty) throws BotConfigurationException {
+	public void setRaxInfo(String raxInfoProperty) {
+		final int raxCount = raxInfo.length;
 		String[] splits = raxInfoProperty.split("\\s*,\\s*");
-		if (splits.length != 4) {
-			throw new BotConfigurationException("There must be 4 rax in config file");
-		}
-		for (int i = 0; i < splits.length; i++) {
-			String split = splits[i];
-			raxInfo[i] = Clickable.fromDescription(split);
-		}
+		for (int i = 0; i < splits.length && i < raxCount; i++) {
+ 			String split = splits[i];
+ 			raxInfo[i] = Clickable.fromDescription(split);
+ 		}
 	}
 
 	public Clickable[] getRaxInfo() {
