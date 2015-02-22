@@ -190,9 +190,10 @@ public class TestImageParser {
 		int fail = 0;
 		for (File f : baseDir.listFiles()) {
 			String name = f.getName();
-			if (!name.equals("attack_1422589140788_no_9.png")) {
-				continue;
-			}
+//			if (!name.equals("attack_1422589140788_no_9.png")) {
+//				continue;
+//			}
+			@SuppressWarnings("unused")
 			Integer thLevel;
 			try {
 				thLevel = Integer.parseInt(name.substring(name.lastIndexOf('_') + 1, name.lastIndexOf('.')));
