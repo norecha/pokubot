@@ -213,8 +213,8 @@ public class MainWindowController {
 			@Override
 			public void handle(WorkerStateEvent event) {
 				isSetupDone = false;
+				logger.log(Level.SEVERE, "Setup is failed: " + setupService.getException().getMessage(), setupService.getException());
 				setupService.reset();
-				logger.log(Level.SEVERE, "Setup is failed:" + setupService.getException().getMessage(), setupService.getException());
 			}
 		});
 
@@ -223,8 +223,8 @@ public class MainWindowController {
 			@Override
 			public void handle(WorkerStateEvent event) {
 				isSetupDone = false;
-				setupService.reset();
 				logger.warning("Setup is cancelled.");
+				setupService.reset();
 			}
 		});
 	}

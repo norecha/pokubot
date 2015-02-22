@@ -1,6 +1,7 @@
 package aok.coc.launcher;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 import org.jnativehook.GlobalScreen;
@@ -33,7 +34,10 @@ public class Setup {
 	private static final Logger	logger			= Logger.getLogger(Setup.class.getName());
 
 	public static void setup() throws BotConfigurationException, InterruptedException {
-		if (!RobotUtils.SYSTEM_OS.toLowerCase().contains("windows")) {
+		// set system locale to ROOT, Turkish clients will break because jnativehook dependency has Turkish I bug
+		Locale.setDefault(Locale.ROOT);
+		
+		if (!RobotUtils.SYSTEM_OS.toLowerCase(Locale.ROOT).contains("windows")) {
 			throw new BotConfigurationException("Bot is only available for Windows OS.");
 		}
 		
@@ -42,6 +46,7 @@ public class Setup {
 
 		// setup configUtils
 		logger.info("Setting up ConfigUtils...");
+		logger.info("Make sure in-game language is English.");
 		ConfigUtils.initialize();
 
 		// setup bs window handle
