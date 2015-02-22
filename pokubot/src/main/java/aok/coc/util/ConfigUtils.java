@@ -379,8 +379,9 @@ public class ConfigUtils {
 	}
 
 	public void setRaxInfo(String raxInfoProperty) {
+		final int raxCount = raxInfo.length;
 		String[] splits = raxInfoProperty.split("\\s*,\\s*");
-		for (int i = 0; i < splits.length && i < 5; i++) {
+		for (int i = 0; i < splits.length && i < raxCount; i++) {
 			String split = splits[i];
 			raxInfo[i] = Clickable.fromDescription(split);
 		}
