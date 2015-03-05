@@ -73,6 +73,8 @@ public class BotLauncher {
 			}
 		} finally {
 			dcThread.interrupt();
+			this.waitingForDcChecker = false;
+			context.setWaitDone(false);
 		}
 	}
 
@@ -110,6 +112,8 @@ public class BotLauncher {
 				
 				logger.info("Waiting for dc checker to wake me up...");
 				this.waitingForDcChecker = true;
+				
+				// if user interrupts here while it is waiting, make sure waitingForDcChecker is set to false
 				context.wait(timeout);
 				
 				if ((System.currentTimeMillis() - tBefore) > timeout) {
