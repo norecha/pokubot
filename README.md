@@ -1,5 +1,5 @@
 ##PokuBot
-An open source Clash of Clans bot. Read [FAQ](https://github.com/norecha/pokubot#faq) for most common issues.
+An open source Clash of Clans bot. Read [FAQ](#faq) for most common issues.
 
 ###Features
 * Auto train troops(all troops)
