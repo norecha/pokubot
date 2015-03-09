@@ -40,12 +40,12 @@ In case barracks configuration went wrong and you want to reset it, you can dele
 * At least 170k for resources, so you increase the chance of getting a base with full collectors.
 * Auto Attack: Attack 4 Side Parallel 2 Half Wave
 * Detect empty collectors: true
-* Rax 1: barb
-* Rax 2: barb
-* Rax 3: archer
-* Rax 4: archer
+* Rax 1: Barb
+* Rax 2: Barb
+* Rax 3: Archer
+* Rax 4: Archer
 
-*If one or more of your rax are upgrading, you need to set remaining ones to "No Unit"
+*If one or more of your barracks are upgrading, you need to set remaining ones to "No Unit"
 
 ###Issues
 Bot is still in its early stages, I have not tested with different machines. If there are bugs/suggestions, create an issue and attach the log file.
@@ -53,7 +53,8 @@ Bot is still in its early stages, I have not tested with different machines. If 
 ###FAQ
 * Stuck in StateIdle
 
-  Your resolution is not right. If bot fails to automatically change it, you need to manually change values from registry. Google how to change resolution for bluestacks. You need to **restart** your bs(from system tray icon) after you change resolution. If it still looks wrong, restart your pc.
+    Your resolution is not right. If bot fails to automatically change it, you need to manually change values from registry. Google how to change resolution for bluestacks. You need to **restart** your BlueStacks(from system tray icon) after you change resolution. If it still looks wrong, restart your pc.
+
 * Not attacking, bot dies after first opponent.
 
     Change your in-game language to English.
