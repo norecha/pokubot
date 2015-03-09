@@ -138,7 +138,7 @@ public class TestImageParser {
 		for (int i = 0; i < imageNames.length; i++) {
 			String s = imageNames[i];
 			BufferedImage image = ImageIO.read(TestImageParser.class.getResourceAsStream(imageLocation + s));
-			int trophy = ImageParser.parseTropy(image);
+			int trophy = ImageParser.parseTrophy(image);
 			
 			try {
 				Assert.assertEquals(expectedTrophy[i], trophy);

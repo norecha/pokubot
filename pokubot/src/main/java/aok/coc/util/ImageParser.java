@@ -187,7 +187,7 @@ public class ImageParser {
 		return parseNumber(image, 2, 33, 57, image.getWidth() - 43);
 	}
 
-	public static int parseTropy(BufferedImage image) throws BotBadBaseException {
+	public static int parseTrophy(BufferedImage image) throws BotBadBaseException {
 		if (!hasDE(image)) {
 			return parseNumber(image, 3, 33, 62, image.getWidth() - 43);
 		} else {
