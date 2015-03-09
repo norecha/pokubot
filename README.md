@@ -56,7 +56,11 @@ Bot is still in its early stages, I have not tested with different machines. If 
   Your resolution is not right. If bot fails to automatically change it, you need to manually change values from registry. Google how to change resolution for bluestacks. You need to **restart** your bs(from system tray icon) after you change resolution. If it still looks wrong, restart your pc.
 * Not attacking, bot dies after first opponent.
 
-  Change your in-game language to English.
+    Change your in-game language to English.
+
+* Barracks are scrolling to dark barracks/spells instead of next barracks
+
+    Your first barracks was improperly configured. All settings are saved under %appdata%/PokuBot/config.properties. Delete this file and reconfigure.
 
 
 ###Donate
