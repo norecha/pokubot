@@ -1,5 +1,5 @@
 ##PokuBot
-An open source Clash of Clans bot. Read [FAQ](https://github.com/norecha/pokubot#faq) for most common issues.
+An open source Clash of Clans bot. Read [FAQ](/pokubot#faq) for most common issues.
 
 ###Features
 * Auto train troops(all troops)
@@ -22,7 +22,7 @@ An open source Clash of Clans bot. Read [FAQ](https://github.com/norecha/pokubot
 * Run the game in **English,** some users reported errors in other languages.
 
 ###Instructions
-Download the latest version of PokuBot from [releases page](https://github.com/norecha/pokubot/releases) and run the .jar file.
+Download the latest version of PokuBot from [releases page](/pokubot/releases) and run the .jar file.
 
 Make sure you are running it with java 8, not with an older version of Java.
 Right click to .jar file, Properties -> Open with -> Change -> Browse.
