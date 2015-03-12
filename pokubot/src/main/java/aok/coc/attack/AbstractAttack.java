@@ -1,5 +1,6 @@
 package aok.coc.attack;
 
+import java.util.Random;
 import java.util.logging.Logger;
 
 import aok.coc.exception.BotBadBaseException;
@@ -17,12 +18,19 @@ public abstract class AbstractAttack {
 
 	protected static int		RIGHT_X			= 836;
 	protected static int		RIGHT_Y			= 307;
-
+	
+	protected static int		CENTRE_X		= 428;
+	protected static int		CENTRE_Y		= 307;
+	
 	protected static int		BOTTOM_LEFT_X	= 300;
 	protected static int		BOTTOM_LEFT_Y	= 536;
 
 	protected static int		BOTTOM_RIGHT_X	= 537;
 	protected static int		BOTTOM_RIGHT_Y	= 538;
+	
+	protected static final int  WAVE_PER_SIDE = 1;
+	
+	protected static final int	DEFAULT_DISTURB = 8;
 	
 	protected static final int	PAUSE_BETWEEN_UNIT_DROP = 61;
 
@@ -50,10 +58,38 @@ public abstract class AbstractAttack {
 
 		double deltaX = (toX - fromX) / (count - 1);
 		double deltaY = (toY - fromY) / (count - 1);
-
+		
 		for (int i = 0; i < count; i++) {
 			result[i][0] = (int) (fromX + deltaX * i);
 			result[i][1] = (int) (fromY + deltaY * i);
+		}
+
+		return result;
+	}
+	
+	//Add some disturbance to the position
+	protected static final int[][] pointsBetweenFromToInclusive(int fromX, int fromY, int toX, int toY, int count, int disturb) {
+		
+		if (count <= 0) {
+			return new int[0][0];
+		} else if (count == 1) {
+			return new int[][] { { (toX + fromX) / 2, (toY + fromY) / 2 } };
+		}
+
+		Random r = new Random();
+		int[][] result = new int[count][2];
+
+		double deltaX = (toX - fromX) / (count - 1);
+		double deltaY = (toY - fromY) / (count - 1);
+		
+		int disturbX = 0;
+		int disturbY = 0;
+		
+		for (int i = 0; i < count; i++) {
+			disturbX = r.nextInt(disturb*2+1) - disturb;
+			disturbY = r.nextInt(disturb*2+1) - disturb;
+			result[i][0] = (int) (fromX + deltaX * i + disturbX);
+			result[i][1] = (int) (fromY + deltaY * i + disturbY);
 		}
 
 		return result;
