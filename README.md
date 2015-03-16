@@ -33,6 +33,8 @@ BlueStacks must run in 860x720 resolution, it will automatically set that up, bu
 After PokuBot is opened, click start to go through setup, write down your settings and hit save.
 You can change the values while bot is running too, just don't forget to click save.
 
+If you need help with setting up first barracks, you can watch [this video.](https://www.youtube.com/watch?v=sUN-im0Zt8s) (Thanks to frank1cangri)
+
 All settings are saved under %appdata%/PokuBot/config.properties.
 In case barracks configuration went wrong and you want to reset it, you can delete this file.
 
