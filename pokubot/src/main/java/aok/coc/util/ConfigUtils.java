@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import aok.coc.attack.AbstractAttack;
 import aok.coc.attack.Attack2Side;
 import aok.coc.attack.Attack4Side;
+import aok.coc.attack.Attack4SideAsHumanbeings;
 import aok.coc.attack.Attack4SideParallel;
 import aok.coc.attack.Attack4SideParallelFull2Wave;
 import aok.coc.attack.Attack4SideParallelHalf2Wave;
@@ -105,6 +106,7 @@ public class ConfigUtils {
 																		Attack4SideParallel.instance(),
 																		Attack4SideParallelHalf2Wave.instance(),
 																		Attack4SideParallelFull2Wave.instance(),
+																		Attack4SideAsHumanbeings.instance()
 																		};
 
 	private static final Logger		logger								= Logger.getLogger(ConfigUtils.class.getName());
