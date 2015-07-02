@@ -11,8 +11,8 @@ public enum Clickable {
 	BUTTON_ATTACK(63, 599, new Color(0xF0E8D8)), // make sure to pick a solid spot, some parts are transparent
 	BUTTON_FIND_A_MATCH(148, 529, new Color(0xD84B00)),
 	BUTTON_SHIELD_DISABLE(512, 397, null),
-	BUTTON_NEXT(816, 484, new Color(0xECAC28)),
-	BUTTON_END_BATTLE(59, 517, null),
+	BUTTON_NEXT(816, 500, new Color(0xECAC28)),
+	BUTTON_END_BATTLE(59, 540, null),
 	BUTTON_END_BATTLE_QUESTION_OKAY(509, 394, null),
 	BUTTON_END_BATTLE_RETURN_HOME(437, 532, new Color(0xCEE870)),
 	BUTTON_RAX_NEXT(767, 361, new Color(0xF8B046)),
@@ -30,8 +30,8 @@ public enum Clickable {
 	BUTTON_RAX_DRAGON(542, 451, null, "Dragon"),
 	BUTTON_RAX_PEKKA(642, 451, null, "Pekka"),
 	
-	BUTTON_RAX_FULL(156, 507, new Color(0xD04048)),
-	BUTTON_RAX_CLOSE(729, 145, new Color(0xF8FCFF)),
+	BUTTON_RAX_FULL(402, 156, new Color(0xE84E50)),
+	BUTTON_RAX_CLOSE(730, 110, new Color(0xF8FCFF)),
 	BUTTON_ATTACK_UNIT_1(72, 600, null),
 	BUTTON_ATTACK_UNIT_2(145, 600, null),
 	BUTTON_ATTACK_UNIT_3(217, 600, null),
