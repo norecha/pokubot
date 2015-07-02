@@ -1,6 +1,10 @@
 ##PokuBot
 An open source Clash of Clans bot. Read [FAQ](#faq) for most common issues.
 
+###Donate
+If you like PokuBot consider a donation to support further development. Click
+[here!](https://cdn.rawgit.com/norecha/pokubot/master/donate2.html)
+
 ###Features
 * Auto train troops(all troops)
 * Auto opponent finder matching gold, elixir, dark elixir criterias
@@ -64,8 +68,3 @@ Bot is still in its early stages, I have not tested with different machines. If 
 * Barracks are scrolling to dark barracks/spells instead of next barracks
 
     Your first barracks was improperly configured. All settings are saved under %appdata%/PokuBot/config.properties. Delete this file and reconfigure.
-
-
-###Donate
-If you like PokuBot consider a donation to support further development. Click
-[here!](https://cdn.rawgit.com/norecha/pokubot/master/donate2.html)
