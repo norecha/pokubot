@@ -1,15 +1,5 @@
 package aok.coc.state;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-
 import aok.coc.attack.ManualAttack;
 import aok.coc.exception.BotBadBaseException;
 import aok.coc.exception.BotException;
@@ -18,6 +8,15 @@ import aok.coc.util.ImageParser;
 import aok.coc.util.RobotUtils;
 import aok.coc.util.coords.Area;
 import aok.coc.util.coords.Clickable;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class StateAttack implements State {
 	private static final Logger			logger		= Logger.getLogger(StateAttack.class.getName());
