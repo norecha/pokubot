@@ -2,9 +2,10 @@ package aok.coc.util.coords;
 
 public enum Area {
 
-	ENEMY_LOOT(17, 68, 138, 240),
-	ATTACK_GROUP(24, 554, 836, 653),
+	ENEMY_LOOT(17, 70, 138, 240),
+	ATTACK_GROUP(24, 574, 836, 673),
 	ENEMY_BASE(31, 0, 831, 510),
+	@Deprecated
 	BARRACKS_BUTTONS(188, 581, 679, 679);
 	
 	private int	x1;

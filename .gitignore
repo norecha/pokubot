@@ -7,3 +7,6 @@ pokubot/pokulog.txt
 pokubot/pokulog.txt.lck
 pokubot/.idea/
 pokubot/pokubot.iml
+pokubot/debug/
+pokubot/pokulog.txt*
+pokubot/bug/

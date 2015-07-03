@@ -1,10 +1,10 @@
 package aok.coc.attack;
 
-import java.util.logging.Logger;
-
 import aok.coc.exception.BotBadBaseException;
 import aok.coc.util.ImageParser;
 import aok.coc.util.RobotUtils;
+
+import java.util.logging.Logger;
 
 public abstract class AbstractAttack {
 	private static final Logger	logger			= Logger.getLogger(AbstractAttack.class.getName());
