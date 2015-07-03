@@ -10,3 +10,5 @@ pokubot/pokubot.iml
 pokubot/debug/
 pokubot/pokulog.txt*
 pokubot/bug/
+pokubot/KeyGen/
+pokubot/out/
