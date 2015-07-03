@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 
 public class ConfigUtils {
 
-	private boolean debug = true;
 	//----------------------------------------------------------
 	// Singleton reference
 	// Thread safe
@@ -345,13 +344,5 @@ public class ConfigUtils {
 
 	public Clickable[] getRaxInfo() {
 		return raxInfo;
-	}
-
-	public boolean isDebug() {
-		return debug;
-	}
-
-	public void setDebug(boolean debug) {
-		this.debug = debug;
 	}
 }
