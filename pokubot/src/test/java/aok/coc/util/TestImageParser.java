@@ -64,7 +64,7 @@ public class TestImageParser {
 		new int[]{110,100,0,1,1},
 		new int[]{108,98,0,1,1},
 		new int[]{0,8,16,1,1},
-		new int[]{5,8,18,1,1},
+		new int[]{0,8,18,1,1},
 	};
 	
 	private final String imageLocation = "/parser_images/";
