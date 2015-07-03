@@ -81,6 +81,6 @@
             <Font size="11.0" />
          </font>
       </Hyperlink>
-      <Label fx:id="updateLabel" layoutX="536.0" layoutY="515.0" text="Update is available!" textFill="#b91010" visible="false" AnchorPane.bottomAnchor="9.0" AnchorPane.rightAnchor="243.0" />
+      <Label fx:id="updateLabel" layoutX="482.0" layoutY="513.0" text="Update is available!" textFill="#b91010" AnchorPane.bottomAnchor="9.0" AnchorPane.rightAnchor="276.0" />
    </children>
 </AnchorPane>

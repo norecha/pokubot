@@ -95,6 +95,7 @@ public class MainWindowController {
 
 	@FXML
 	private void initialize() {
+		updateLabel.setVisible(false);
 		for (Handler h : Logger.getLogger("").getHandlers()) {
 			if (h instanceof UILogHandler) {
 				((UILogHandler) h).setTextArea(textArea);

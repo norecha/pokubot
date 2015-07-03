@@ -100,15 +100,15 @@ public class ImageParser {
 	static int[] parseTroopCount(BufferedImage image) {
 		BufferedImage binary = imageToBinary(image);
 
-		if (ConfigUtils.instance().isDebug()) {
-			String name = "troop_" + System.currentTimeMillis();
-			try {
-				RobotUtils.saveImage(image, "debug", name + "_colored.png");
-				RobotUtils.saveImage(binary, "debug", name + "_binary.png");
-			} catch (IOException e) {
-				logger.log(Level.SEVERE, "Unable to save image", e);
-			}
-		}
+//		if (true) {
+//			String name = "troop_" + System.currentTimeMillis();
+//			try {
+//				RobotUtils.saveImage(image, "debug", name + "_colored.png");
+//				RobotUtils.saveImage(binary, "debug", name + "_binary.png");
+//			} catch (IOException e) {
+//				logger.log(Level.SEVERE, "Unable to save image", e);
+//			}
+//		}
 
 		int[] tmp = new int[11]; // max group size
 
@@ -305,15 +305,15 @@ public class ImageParser {
 		logger.info(String.format("[gold: %d, elixir: %d, de: %d]",
 			gold, elixir, de));
 
-		if (ConfigUtils.instance().isDebug()) {
-			String name = "loot_" + System.currentTimeMillis();
-			try {
-				RobotUtils.saveImage(image, "debug", name + "_colored.png");
-				RobotUtils.saveImage(binary, "debug", name + "_binary.png");
-			} catch (IOException e) {
-				logger.log(Level.SEVERE, "Unable to save image", e);
-			}
-		}
+//		if (true) {
+//			String name = "loot_" + System.currentTimeMillis();
+//			try {
+//				RobotUtils.saveImage(image, "debug", name + "_colored.png");
+//				RobotUtils.saveImage(binary, "debug", name + "_binary.png");
+//			} catch (IOException e) {
+//				logger.log(Level.SEVERE, "Unable to save image", e);
+//			}
+//		}
 
 		return new int[] { gold, elixir, de };
 	}

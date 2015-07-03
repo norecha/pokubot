@@ -69,17 +69,6 @@ public class TestImageParser {
 	
 	private final String imageLocation = "/parser_images/";
 
-	@BeforeClass
-	public static void setup() {
-		ConfigUtils.initialize();
-		ConfigUtils.instance().setDebug(false);
-	}
-
-	@AfterClass
-	public static void teardown() {
-		ConfigUtils.close();
-	}
-
 	@Test
 	public void testGoldParser() throws IOException, BotBadBaseException {
 		int fail = 0;
