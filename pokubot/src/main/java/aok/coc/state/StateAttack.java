@@ -102,8 +102,11 @@ public class StateAttack implements State {
 				
 				RobotUtils.sleepTillClickableIsActive(Clickable.BUTTON_NEXT);
 
+				// NOTE: Since version 1.1, calculating loot takes ~2.5 seconds, which makes up for
+				// sleep we had before.
+				
 				// to avoid server/client sync from nexting too fast
-				RobotUtils.sleepRandom(1000);
+//				RobotUtils.sleepRandom(1000);
 			}
 		}
 	}
