@@ -132,10 +132,10 @@ public class ImageParser {
 				break;
 			}
 
-			if (no >= 5) {
+			if (no >= 6) {
 				tmp[curr] = no;
 			} else {
-				// ignore 1,2,3,4 because they are usually
+				// ignore 1,2,3,4,5 because they are usually
 				// cc or spells
 				tmp[curr] = 0;
 			}
