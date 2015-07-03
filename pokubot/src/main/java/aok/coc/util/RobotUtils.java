@@ -1,7 +1,19 @@
 package aok.coc.util;
 
-import java.awt.Color;
-import java.awt.Toolkit;
+import aok.coc.util.coords.Area;
+import aok.coc.util.coords.Clickable;
+import aok.coc.util.w32.GDI32;
+import aok.coc.util.w32.User32;
+import com.sun.jna.Memory;
+import com.sun.jna.platform.win32.WinDef;
+import com.sun.jna.platform.win32.WinDef.*;
+import com.sun.jna.platform.win32.WinGDI;
+import com.sun.jna.platform.win32.WinGDI.BITMAPINFO;
+import com.sun.jna.platform.win32.WinNT.HANDLE;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -9,27 +21,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Random;
 import java.util.logging.Logger;
-
-import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
-
-import aok.coc.util.coords.Area;
-import aok.coc.util.coords.Clickable;
-import aok.coc.util.w32.GDI32;
-import aok.coc.util.w32.User32;
-
-import com.sun.jna.Memory;
-import com.sun.jna.platform.win32.WinDef;
-import com.sun.jna.platform.win32.WinDef.DWORD;
-import com.sun.jna.platform.win32.WinDef.HBITMAP;
-import com.sun.jna.platform.win32.WinDef.HDC;
-import com.sun.jna.platform.win32.WinDef.HWND;
-import com.sun.jna.platform.win32.WinDef.LPARAM;
-import com.sun.jna.platform.win32.WinDef.POINT;
-import com.sun.jna.platform.win32.WinDef.WPARAM;
-import com.sun.jna.platform.win32.WinGDI;
-import com.sun.jna.platform.win32.WinGDI.BITMAPINFO;
-import com.sun.jna.platform.win32.WinNT.HANDLE;
 
 public class RobotUtils {
 
@@ -95,8 +86,7 @@ public class RobotUtils {
 	}
 
 	public static void leftClick(Clickable clickable, int sleepInMs) throws InterruptedException {
-		boolean randomize = clickable != Clickable.UNIT_FIRST_RAX;
-		leftClickWin32(clickable.getX(), clickable.getY(), randomize);
+		leftClickWin32(clickable.getX(), clickable.getY(), true);
 		Thread.sleep(sleepInMs + random.nextInt(sleepInMs));
 	}
 
@@ -203,12 +193,16 @@ public class RobotUtils {
 	}
 
 	public static File saveScreenShot(int x1, int y1, int x2, int y2, String filePathFirst, String... filePathRest) throws IOException {
+		BufferedImage img = screenShotBackGround(x1, y1, x2, y2);
+		return saveImage(img, filePathFirst, filePathRest);
+	}
+
+	public static File saveImage(BufferedImage img, String filePathFirst, String... filePathRest) throws IOException {
 		Path path = Paths.get(filePathFirst, filePathRest).toAbsolutePath();
 		String fileName = path.getFileName().toString();
 		if (!(path.getFileName().toString().toLowerCase().endsWith(".png"))) {
 			fileName = path.getFileName().toString() + ".png";
 		}
-		BufferedImage img = screenShotBackGround(x1, y1, x2, y2);
 		File file = new File(path.getParent().toString(), fileName);
 		if (!file.getParentFile().isDirectory()) {
 			file.getParentFile().mkdirs();

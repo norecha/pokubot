@@ -1,27 +1,17 @@
 package aok.coc.util;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import aok.coc.attack.AbstractAttack;
-import aok.coc.attack.Attack2Side;
-import aok.coc.attack.Attack4Side;
-import aok.coc.attack.Attack4SideParallel;
-import aok.coc.attack.Attack4SideParallelFull2Wave;
-import aok.coc.attack.Attack4SideParallelHalf2Wave;
-import aok.coc.attack.ManualAttack;
+import aok.coc.attack.*;
 import aok.coc.launcher.Setup;
 import aok.coc.util.coords.Clickable;
 
+import java.io.*;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class ConfigUtils {
 
+	private boolean debug = true;
 	//----------------------------------------------------------
 	// Singleton reference
 	// Thread safe
@@ -56,7 +46,6 @@ public class ConfigUtils {
 	private static final String		PROPERTY_DE							= "de";
 	private static final String		PROPERTY_MAX_TH						= "max_th";
 	private static final String		PROPERTY_IS_MATCH_ALL_CONDS			= "match_all";
-	private static final String		PROPERTY_BARRACKS_COORDS			= "barracks_coords";
 	private static final String		PROPERTY_DETECT_EMPTY_COLLECTORS	= "detect_empty_collectors";
 	private static final String		PROPERTY_PLAY_SOUND					= "play_sound";
 	private static final String		PROPERTY_ATTACK_STRAT				= "attack_strat";
@@ -184,23 +173,6 @@ public class ConfigUtils {
 				if (raxInfoProperty != null) {
 					instance.setRaxInfo(raxInfoProperty);
 				}
-
-				String barracksCoordsProperty = configProperties.getProperty(PROPERTY_BARRACKS_COORDS);
-				if (barracksCoordsProperty != null) {
-					try (Scanner sc = new Scanner(barracksCoordsProperty)) {
-						int x = sc.nextInt();
-						int y = sc.nextInt();
-
-						Clickable.UNIT_FIRST_RAX.setX(x);
-						Clickable.UNIT_FIRST_RAX.setY(y);
-
-						logger.info(String.format("Found barracks coordinates <%d, %d>", x, y));
-						instance.barracksConfigDone = true;
-					} catch (Exception e) {
-						logger.log(Level.SEVERE, "Unable to read barracks config.", e);
-						instance.barracksConfigDone = false;
-					}
-				}
 			} catch (Exception e) {
 				logger.log(Level.SEVERE, "Unable to read configuration file.", e);
 			}
@@ -235,8 +207,7 @@ public class ConfigUtils {
 			configProperties.setProperty(PROPERTY_DETECT_EMPTY_COLLECTORS, String.valueOf(detectEmptyCollectors));
 			configProperties.setProperty(PROPERTY_PLAY_SOUND, String.valueOf(playSound));
 			configProperties.setProperty(PROPERTY_ATTACK_STRAT, String.valueOf(attackStrategy.getClass().getSimpleName()));
-			configProperties.setProperty(PROPERTY_BARRACKS_COORDS, Clickable.UNIT_FIRST_RAX.getX() + " " + Clickable.UNIT_FIRST_RAX.getY());
-			
+
 			StringBuilder raxProp = new StringBuilder();
 			for (int i = 0; i < raxInfo.length; i++) {
 				Clickable unit = raxInfo[i];
@@ -391,4 +362,11 @@ public class ConfigUtils {
 		return raxInfo;
 	}
 
+	public boolean isDebug() {
+		return debug;
+	}
+
+	public void setDebug(boolean debug) {
+		this.debug = debug;
+	}
 }

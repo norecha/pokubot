@@ -1,26 +1,18 @@
 package aok.coc.launcher;
 
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.logging.Logger;
-
-import org.jnativehook.GlobalScreen;
-import org.jnativehook.NativeHookException;
-import org.jnativehook.mouse.NativeMouseEvent;
-import org.jnativehook.mouse.NativeMouseListener;
-
 import aok.coc.exception.BotConfigurationException;
 import aok.coc.util.ConfigUtils;
 import aok.coc.util.RobotUtils;
-import aok.coc.util.coords.Clickable;
 import aok.coc.util.w32.User32;
-
 import com.sun.jna.platform.win32.Advapi32Util;
 import com.sun.jna.platform.win32.WinDef.HWND;
-import com.sun.jna.platform.win32.WinDef.POINT;
 import com.sun.jna.platform.win32.WinNT;
 import com.sun.jna.platform.win32.WinReg;
 import com.sun.jna.platform.win32.WinReg.HKEYByReference;
+
+import java.util.Arrays;
+import java.util.Locale;
+import java.util.logging.Logger;
 
 public class Setup {
 
@@ -60,84 +52,11 @@ public class Setup {
 		// setup RobotUtils
 		logger.info("Setting up RobotUtils...");
 		RobotUtils.setupWin32(bsHwnd);
-
-		// setup barracks
-		logger.info("Setting up Barracks...");
-		setupBarracks();
 	}
 
 	public static void tearDown() {
 		if (ConfigUtils.isInitialized()) {
 			ConfigUtils.close();
-		}
-	}
-
-	private static void setupBarracks() throws BotConfigurationException, InterruptedException {
-
-		if (!ConfigUtils.instance().isBarracksConfigDone()) {
-			RobotUtils.zoomUp();
-			boolean confirmed = RobotUtils.confirmationBox("You must configure the location " +
-															"of first Barracks. First Barracks is the leftmost one when you \n" +
-															"scroll through your barracks via orange next arrow on the right. For example, if you \n" +
-															"have 4 barracks, when you select the first one and click 'Train Troops', all \n" +
-															"3 'next' views should also be barracks.\n\n" +
-															"Click Yes to start configuration and click on your first barracks. Do \n" +
-															"NOT click anything else in between. Click Yes and click barracks. \n\n" +
-															"Make sure you are max zoomed out.",
-				"Barracks configuration");
-
-			if (!confirmed) {
-				throw new BotConfigurationException("Cannot proceed without barracks");
-			}
-
-			// read mouse click
-			try {
-				GlobalScreen.registerNativeHook();
-				GlobalScreen.getInstance().addNativeMouseListener(new NativeMouseListener() {
-
-					@Override
-					public void nativeMouseReleased(NativeMouseEvent e) {
-					}
-
-					@Override
-					public void nativeMousePressed(NativeMouseEvent e) {
-					}
-
-					@Override
-					public void nativeMouseClicked(NativeMouseEvent e) {
-						// not relative to window
-						int x = e.getX();
-						int y = e.getY();
-						logger.finest(String.format("clicked %d %d", e.getX(), e.getY()));
-						
-						POINT screenPoint = new POINT(x, y);
-						User32.INSTANCE.ScreenToClient(bsHwnd, screenPoint);
-						
-						Clickable.UNIT_FIRST_RAX.setX(screenPoint.x);
-						Clickable.UNIT_FIRST_RAX.setY(screenPoint.y);
-						
-						synchronized (GlobalScreen.getInstance()) {
-							GlobalScreen.getInstance().notify();
-						}
-					}
-				});
-
-				logger.info("Waiting for user to click on first barracks.");
-				synchronized (GlobalScreen.getInstance()) {
-					while (Clickable.UNIT_FIRST_RAX.getX() == null) {
-						GlobalScreen.getInstance().wait();
-					}
-				}
-				logger.info(String.format("Set barracks location to <%d, %d>",
-					Clickable.UNIT_FIRST_RAX.getX(),
-					Clickable.UNIT_FIRST_RAX.getY()));
-
-				ConfigUtils.instance().setBarracksConfigDone(true);
-
-				GlobalScreen.unregisterNativeHook();
-			} catch (NativeHookException e) {
-				throw new BotConfigurationException("Unable to capture mouse movement.", e);
-			}
 		}
 	}
 

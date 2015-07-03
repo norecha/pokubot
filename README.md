@@ -1,5 +1,5 @@
 ##PokuBot
-An open source Clash of Clans bot.
+An open source Clash of Clans bot. Read [FAQ](#faq) for most common issues.
 
 ###Features
 * Auto train troops(all troops)
@@ -33,6 +33,8 @@ BlueStacks must run in 860x720 resolution, it will automatically set that up, bu
 After PokuBot is opened, click start to go through setup, write down your settings and hit save.
 You can change the values while bot is running too, just don't forget to click save.
 
+If you need help with setting up first barracks, you can watch [this video.](https://www.youtube.com/watch?v=sUN-im0Zt8s) (Thanks to frank1cangri)
+
 All settings are saved under %appdata%/PokuBot/config.properties.
 In case barracks configuration went wrong and you want to reset it, you can delete this file.
 
@@ -40,15 +42,29 @@ In case barracks configuration went wrong and you want to reset it, you can dele
 * At least 170k for resources, so you increase the chance of getting a base with full collectors.
 * Auto Attack: Attack 4 Side Parallel 2 Half Wave
 * Detect empty collectors: true
-* Rax 1: barb
-* Rax 2: barb
-* Rax 3: archer
-* Rax 4: archer
+* Rax 1: Barb
+* Rax 2: Barb
+* Rax 3: Archer
+* Rax 4: Archer
 
-*If one or more of your rax are upgrading, you need to set remaining ones to "No Unit"
+*If one or more of your barracks are upgrading, you need to set remaining ones to "No Unit"
 
 ###Issues
 Bot is still in its early stages, I have not tested with different machines. If there are bugs/suggestions, create an issue and attach the log file.
+
+###FAQ
+* Stuck in StateIdle
+
+    Your resolution is not right. If bot fails to automatically change it, you need to manually change values from registry. Google how to change resolution for bluestacks. You need to **restart** your BlueStacks(from system tray icon) after you change resolution. If it still looks wrong, restart your pc.
+
+* Not attacking, bot dies after first opponent.
+
+    Change your in-game language to English.
+
+* Barracks are scrolling to dark barracks/spells instead of next barracks
+
+    Your first barracks was improperly configured. All settings are saved under %appdata%/PokuBot/config.properties. Delete this file and reconfigure.
+
 
 ###Donate
 If you like PokuBot consider a donation to support further development. Click

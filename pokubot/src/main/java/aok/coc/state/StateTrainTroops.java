@@ -1,10 +1,10 @@
 package aok.coc.state;
 
-import java.util.logging.Logger;
-
 import aok.coc.util.ConfigUtils;
 import aok.coc.util.RobotUtils;
 import aok.coc.util.coords.Clickable;
+
+import java.util.logging.Logger;
 
 
 public class StateTrainTroops implements State {
@@ -32,10 +32,10 @@ public class StateTrainTroops implements State {
 			
 			if (currRax < raxInfo.length - 1) {
 				// select next rax
-				RobotUtils.leftClick(Clickable.BUTTON_RAX_NEXT, 350);
+				RobotUtils.leftClick(Clickable.BUTTON_ARMY_OVERVIEW_NEXT, 350);
 			}
 		}
-		RobotUtils.leftClick(Clickable.BUTTON_RAX_CLOSE, 250);
+		RobotUtils.leftClick(Clickable.BUTTON_ARMY_OVERVIEW_CLOSE, 250);
 		
 		context.setState(StateMainMenu.instance());
 		RobotUtils.sleepRandom(5000);
