@@ -51,7 +51,6 @@ public class StateAttack implements State {
 				}
 				throw e;
 			}
-			int[] attackGroup = ImageParser.parseTroopCount();
 
 			int gold = loot[0];
 			int elixir = loot[1];
@@ -59,11 +58,14 @@ public class StateAttack implements State {
 
 			if (ConfigUtils.instance().doConditionsMatch(gold, elixir, de) &&
 				(!ConfigUtils.instance().isDetectEmptyCollectors() || ImageParser.isCollectorFullBase())) {
-			
+
 //			// debug
 //			if (true) {
 				// attack or let user manually attack
 				if (ConfigUtils.instance().getAttackStrategy() != ManualAttack.instance()) {
+
+					// parse troop count only when bot is attacking
+					int[] attackGroup = ImageParser.parseTroopCount();
 					playAttackReady();
 					ConfigUtils.instance().getAttackStrategy().attack(loot, attackGroup);
 					RobotUtils.leftClick(Clickable.BUTTON_END_BATTLE, 1200);
@@ -102,7 +104,7 @@ public class StateAttack implements State {
 				
 				RobotUtils.sleepTillClickableIsActive(Clickable.BUTTON_NEXT);
 
-				// NOTE: Since version 1.1, calculating loot takes ~2.5 seconds, which makes up for
+				// NOTE: Since version 1.1, calculating loot takes ~1.5 seconds, which makes up for
 				// sleep we had before.
 				
 				// to avoid server/client sync from nexting too fast
