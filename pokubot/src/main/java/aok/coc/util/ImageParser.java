@@ -100,6 +100,7 @@ public class ImageParser {
 	static int[] parseTroopCount(BufferedImage image) {
 		BufferedImage binary = imageToBinary(image);
 
+		// debug
 //		if (true) {
 //			String name = "troop_" + System.currentTimeMillis();
 //			try {
@@ -305,6 +306,7 @@ public class ImageParser {
 		logger.info(String.format("[gold: %d, elixir: %d, de: %d]",
 			gold, elixir, de));
 
+		// debug
 //		if (true) {
 //			String name = "loot_" + System.currentTimeMillis();
 //			try {

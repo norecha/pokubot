@@ -42,6 +42,7 @@ public class TestImageParser {
 	};
 	
 	private final String[] troopImageNames = new String[] {
+			"troop_1435978003287_colored.png",
 			"troop_1435807094346_colored.png",
 			"troop_1435809657799_colored.png",
 			"troop_1435809945313_colored.png",
@@ -52,9 +53,14 @@ public class TestImageParser {
 			"troop_1435842662877_colored.png",
 			"troop_1435926197976_colored.png",
 			"troop_1435926297125_colored.png",
+			"troop_1435980125998_colored.png",
+			"troop_1435979943461_colored.png",
+			"troop_1435979995403_colored.png",
+			"troop_1435980060511_colored.png",
 	};
 	
 	private final int[][] expectedTroops = new int[][] {
+		new int[]{111,89,0,1},
 		new int[]{106,103,0,1},
 		new int[]{96,80,0,1},
 		new int[]{92,77,0,1},
@@ -65,6 +71,10 @@ public class TestImageParser {
 		new int[]{108,98,0,1,1},
 		new int[]{0,8,16,1,1},
 		new int[]{0,8,18,1,1},
+		new int[]{90,90,0,0},
+		new int[]{109,111,0,0},
+		new int[]{110,110,0,0},
+		new int[]{100,100,0,0},
 	};
 	
 	private final String imageLocation = "/parser_images/";
