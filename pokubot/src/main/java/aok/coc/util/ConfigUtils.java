@@ -66,6 +66,7 @@ public class ConfigUtils {
 																		Clickable.BUTTON_RAX_BARB,
 																		Clickable.BUTTON_RAX_ARCHER,
 																		Clickable.BUTTON_RAX_ARCHER,
+																		Clickable.BUTTON_RAX_NO_UNIT,
 																		Clickable.BUTTON_RAX_NO_UNIT
 																		};
 

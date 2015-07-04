@@ -1,9 +1,11 @@
 package aok.coc.controller;
 
+import java.util.Set;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import aok.coc.launcher.Setup;
 import javafx.application.HostServices;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -52,6 +54,8 @@ public class MainWindowController {
 	@FXML
 	private Button				stopButton;
 	@FXML
+	private Button				hideBSButton;
+	@FXML
 	private TextArea			textArea;
 	@FXML
 	private GridPane			configGridPane;
@@ -72,7 +76,9 @@ public class MainWindowController {
 	@FXML
 	private ComboBox<String>	rax4ComboBox;
 	@FXML
-	private ComboBox<String>	darkRaxComboBox;
+	private ComboBox<String> 	darkRax1ComboBox;
+	@FXML
+	private ComboBox<String> 	darkRax2ComboBox;
 	@FXML
 	private Hyperlink			githubLink;
 	@FXML
@@ -90,19 +96,22 @@ public class MainWindowController {
 	private Service<Void>		setupService	= null;
 	private Service<Void>		runnerService	= null;
 	private boolean				isSetupDone		= false;
+	private boolean				isBSHidden		= false;
+	private int[]				previousWindowRect;
 
 	private HostServices		hostServices	= null;
 
 	@FXML
 	private void initialize() {
-		updateLabel.setVisible(false);
 		for (Handler h : Logger.getLogger("").getHandlers()) {
 			if (h instanceof UILogHandler) {
 				((UILogHandler) h).setTextArea(textArea);
 			}
 		}
 
+		updateLabel.setVisible(false);
 		configGridPane.setVisible(false);
+		hideBSButton.setDisable(true);
 
 		botLauncher = new BotLauncher();
 
@@ -283,7 +292,11 @@ public class MainWindowController {
 			darkTroops[i] = c.getDescription();
 		}
 
-		darkRaxComboBox.getItems().addAll(
+		darkRax1ComboBox.getItems().addAll(
+			darkTroops
+			);
+
+		darkRax2ComboBox.getItems().addAll(
 			darkTroops
 			);
 	}
@@ -296,6 +309,30 @@ public class MainWindowController {
 
 		if (isSetupDone && runnerService.getState() == State.READY) {
 			runnerService.start();
+		}
+	}
+
+	@FXML
+	public void handleHideBSButtonAction() {
+		if (!isSetupDone) {
+			return;
+		}
+
+		int hiddenCoord = -32000;
+		if (isBSHidden) {
+			logger.info("Showing window.");
+			if (previousWindowRect[0] == hiddenCoord && previousWindowRect[1] == hiddenCoord) {
+				Setup.moveBSWindow(0, 0);
+			} else {
+				Setup.moveBSWindow(previousWindowRect[0], previousWindowRect[1]);
+			}
+			hideBSButton.setText("Hide BS");
+			isBSHidden = false;
+		} else {
+			logger.info("Hiding window.");
+			previousWindowRect = Setup.moveBSWindow(hiddenCoord, hiddenCoord);
+			hideBSButton.setText("Show BS");
+			isBSHidden = true;
 		}
 	}
 
@@ -313,8 +350,10 @@ public class MainWindowController {
 		rax2ComboBox.getSelectionModel().select(ConfigUtils.instance().getRaxInfo()[1].getDescription());
 		rax3ComboBox.getSelectionModel().select(ConfigUtils.instance().getRaxInfo()[2].getDescription());
 		rax4ComboBox.getSelectionModel().select(ConfigUtils.instance().getRaxInfo()[3].getDescription());
-		darkRaxComboBox.getSelectionModel().select(ConfigUtils.instance().getRaxInfo()[4].getDescription());
+		darkRax1ComboBox.getSelectionModel().select(ConfigUtils.instance().getRaxInfo()[4].getDescription());
+		darkRax2ComboBox.getSelectionModel().select(ConfigUtils.instance().getRaxInfo()[5].getDescription());
 
+		hideBSButton.setDisable(false);
 		configGridPane.setVisible(true);
 	}
 
@@ -356,7 +395,8 @@ public class MainWindowController {
 		ConfigUtils.instance().getRaxInfo()[1] = Clickable.fromDescription(rax2ComboBox.getValue());
 		ConfigUtils.instance().getRaxInfo()[2] = Clickable.fromDescription(rax3ComboBox.getValue());
 		ConfigUtils.instance().getRaxInfo()[3] = Clickable.fromDescription(rax4ComboBox.getValue());
-		ConfigUtils.instance().getRaxInfo()[4] = Clickable.fromDescription(darkRaxComboBox.getValue());
+		ConfigUtils.instance().getRaxInfo()[4] = Clickable.fromDescription(darkRax1ComboBox.getValue());
+		ConfigUtils.instance().getRaxInfo()[5] = Clickable.fromDescription(darkRax2ComboBox.getValue());
 
 		ConfigUtils.instance().save();
 	}
@@ -391,5 +431,4 @@ public class MainWindowController {
 			logger.log(Level.WARNING, "Unable to get latest version", e);
 		}
 	}
-
 }

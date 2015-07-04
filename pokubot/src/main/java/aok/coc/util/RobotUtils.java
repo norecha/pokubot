@@ -1,5 +1,7 @@
 package aok.coc.util;
 
+import aok.coc.exception.BotException;
+import aok.coc.launcher.Setup;
 import aok.coc.util.coords.Area;
 import aok.coc.util.coords.Clickable;
 import aok.coc.util.w32.GDI32;
@@ -119,7 +121,7 @@ public class RobotUtils {
 		return (high << 16) | ((low << 16) >>> 16);
 	}
 
-	public static void sleepTillClickableIsActive(Clickable clickable) throws InterruptedException {
+	public static void sleepTillClickableIsActive(Clickable clickable) throws InterruptedException, BotException {
 		while (true) {
 			if (isClickableActive(clickable)) {
 				return;
@@ -150,7 +152,10 @@ public class RobotUtils {
 		}
 	}
 
-	public static BufferedImage screenShotBackGround(int x1, int y1, int x2, int y2) {
+	public static BufferedImage screenShotBackGround(int x1, int y1, int x2, int y2) throws BotException {
+
+		Setup.failIfBSMinimized();
+
 		HDC hdcWindow = User32.INSTANCE.GetDC(handle);
 		HDC hdcMemDC = GDI32.INSTANCE.CreateCompatibleDC(hdcWindow);
 
@@ -184,15 +189,15 @@ public class RobotUtils {
 		return image;
 	}
 
-	public static BufferedImage screenShot(Area area) {
+	public static BufferedImage screenShot(Area area) throws BotException {
 		return screenShotBackGround(area.getX1(), area.getY1(), area.getX2(), area.getY2());
 	}
 
-	public static File saveScreenShot(Area area, String filePathFirst, String... filePathRest) throws IOException {
+	public static File saveScreenShot(Area area, String filePathFirst, String... filePathRest) throws IOException, BotException {
 		return saveScreenShot(area.getX1(), area.getY1(), area.getX2(), area.getY2(), filePathFirst, filePathRest);
 	}
 
-	public static File saveScreenShot(int x1, int y1, int x2, int y2, String filePathFirst, String... filePathRest) throws IOException {
+	public static File saveScreenShot(int x1, int y1, int x2, int y2, String filePathFirst, String... filePathRest) throws IOException, BotException {
 		BufferedImage img = screenShotBackGround(x1, y1, x2, y2);
 		return saveImage(img, filePathFirst, filePathRest);
 	}
@@ -211,12 +216,12 @@ public class RobotUtils {
 		return file;
 	}
 
-	public static Color pixelGetColor(int x, int y) {
+	public static Color pixelGetColor(int x, int y) throws BotException {
 		BufferedImage image = screenShotBackGround(x, y, x + 1, y + 1);
 		return new Color(image.getRGB(0, 0));
 	}
 
-	public static boolean isClickableActive(Clickable clickable) {
+	public static boolean isClickableActive(Clickable clickable) throws BotException {
 		if (clickable.getColor() == null) {
 			throw new IllegalArgumentException(clickable.name());
 		}

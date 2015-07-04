@@ -2,6 +2,8 @@ package aok.coc.state;
 
 import java.util.logging.Logger;
 
+import aok.coc.exception.BotException;
+import aok.coc.launcher.Setup;
 import aok.coc.util.RobotUtils;
 import aok.coc.util.coords.Clickable;
 
@@ -16,7 +18,7 @@ public class StateIdle implements State {
 	}
 
 	@Override
-	public void handle(Context context) throws InterruptedException {
+	public void handle(Context context) throws InterruptedException, BotException {
 		State nextState = null;
 		while (true) {
 			logger.info("StateIdle");
@@ -29,7 +31,7 @@ public class StateIdle implements State {
 				Thread.sleep(2000);
 				continue;
 			}
-			
+
 			if (RobotUtils.isClickableActive(Clickable.BUTTON_WAS_ATTACKED_HEADLINE) || 
 				RobotUtils.isClickableActive(Clickable.BUTTON_WAS_ATTACKED_OKAY)) {
 				logger.info("Was attacked.");

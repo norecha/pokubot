@@ -1,6 +1,7 @@
 package aok.coc.state;
 
 import aok.coc.exception.BotConfigurationException;
+import aok.coc.exception.BotException;
 import aok.coc.util.RobotUtils;
 import aok.coc.util.coords.Clickable;
 
@@ -15,7 +16,7 @@ public class StateMainMenu implements State {
 	}
 
 	@Override
-	public void handle(Context context) throws BotConfigurationException, InterruptedException {
+	public void handle(Context context) throws BotException, InterruptedException {
 		logger.info("StateMainMenu");
 		if (Thread.interrupted()) {
 			throw new InterruptedException("StateMainMenu is interrupted.");

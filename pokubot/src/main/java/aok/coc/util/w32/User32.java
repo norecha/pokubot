@@ -36,4 +36,18 @@ public interface User32 extends com.sun.jna.platform.win32.User32 {
 	short GetAsyncKeyState(int key);
 
 	short GetKeyState(int key);
+
+	@Override
+	boolean MoveWindow(HWND hWnd, int x, int y, int nWidth, int nHeight, boolean bRepaint);
+
+	@Override
+	boolean ShowWindow(HWND hWnd, int nCmdShow);
+
+	boolean IsIconic(HWND hWnd);
+
+	@Override
+	int GetWindowLong(HWND hWnd, int nIndex);
+
+	@Override
+	int SetWindowLong(HWND hWnd, int nIndex, int dwNewLong);
 }

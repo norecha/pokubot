@@ -90,7 +90,7 @@ public class ImageParser {
 		return parseNumberFromBinary(binary, 33, 57, digitLoot, binary.getWidth() - 33, 12);
 	}
 
-	public static int[] parseTroopCount() {
+	public static int[] parseTroopCount() throws BotException {
 		BufferedImage image = RobotUtils.screenShot(Area.ATTACK_GROUP);
 		int[] troopCount = parseTroopCount(image);
 		logger.info("[Troop count: " + Arrays.toString(troopCount) + "]");
@@ -320,7 +320,7 @@ public class ImageParser {
 		return new int[] { gold, elixir, de };
 	}
 
-	public static int[] parseLoot() throws BotBadBaseException {
+	public static int[] parseLoot() throws BotException {
 		BufferedImage image = RobotUtils.screenShot(Area.ENEMY_LOOT);
 
 		return parseLoot(image);

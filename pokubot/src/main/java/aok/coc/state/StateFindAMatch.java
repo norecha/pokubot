@@ -2,6 +2,7 @@ package aok.coc.state;
 
 import java.util.logging.Logger;
 
+import aok.coc.exception.BotException;
 import aok.coc.util.RobotUtils;
 import aok.coc.util.coords.Clickable;
 
@@ -18,7 +19,7 @@ public class StateFindAMatch implements State {
 	}
 
 	@Override
-	public void handle(Context context) throws InterruptedException {
+	public void handle(Context context) throws InterruptedException, BotException {
 		logger.info("StateFindAMatch");
 		if (Thread.interrupted()) {
 			throw new InterruptedException("StateFindAMatch is interrupted.");

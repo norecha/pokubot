@@ -1,6 +1,7 @@
 package aok.coc.attack;
 
 import aok.coc.exception.BotBadBaseException;
+import aok.coc.exception.BotException;
 import aok.coc.util.ImageParser;
 import aok.coc.util.RobotUtils;
 
@@ -28,7 +29,7 @@ public abstract class AbstractAttack {
 
 	protected abstract void doDropUnits(int[] attackGroup) throws InterruptedException;
 
-	public void attack(int[] loot, int[] attackGroup) throws InterruptedException {
+	public void attack(int[] loot, int[] attackGroup) throws InterruptedException, BotException {
 		logger.info("Attacking...");
 		RobotUtils.zoomUp();
 
@@ -59,7 +60,7 @@ public abstract class AbstractAttack {
 		return result;
 	}
 
-	protected void sleepUntilLootDoesNotChange(int[] loot) throws InterruptedException {
+	protected void sleepUntilLootDoesNotChange(int[] loot) throws InterruptedException, BotException {
 		Thread.sleep(10000);
 		int[] prevLoot = loot;
 		int diff = Integer.MAX_VALUE;

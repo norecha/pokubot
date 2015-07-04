@@ -1,6 +1,7 @@
 package aok.coc.launcher;
 
 import aok.coc.exception.BotConfigurationException;
+import aok.coc.exception.BotException;
 import aok.coc.util.ConfigUtils;
 import aok.coc.util.RobotUtils;
 import aok.coc.util.w32.User32;
@@ -9,6 +10,7 @@ import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinNT;
 import com.sun.jna.platform.win32.WinReg;
 import com.sun.jna.platform.win32.WinReg.HKEYByReference;
+import com.sun.jna.platform.win32.WinUser;
 import sun.misc.BASE64Decoder;
 
 import javax.crypto.Cipher;
@@ -69,6 +71,28 @@ public class Setup {
 	public static void tearDown() {
 		if (ConfigUtils.isInitialized()) {
 			ConfigUtils.close();
+		}
+	}
+
+	public static int[] moveBSWindow(int x, int y) {
+		logger.finest(String.format("Moving %s to %d, %d", BS_WINDOW_NAME, x, y));
+		int[] rect = { 0, 0, 0, 0 };
+		User32.INSTANCE.GetWindowRect(bsHwnd, rect);
+
+		int width = rect[2] - rect[0];
+		int height = rect[3] - rect[1];
+		User32.INSTANCE.MoveWindow(bsHwnd, x, y, width, height, true);
+
+		return rect;
+	}
+
+	public static boolean isBSMinimized() {
+		return User32.INSTANCE.IsIconic(bsHwnd);
+	}
+
+	public static void failIfBSMinimized() throws BotException {
+		if (isBSMinimized()) {
+			throw new BotException(String.format("Do NOT minimize %s window!", BS_WINDOW_NAME));
 		}
 	}
 
