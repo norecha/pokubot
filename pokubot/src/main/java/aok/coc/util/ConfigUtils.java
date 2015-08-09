@@ -49,12 +49,14 @@ public class ConfigUtils {
 	private static final String		PROPERTY_PLAY_SOUND					= "play_sound";
 	private static final String		PROPERTY_ATTACK_STRAT				= "attack_strat";
 	private static final String		PROPERTY_RAX_INFO					= "rax_info";
+	private static final String		PROPERTY_DC_WAIT_TIME					= "dc_wait";
 
 	// default values
 	private int						goldThreshold						= 0;
 	private int						elixirThreshold						= 0;
 	private int						darkElixirThreshold					= 0;
 	private int						maxThThreshold						= 0;
+	private int						dcWaitTime							= 0;
 
 	private boolean					matchAllConditions					= false;
 	private boolean					barracksConfigDone					= false;
@@ -161,6 +163,11 @@ public class ConfigUtils {
 				if (raxInfoProperty != null) {
 					instance.setRaxInfo(raxInfoProperty);
 				}
+
+				String dcWaitTimeProperty = configProperties.getProperty(PROPERTY_DC_WAIT_TIME);
+				if (dcWaitTimeProperty != null) {
+					instance.setDcWaitTime(Integer.parseInt(dcWaitTimeProperty));
+				}
 			} catch (Exception e) {
 				logger.log(Level.SEVERE, "Unable to read configuration file.", e);
 			}
@@ -195,6 +202,7 @@ public class ConfigUtils {
 			configProperties.setProperty(PROPERTY_DETECT_EMPTY_COLLECTORS, String.valueOf(detectEmptyCollectors));
 			configProperties.setProperty(PROPERTY_PLAY_SOUND, String.valueOf(playSound));
 			configProperties.setProperty(PROPERTY_ATTACK_STRAT, String.valueOf(attackStrategy.getClass().getSimpleName()));
+			configProperties.setProperty(PROPERTY_DC_WAIT_TIME, String.valueOf(dcWaitTime));
 
 			StringBuilder raxProp = new StringBuilder();
 			for (int i = 0; i < raxInfo.length; i++) {
@@ -345,4 +353,8 @@ public class ConfigUtils {
 	public Clickable[] getRaxInfo() {
 		return raxInfo;
 	}
+
+	public void setDcWaitTime(int dcWaitTime) { this.dcWaitTime = dcWaitTime; }
+
+	public int getDcWaitTime() { return this.dcWaitTime; }
 }
