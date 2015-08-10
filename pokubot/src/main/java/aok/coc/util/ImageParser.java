@@ -194,9 +194,12 @@ public class ImageParser {
 
 	static Rectangle findArea(BufferedImage input, String resourcePath) {
 		BufferedImage tar = fromResource(resourcePath);
+		return findArea(input, tar);
+	}
 
+	static Rectangle findArea(BufferedImage input, BufferedImage target) {
 		List<RegionMatch> doFindAll = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolution(
-			input, tar, 1, 0.9);
+				input, target, 1, 0.9);
 
 		if (doFindAll.isEmpty()) {
 			return null;

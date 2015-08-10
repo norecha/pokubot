@@ -81,6 +81,8 @@ public class MainWindowController {
 	private Label				donateLabel;
 	@FXML
 	private Label				updateLabel;
+	@FXML
+	private TextField			dcWaitTimeField;
 
 	private static final Logger	logger			= Logger.getLogger(MainWindowController.class.getName());
 
@@ -244,6 +246,7 @@ public class MainWindowController {
 		elixirField.textProperty().addListener(intFieldListener);
 		deField.textProperty().addListener(intFieldListener);
 		maxThField.textProperty().addListener(intFieldListener);
+		dcWaitTimeField.textProperty().addListener(intFieldListener);
 	}
 
 	private void initializeComboBox() {
@@ -289,6 +292,7 @@ public class MainWindowController {
 		elixirField.setText(ConfigUtils.instance().getElixirThreshold() + "");
 		deField.setText(ConfigUtils.instance().getDarkElixirThreshold() + "");
 		maxThField.setText(ConfigUtils.instance().getMaxThThreshold() + "");
+		dcWaitTimeField.setText(ConfigUtils.instance().getDcWaitTime() + "");
 
 		isMatchAllConditionsCheckBox.setSelected(ConfigUtils.instance().isMatchAllConditions());
 		detectEmptyCollectorsCheckBox.setSelected(ConfigUtils.instance().isDetectEmptyCollectors());
@@ -330,6 +334,10 @@ public class MainWindowController {
 
 		if (!maxThField.getText().isEmpty()) {
 			ConfigUtils.instance().setMaxThThreshold(Integer.parseInt(maxThField.getText()));
+		}
+
+		if (!dcWaitTimeField.getText().isEmpty()) {
+			ConfigUtils.instance().setDcWaitTime(Integer.parseInt(dcWaitTimeField.getText()));
 		}
 
 		ConfigUtils.instance().setMatchAllConditions(isMatchAllConditionsCheckBox.isSelected());

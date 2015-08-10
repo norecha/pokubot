@@ -70,6 +70,8 @@ public class RobotUtils {
 
 	public static void zoomUp(int notch) throws InterruptedException {
 		logger.info("Zooming out...");
+		BufferedImage beforeZoomSampleScreenShot = null;
+
 		int lParam = 0x00000001 | (0x50 /*scancode*/<< 16) | 0x01000000 /*extended*/;
 
 		WPARAM wparam = new WinDef.WPARAM(VK_DOWN);
@@ -79,6 +81,12 @@ public class RobotUtils {
 		for (int i = 0; i < notch; i++) {
 			while (isCtrlKeyDown()) {
 			}
+
+			BufferedImage currentSampleScreenShot = screenShot(Area.SAMPLE_SCREEN);
+			if (beforeZoomSampleScreenShot != null &&
+					ImageParser.findArea(currentSampleScreenShot, beforeZoomSampleScreenShot) != null) return;
+			beforeZoomSampleScreenShot = currentSampleScreenShot;
+
 			User32.INSTANCE.PostMessage(handler, WM_KEYDOWN, wparam, lparamDown);
 			User32.INSTANCE.PostMessage(handler, WM_KEYUP, wparam, lparamUp);
 			Thread.sleep(1000);

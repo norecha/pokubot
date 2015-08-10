@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import aok.coc.state.Context;
 import aok.coc.state.StateIdle;
+import aok.coc.util.ConfigUtils;
 import aok.coc.util.RobotUtils;
 import aok.coc.util.coords.Clickable;
 
@@ -61,6 +62,7 @@ public class DisconnectChecker implements Runnable {
 					// when you click reload, screen would look like it is loaded for a second, before
 					// loading actually starts and next state would be executed.
 					StateIdle.instance().setReloading(true);
+					Thread.sleep(ConfigUtils.instance().getDcWaitTime());
 					RobotUtils.leftClick(Clickable.UNIT_RECONNECT, 5000);
 					Thread.sleep(2000);
 					StateIdle.instance().setReloading(false);
