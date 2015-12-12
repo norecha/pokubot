@@ -15,7 +15,6 @@ An open source Clash of Clans bot. Read [FAQ](#faq) for most common issues.
 * Windows OS
 * [BlueStacks] (http://www.bluestacks.com/) [(Tutorial here)](http://cocland.com/tutorials/play-clash-clans-pc-bluestacks)
 * [Java 8 JRE] (http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html)
-* You must run BlueStacks window on foreground, make sure nothing gets in front of it. I will add background mode in the future.
 * Bot uses down arrow key to zoom up, make sure that key zooms up for you as well.
 * Do not click CTRL key when bot is running, if you make a ctrl and mouse click, you will see BlueStacks is zooming(If not you are lucky, mine does). It will interfere with bot's clicks.
 * Make sure your display&pc never goes to sleep.(power settings)
