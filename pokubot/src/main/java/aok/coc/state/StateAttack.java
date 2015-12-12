@@ -52,6 +52,14 @@ public class StateAttack implements State {
 				throw e;
 			}
 
+			// save base for debug
+//			try {
+//				logger.info(ImageParser.isCollectorFullBase() + " attackable");
+//				RobotUtils.saveScreenShot(Area.ENEMY_BASE, "debug", "false_" + System.currentTimeMillis());
+//			} catch (IOException e1) {
+//				logger.log(Level.SEVERE, e1.getMessage(), e1);
+//			}
+
 			int gold = loot[0];
 			int elixir = loot[1];
 			int de = loot[2];
@@ -101,14 +109,14 @@ public class StateAttack implements State {
 				// next
 				// make sure you dont immediately check for next button because you may see the original one
 				RobotUtils.leftClick(Clickable.BUTTON_NEXT, 666);
-				
+
 				RobotUtils.sleepTillClickableIsActive(Clickable.BUTTON_NEXT);
 
 				// NOTE: Since version 1.1, calculating loot takes ~1.5 seconds, which makes up for
 				// sleep we had before.
-				
+
 				// to avoid server/client sync from nexting too fast
-//				RobotUtils.sleepRandom(1000);
+				RobotUtils.sleepRandom(200);
 			}
 		}
 	}

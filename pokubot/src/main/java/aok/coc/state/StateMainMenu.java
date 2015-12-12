@@ -1,6 +1,5 @@
 package aok.coc.state;
 
-import aok.coc.exception.BotConfigurationException;
 import aok.coc.exception.BotException;
 import aok.coc.util.RobotUtils;
 import aok.coc.util.coords.Clickable;
@@ -21,7 +20,16 @@ public class StateMainMenu implements State {
 		if (Thread.interrupted()) {
 			throw new InterruptedException("StateMainMenu is interrupted.");
 		}
-		RobotUtils.zoomUp();
+		RobotUtils.zoomOut();
+
+		/**
+		 * 1 zoom is equal to ~3 zoom out.
+		 * With TH11 update, map size is increased and you can zoom out even further.
+		 * To make empty collector detection work, we need to zoom-in little bit to
+		 * get a similar resolution.
+		 */
+		RobotUtils.zoomIn(1);
+		RobotUtils.zoomOut(1);
 
 		RobotUtils.sleepRandom(350);
 		RobotUtils.leftClick(Clickable.BUTTON_ARMY_OVERVIEW, 500);

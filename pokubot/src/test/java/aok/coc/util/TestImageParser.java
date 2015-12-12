@@ -169,7 +169,8 @@ public class TestImageParser {
 		
 		Assert.assertEquals(3, parseBarbKingSlot2);
 	}
-	
+
+	@Test
 	@Ignore
 	public void testBaseParser() throws IOException, BotException {
 		// processing: attack_1421204450459.png 1-9
@@ -177,26 +178,18 @@ public class TestImageParser {
 
 		int fail = 0;
 		for (File f : baseDir.listFiles()) {
-			String name = f.getName();
-			@SuppressWarnings("unused")
-			Integer thLevel;
-			try {
-				thLevel = Integer.parseInt(name.substring(name.lastIndexOf('_') + 1, name.lastIndexOf('.')));
-			} catch (NumberFormatException e) {
-				thLevel = null;
-			}
-			int secondIndexOf_ = name.indexOf('_', name.indexOf('_') + 1);
-			String bool = name.substring(secondIndexOf_ + 1, name.lastIndexOf('_'));
-			boolean expected = bool.equals("yes");
+			System.out.println("processing " + f.getName());
 			BufferedImage src = ImageIO.read(f);
-			boolean isAttackable = ImageParser.isCollectorFullBase(src);
+			boolean isFullActual = ImageParser.isCollectorFullBase(src);
+			boolean isFullExpected = f.getName().startsWith("true");
+
 			try {
-				Assert.assertEquals(name, expected, isAttackable);
+				Assert.assertEquals(isFullExpected, isFullActual);
 			} catch (AssertionError e) {
 				fail++;
-				System.err.println(e.getMessage());
+				System.out.println(e.getMessage() + " for " + f.getName());
 			}
 		}
-		System.out.println("Base detecter Success Rate: " + (1 - (float)fail / baseDir.listFiles().length));
+		System.out.println("Full Collector Base Success Rate: " + (1 - (float)fail / baseDir.listFiles().length));
 	}
 }

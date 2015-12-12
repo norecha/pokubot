@@ -8,19 +8,19 @@ import java.awt.Color;
  */
 public enum Clickable {
 
-	BUTTON_ATTACK(63, 599, new Color(0xF0E8D8)), // make sure to pick a solid spot, some parts are transparent
-	BUTTON_ARMY_OVERVIEW(27, 524, new Color(0xF2E9D1)), // button above attack button
+	BUTTON_ATTACK(63, 599, new Color(0xF0E4C8)), // make sure to pick a solid spot, some parts are transparent
+	BUTTON_ARMY_OVERVIEW(27, 524, null), // button above attack button
 	BUTTON_ARMY_OVERVIEW_NEXT(760, 326, new Color(0xF1873A)),
 	BUTTON_ARMY_OVERVIEW_CLOSE(729, 114, new Color(0xF8FCFF)),
-	BUTTON_ARMY_OVERVIEW_READY(149, 147, new Color(0x9BC73B)),
-	BUTTON_FIND_A_MATCH(148, 529, new Color(0xD84B00)),
+	BUTTON_ARMY_OVERVIEW_READY(129, 146, new Color(0x98C537)), // green check button top left
+	BUTTON_FIND_A_MATCH(148, 529, new Color(0xE89D28)),
 	BUTTON_SHIELD_DISABLE(512, 397, null),
 
 	// finding opponent
 	BUTTON_NEXT(817, 505, new Color(0xF0AA28)),
 	BUTTON_END_BATTLE(59, 517, null),
 	BUTTON_END_BATTLE_QUESTION_OKAY(509, 394, null),
-	BUTTON_END_BATTLE_RETURN_HOME(437, 532, new Color(0xCEE870)),
+	BUTTON_END_BATTLE_RETURN_HOME(437, 532, null),
 	
 	// trainables
 	BUTTON_RAX_NO_UNIT(null, null, null, "No Unit"),

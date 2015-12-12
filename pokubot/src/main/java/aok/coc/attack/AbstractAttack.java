@@ -31,7 +31,7 @@ public abstract class AbstractAttack {
 
 	public void attack(int[] loot, int[] attackGroup) throws InterruptedException, BotException {
 		logger.info("Attacking...");
-		RobotUtils.zoomUp();
+		RobotUtils.zoomOut();
 
 		doDropUnits(attackGroup);
 

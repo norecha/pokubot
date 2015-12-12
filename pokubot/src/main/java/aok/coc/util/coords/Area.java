@@ -4,10 +4,8 @@ public enum Area {
 
 	ENEMY_LOOT(17, 70, 138, 240),
 	ATTACK_GROUP(24, 574, 836, 673),
-	ENEMY_BASE(31, 0, 831, 510),
-	@Deprecated
-	BARRACKS_BUTTONS(188, 581, 679, 679);
-	
+	ENEMY_BASE(31, 55, 800, 565);
+
 	private int	x1;
 	private int	y1;
 	private int	x2;

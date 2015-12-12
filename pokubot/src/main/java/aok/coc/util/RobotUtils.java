@@ -50,6 +50,7 @@ public class RobotUtils {
 	public static final int		WM_KEYUP			= 0x101;
 	public static final int		WM_MOUSEWHEEL		= 0x20A;
 	public static final int		VK_CONTROL			= 0x11;
+	public static final int		VK_UP				= 0x26;
 	public static final int		VK_DOWN				= 0x28;
 
 	private static HWND			handle				= null;
@@ -62,7 +63,7 @@ public class RobotUtils {
 		return User32.INSTANCE.ClientToScreen(handle, clientPoint);
 	}
 
-	public static void zoomUp(int notch) throws InterruptedException {
+	public static void zoomOut(int notch) throws InterruptedException {
 		logger.info("Zooming out...");
 		int lParam = 0x00000001 | (0x50 /*scancode*/<< 16) | 0x01000000 /*extended*/;
 
@@ -79,12 +80,29 @@ public class RobotUtils {
 		}
 	}
 
+	public static void zoomIn(int notch) throws InterruptedException {
+		logger.info("Zooming in...");
+		int lParam = 0x00000001 | (0x50 /*scancode*/<< 16) | 0x01000000 /*extended*/;
+
+		WPARAM wparam = new WinDef.WPARAM(VK_UP);
+		LPARAM lparamDown = new WinDef.LPARAM(lParam);
+		LPARAM lparamUp = new WinDef.LPARAM(lParam | 1 << 30 | 1 << 31);
+
+		for (int i = 0; i < notch; i++) {
+			while (isCtrlKeyDown()) {
+			}
+			User32.INSTANCE.PostMessage(handle, WM_KEYDOWN, wparam, lparamDown);
+			User32.INSTANCE.PostMessage(handle, WM_KEYUP, wparam, lparamUp);
+			Thread.sleep(1000);
+		}
+	}
+
 	private static boolean isCtrlKeyDown() {
 		return User32.INSTANCE.GetKeyState(VK_CONTROL) < 0;
 	}
 
-	public static void zoomUp() throws InterruptedException {
-		zoomUp(14);
+	public static void zoomOut() throws InterruptedException {
+		zoomOut(14);
 	}
 
 	public static void leftClick(Clickable clickable, int sleepInMs) throws InterruptedException {
