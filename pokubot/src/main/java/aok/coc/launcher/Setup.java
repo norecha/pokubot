@@ -45,8 +45,6 @@ public class Setup {
 			throw new BotConfigurationException("Bot is only available for Windows OS.");
 		}
 
-		verifyMacAddress();
-
 		// disable display off
 //		Kernel32.INSTANCE.SetThreadExecutionState(Kernel32.ES_SYSTEM_REQUIRED | Kernel32.ES_CONTINUOUS | Kernel32.ES_DISPLAY_REQUIRED);
 
@@ -162,67 +160,5 @@ public class Setup {
 		} catch (Exception e) {
 			throw new BotConfigurationException("Unable to change resolution. Do it manually.", e);
 		}
-	}
-
-	private static void verifyMacAddress() throws BotConfigurationException {
-
-		final String base64encryptedMacBytes = "PHM9lAhgGluTsbdLV0bKl1EbooMeR6H6n+TXd7mzEAKYcjV/2CfBjY66CLzuHp2/0w4Fv8d3suE8\n" +
-				"YwGOTohdtG1SIScQJWfd0kEOkzvFSXgk364DG3XnYds3v2O+gqhLbpaLpp+Gc1P4J8X+P3akS4LI\n" +
-				"I5jF3eUHBeMP0OdJeoc=";
-
-		final String pubKeyStr = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCLUffFDTekzgQKT2eVXqTUVBOs1LqN+pj4dCSt\n" +
-				"tPD5VZtk5nH/vs+KGV489Ocl83KCwLK0iVMiNTqjDf46vTn8mWlslUqZOiowN3VMovgfjgU9EqfN\n" +
-				"eHR5uq/QgS5lAACiDu67y6teqIqLaiqlLKHnAvtdTRzrKIvzLHg6PKZx3QIDAQAB\n";
-
-		try {
-			BASE64Decoder decoder = new BASE64Decoder();
-			byte[] encryptedMacBytes = decoder.decodeBuffer(base64encryptedMacBytes);
-
-			PublicKey pubKey = decodePublicKey(pubKeyStr);
-			byte[] expectedMacBytes = decrypt(encryptedMacBytes, pubKey);
-			String expectedMac = new String(expectedMacBytes).trim();
-
-			InetAddress ip = InetAddress.getLocalHost();
-
-			NetworkInterface network = NetworkInterface.getByInetAddress(ip);
-
-			byte[] actualMacBytes = network.getHardwareAddress();
-
-			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < actualMacBytes.length; i++) {
-				sb.append(String.format("%02X%s", actualMacBytes[i], (i < actualMacBytes.length - 1) ? "-" : ""));
-			}
-			String actualMac = sb.toString();
-
-			if (!actualMac.equals(expectedMac)) {
-				throw new BotConfigurationException("Authentication failed.");
-			}
-		} catch (BotConfigurationException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new BotConfigurationException("Unable to get mac address", e);
-		}
-	}
-
-	private static PublicKey decodePublicKey(String keyStr) throws Exception {
-
-		BASE64Decoder decoder = new BASE64Decoder();
-		byte[] sigBytes2 = decoder.decodeBuffer(keyStr);
-
-		X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(sigBytes2);
-
-		KeyFactory keyFact = KeyFactory.getInstance("RSA");
-		return keyFact.generatePublic(x509KeySpec);
-	}
-
-	private static byte[] decrypt(byte[] inpBytes, PublicKey key) throws Exception {
-		Cipher cipher;
-		try {
-			cipher = Cipher.getInstance("RSA/ECB/NoPadding");
-		} catch (NoSuchAlgorithmException e) {
-			cipher = Cipher.getInstance("RSA/NONE/NoPadding");
-		}
-		cipher.init(Cipher.DECRYPT_MODE, key);
-		return cipher.doFinal(inpBytes);
 	}
 }
