@@ -1,7 +1,11 @@
-/bin/
-/target/
+bin
+target
 .classpath
 .settings
 .project
 *.iml
 pokulog*
+.idea
+.settings
+debug
+out
