@@ -9,12 +9,12 @@ An open source Clash of Clans bot. Read [FAQ](#faq) for most common issues.
 * Or you can just use it to find opponents, be notified when there is a match, and attack manually.
 * Detect empty collectors
 * Disconnect detector. You cannot run game for more than 6 hours at a time, you will be disconnected after that for 5 min, it will reload you again. Or in case something goes wrong and bot dies, you will get disconnected from inactivity, and it will log you back in and start again.
+* Background mode
 
 ###Requirements
 * Windows OS
 * [BlueStacks] (http://www.bluestacks.com/) [(Tutorial here)](http://cocland.com/tutorials/play-clash-clans-pc-bluestacks)
 * [Java 8 JRE] (http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html)
-* You must run BlueStacks window on foreground, make sure nothing gets in front of it. I will add background mode in the future.
 * Bot uses down arrow key to zoom up, make sure that key zooms up for you as well.
 * Do not click CTRL key when bot is running, if you make a ctrl and mouse click, you will see BlueStacks is zooming(If not you are lucky, mine does). It will interfere with bot's clicks.
 * Make sure your display&pc never goes to sleep.(power settings)
@@ -33,8 +33,6 @@ BlueStacks must run in 860x720 resolution, it will automatically set that up, bu
 After PokuBot is opened, click start to go through setup, write down your settings and hit save.
 You can change the values while bot is running too, just don't forget to click save.
 
-If you need help with setting up first barracks, you can watch [this video.](https://www.youtube.com/watch?v=sUN-im0Zt8s) (Thanks to frank1cangri)
-
 All settings are saved under %appdata%/PokuBot/config.properties.
 In case barracks configuration went wrong and you want to reset it, you can delete this file.
 
@@ -50,7 +48,7 @@ In case barracks configuration went wrong and you want to reset it, you can dele
 *If one or more of your barracks are upgrading, you need to set remaining ones to "No Unit"
 
 ###Issues
-Bot is still in its early stages, I have not tested with different machines. If there are bugs/suggestions, create an issue and attach the log file.
+If there are bugs/suggestions, create an issue and attach the log file.
 
 ###FAQ
 * Stuck in StateIdle
