@@ -28,10 +28,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
-import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
-import org.kohsuke.github.GHRelease;
-import org.kohsuke.github.GHRepository;
-import org.kohsuke.github.GitHub;
+//import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
+//import org.kohsuke.github.GHRelease;
+//import org.kohsuke.github.GHRepository;
+//import org.kohsuke.github.GitHub;
 
 import aok.coc.launcher.BotLauncher;
 import aok.coc.util.ConfigUtils;
@@ -120,7 +120,7 @@ public class MainWindowController {
 		initializeTextFields();
 		initializeSetupService();
 		initializeRunnerService();
-		checkForUpdate();
+//		checkForUpdate();
 	}
 
 	private void initializeLinks() {
@@ -409,26 +409,26 @@ public class MainWindowController {
 	 * GitHub dependency is only used here and unused parts are excluded. Make sure
 	 * it works fine if it is used somewhere else.
 	 */
-	private void checkForUpdate() {
-		try {
-			String current = getClass().getPackage().getImplementationVersion();
-			if (current == null) {
-				// IDE run
-				return;
-			}
-			DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(current);
-			GitHub github = GitHub.connectAnonymously();
-			GHRepository repository = github.getRepository("norecha/pokubot");
-			for (GHRelease r : repository.listReleases()) {
-				String release = r.getName().substring(1);
-				DefaultArtifactVersion releaseVersion = new DefaultArtifactVersion(release);
-				if (currentVersion.compareTo(releaseVersion) < 0) {
-					updateLabel.setVisible(true);
-					return;
-				}
-			}
-		} catch (Exception e) {
-			logger.log(Level.WARNING, "Unable to get latest version", e);
-		}
-	}
+//	private void checkForUpdate() {
+//		try {
+//			String current = getClass().getPackage().getImplementationVersion();
+//			if (current == null) {
+//				// IDE run
+//				return;
+//			}
+//			DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(current);
+//			GitHub github = GitHub.connectAnonymously();
+//			GHRepository repository = github.getRepository("norecha/pokubot");
+//			for (GHRelease r : repository.listReleases()) {
+//				String release = r.getName().substring(1);
+//				DefaultArtifactVersion releaseVersion = new DefaultArtifactVersion(release);
+//				if (currentVersion.compareTo(releaseVersion) < 0) {
+//					updateLabel.setVisible(true);
+//					return;
+//				}
+//			}
+//		} catch (Exception e) {
+//			logger.log(Level.WARNING, "Unable to get latest version", e);
+//		}
+//	}
 }

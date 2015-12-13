@@ -102,7 +102,7 @@ public class RobotUtils {
 	}
 
 	public static void zoomOut() throws InterruptedException {
-		zoomOut(14);
+		zoomOut(7);
 	}
 
 	public static void leftClick(Clickable clickable, int sleepInMs) throws InterruptedException {

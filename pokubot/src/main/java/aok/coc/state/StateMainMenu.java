@@ -1,6 +1,7 @@
 package aok.coc.state;
 
 import aok.coc.exception.BotException;
+import aok.coc.util.ImageParser;
 import aok.coc.util.RobotUtils;
 import aok.coc.util.coords.Clickable;
 
@@ -31,6 +32,23 @@ public class StateMainMenu implements State {
 		RobotUtils.zoomIn(1);
 		RobotUtils.zoomOut(1);
 
+		//debug
+//		if (true) {
+//			BufferedImage test = RobotUtils.screenShot(Area.ENEMY_BASE);
+//
+//			String name = "HOME_" + System.currentTimeMillis();
+//			try {
+//				RobotUtils.saveImage(test, "debug", name + "_colored.png");
+//			} catch (IOException e) {
+//				logger.log(Level.SEVERE, "Unable to save image", e);
+//			}
+//		}
+		try {
+			ImageParser.collect();
+		} catch (BotException e) {
+			e.printStackTrace();
+		}
+		
 		RobotUtils.sleepRandom(350);
 		RobotUtils.leftClick(Clickable.BUTTON_ARMY_OVERVIEW, 500);
 		

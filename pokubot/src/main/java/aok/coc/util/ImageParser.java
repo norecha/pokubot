@@ -360,7 +360,7 @@ public class ImageParser {
 				}
 
 				List<RegionMatch> doFindAll = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolution(
-					image, tar, 7, 0.8);
+					image, tar, 7, 0.75);
 
 				int c = 0;
 
@@ -373,26 +373,28 @@ public class ImageParser {
 					}
 
 					// check if it's an existing match
-					for (Rectangle r : matchedElixirs) {
-						if (r.intersects(i.getBounds())) {
-							break RECT_LOOP;
-						}
-					}
+//					for (Rectangle r : matchedElixirs) {
+//						if (r.intersects(i.getBounds())) {
+//							break RECT_LOOP;
+//						}
+//					}
+					
 					c++;
 					matchedElixirs.add(i.getBounds());
 					if (next.getFileName().toString().startsWith("empty")) {
-						attackableElixirs--;
+						
 					} else if (next.getFileName().toString().startsWith("full")) {
 						attackableElixirs++;
 					}
 					logger.finest("\t" + i.getBounds() + " score: " + i.getScore());
 				}
 				if (c > 0) {
-					logger.finest(String.format("\tfound %d elixirs matching %s\n", c, next.getFileName().toString()));
+					String match = String.format("\tfound %d elixirs matching %s\n", c, next.getFileName().toString());
+					logger.info(match);
 				}
 			}
 
-			boolean result = attackableElixirs >= 0;
+			boolean result = attackableElixirs > 0;
 			if (result == false) {
 				logger.info("empty collectors");
 			}
@@ -411,5 +413,24 @@ public class ImageParser {
 				walk.close();
 			}
 		}
+	}
+	
+	public static boolean collect() throws BotException, InterruptedException {
+		return clickCollect(); //RobotUtils.screenShot(Area.ENEMY_BASE)
+	}
+	
+	static boolean clickCollect() throws BotException, InterruptedException {
+
+		int NUM_COLLECTORS = 12;
+		// Click collectors
+		int x = 75;
+		int y = 307;
+		for (int i = 0; i < NUM_COLLECTORS; i++){
+			RobotUtils.leftClick(x, y, 100);
+			x += 28;
+			y += 22;
+		}
+		
+		return true;
 	}
 }
