@@ -42,7 +42,8 @@ public class StateIdle implements State {
 			} else if (RobotUtils.isClickableActive(Clickable.BUTTON_NEXT)) {
 				nextState = StateAttack.instance();
 				break;
-			} else if (RobotUtils.isClickableActive(Clickable.BUTTON_FIND_A_MATCH)) {
+			} else if (	RobotUtils.isClickableActive(Clickable.BUTTON_FIND_A_MATCH_1) ||
+						RobotUtils.isClickableActive(Clickable.BUTTON_FIND_A_MATCH_2)) {
 				nextState = StateFindAMatch.instance();
 				break;
 			}

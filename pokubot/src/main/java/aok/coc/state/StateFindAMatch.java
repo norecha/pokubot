@@ -24,9 +24,10 @@ public class StateFindAMatch implements State {
 		if (Thread.interrupted()) {
 			throw new InterruptedException("StateFindAMatch is interrupted.");
 		}
-		if (RobotUtils.isClickableActive(Clickable.BUTTON_FIND_A_MATCH)) {
-			RobotUtils.leftClick(Clickable.BUTTON_FIND_A_MATCH, 300);
-			RobotUtils.leftClick(Clickable.BUTTON_SHIELD_DISABLE, 100);
+		if (RobotUtils.isClickableActive(Clickable.BUTTON_FIND_A_MATCH_1) ||
+			RobotUtils.isClickableActive(Clickable.BUTTON_FIND_A_MATCH_2)) {
+
+			RobotUtils.leftClick(Clickable.BUTTON_FIND_A_MATCH_2, 300);
 			RobotUtils.sleepTillClickableIsActive(Clickable.BUTTON_NEXT);
 
 			context.setState(StateAttack.instance());
