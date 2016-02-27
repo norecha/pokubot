@@ -38,66 +38,66 @@ import javafx.scene.layout.GridPane;
 public class MainWindowController {
 
 	@FXML
-	private TextField			goldField;
+	private TextField goldField;
 	@FXML
-	private TextField			elixirField;
+	private TextField elixirField;
 	@FXML
-	private TextField			deField;
+	private TextField deField;
 	@FXML
-	private TextField			maxThField;
+	private TextField maxThField;
 	@FXML
-	private CheckBox			isMatchAllConditionsCheckBox;
+	private CheckBox isMatchAllConditionsCheckBox;
 	@FXML
-	private Button				startButton;
+	private Button startButton;
 	@FXML
-	private Button				stopButton;
+	private Button stopButton;
 	@FXML
-	private Button				hideBSButton;
+	private Button hideBSButton;
 	@FXML
-	private TextArea			textArea;
+	private TextArea textArea;
 	@FXML
-	private GridPane			configGridPane;
+	private GridPane configGridPane;
 	@FXML
-	private ComboBox<String>	autoAttackComboBox;
+	private ComboBox<String> autoAttackComboBox;
 	@FXML
-	private CheckBox			detectEmptyCollectorsCheckBox;
+	private CheckBox detectEmptyCollectorsCheckBox;
 	@FXML
-	private CheckBox			playSoundCheckBox;
+	private CheckBox playSoundCheckBox;
 	@FXML
-	private Label				versionLabel;
+	private Label versionLabel;
 	@FXML
-	private ComboBox<String>	rax1ComboBox;
+	private ComboBox<String> rax1ComboBox;
 	@FXML
-	private ComboBox<String>	rax2ComboBox;
+	private ComboBox<String> rax2ComboBox;
 	@FXML
-	private ComboBox<String>	rax3ComboBox;
+	private ComboBox<String> rax3ComboBox;
 	@FXML
-	private ComboBox<String>	rax4ComboBox;
+	private ComboBox<String> rax4ComboBox;
 	@FXML
-	private ComboBox<String>	darkRax1ComboBox;
+	private ComboBox<String> darkRax1ComboBox;
 	@FXML
-	private ComboBox<String>	darkRax2ComboBox;
+	private ComboBox<String> darkRax2ComboBox;
 	@FXML
-	private Hyperlink			githubLink;
+	private Hyperlink githubLink;
 	@FXML
-	private Hyperlink			donateLink;
+	private Hyperlink donateLink;
 	@FXML
-	private ImageView			heartImage;
+	private ImageView heartImage;
 	@FXML
-	private Label				donateLabel;
+	private Label donateLabel;
 	@FXML
-	private Label				updateLabel;
+	private Label updateLabel;
 
-	private static final Logger	logger			= Logger.getLogger(MainWindowController.class.getName());
+	private static final Logger logger = Logger.getLogger(MainWindowController.class.getName());
 
-	private BotLauncher			botLauncher		= null;
-	private Service<Void>		setupService	= null;
-	private Service<Void>		runnerService	= null;
-	private boolean				isSetupDone		= false;
-	private boolean				isBSHidden		= false;
-	private int[]				previousWindowRect;
+	private BotLauncher botLauncher = null;
+	private Service<Void> setupService = null;
+	private Service<Void> runnerService = null;
+	private boolean isSetupDone = false;
+	private boolean isBSHidden = false;
+	private int[] previousWindowRect;
 
-	private HostServices		hostServices	= null;
+	private HostServices hostServices = null;
 
 	@FXML
 	private void initialize() {

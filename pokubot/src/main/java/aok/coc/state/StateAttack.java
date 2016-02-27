@@ -20,9 +20,9 @@ import aok.coc.util.coords.Area;
 import aok.coc.util.coords.Clickable;
 
 public class StateAttack implements State {
-	private static final Logger			logger		= Logger.getLogger(StateAttack.class.getName());
+	private static final Logger logger = Logger.getLogger(StateAttack.class.getName());
 
-	private static final StateAttack	instance	= new StateAttack();
+	private static final StateAttack instance = new StateAttack();
 
 	public static StateAttack instance() {
 		return instance;

@@ -8,24 +8,24 @@ import aok.coc.util.ImageParser;
 import aok.coc.util.RobotUtils;
 
 public abstract class AbstractAttack {
-	private static final Logger	logger					= Logger.getLogger(AbstractAttack.class.getName());
+	private static final Logger logger = Logger.getLogger(AbstractAttack.class.getName());
 
-	protected static int		TOP_X					= 429;
-	protected static int		TOP_Y					= 18;
+	protected static int TOP_X = 429;
+	protected static int TOP_Y = 18;
 
-	protected static int		LEFT_X					= 10;
-	protected static int		LEFT_Y					= 360;
+	protected static int LEFT_X = 10;
+	protected static int LEFT_Y = 360;
 
-	protected static int		RIGHT_X					= 836;
-	protected static int		RIGHT_Y					= 360;
+	protected static int RIGHT_X = 836;
+	protected static int RIGHT_Y = 360;
 
-	protected static int		BOTTOM_LEFT_X			= 300;
-	protected static int		BOTTOM_LEFT_Y			= 576;
+	protected static int BOTTOM_LEFT_X = 300;
+	protected static int BOTTOM_LEFT_Y = 576;
 
-	protected static int		BOTTOM_RIGHT_X			= 537;
-	protected static int		BOTTOM_RIGHT_Y			= 578;
+	protected static int BOTTOM_RIGHT_X = 537;
+	protected static int BOTTOM_RIGHT_Y = 578;
 
-	protected static final int	PAUSE_BETWEEN_UNIT_DROP	= 61;
+	protected static final int PAUSE_BETWEEN_UNIT_DROP = 61;
 
 	protected abstract void doDropUnits(int[] attackGroup) throws InterruptedException;
 

@@ -35,34 +35,34 @@ import aok.coc.util.w32.User32;
 
 public class RobotUtils {
 
-	private static final Logger	logger				= Logger.getLogger(RobotUtils.class.getName());
+	private static final Logger logger = Logger.getLogger(RobotUtils.class.getName());
 
-	public static final String	WORKING_DIR			= System.getProperty("user.dir");
-	public static final int		SCREEN_WIDTH		= Toolkit.getDefaultToolkit().getScreenSize().width;
-	public static final int		SCREEN_HEIGHT		= Toolkit.getDefaultToolkit().getScreenSize().height;
-	public static final String	SYSTEM_OS			= System.getProperty("os.name");
-	public static final String	USER_NAME			= System.getProperty("user.name");
-	public static final String	USER_HOME_DIR		= System.getProperty("user.home");
+	public static final String WORKING_DIR = System.getProperty("user.dir");
+	public static final int SCREEN_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
+	public static final int SCREEN_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
+	public static final String SYSTEM_OS = System.getProperty("os.name");
+	public static final String USER_NAME = System.getProperty("user.name");
+	public static final String USER_HOME_DIR = System.getProperty("user.home");
 
-	public static Random		random				= new Random();
+	public static Random random = new Random();
 
 	// user32
-	public static final int		WM_NULL				= 0x000;
-	public static final int		WM_COMMAND			= 0x111;
-	public static final int		WM_LBUTTONDOWN		= 0x201;
-	public static final int		WM_LBUTTONUP		= 0x202;
-	public static final int		WM_LBUTTONDBLCLK	= 0x203;
-	public static final int		WM_RBUTTONDOWN		= 0x204;
-	public static final int		WM_RBUTTONUP		= 0x205;
-	public static final int		WM_RBUTTONDBLCLK	= 0x206;
-	public static final int		WM_KEYDOWN			= 0x100;
-	public static final int		WM_KEYUP			= 0x101;
-	public static final int		WM_MOUSEWHEEL		= 0x20A;
-	public static final int		VK_CONTROL			= 0x11;
-	public static final int		VK_UP				= 0x26;
-	public static final int		VK_DOWN				= 0x28;
+	public static final int WM_NULL = 0x000;
+	public static final int WM_COMMAND = 0x111;
+	public static final int WM_LBUTTONDOWN = 0x201;
+	public static final int WM_LBUTTONUP = 0x202;
+	public static final int WM_LBUTTONDBLCLK = 0x203;
+	public static final int WM_RBUTTONDOWN = 0x204;
+	public static final int WM_RBUTTONUP = 0x205;
+	public static final int WM_RBUTTONDBLCLK = 0x206;
+	public static final int WM_KEYDOWN = 0x100;
+	public static final int WM_KEYUP = 0x101;
+	public static final int WM_MOUSEWHEEL = 0x20A;
+	public static final int VK_CONTROL = 0x11;
+	public static final int VK_UP = 0x26;
+	public static final int VK_DOWN = 0x28;
 
-	private static HWND			handle				= null;
+	private static HWND handle = null;
 
 	public static void setupWin32(HWND handler) {
 		RobotUtils.handle = handler;

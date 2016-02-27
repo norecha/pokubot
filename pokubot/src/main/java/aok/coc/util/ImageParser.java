@@ -162,8 +162,7 @@ public class ImageParser {
 		if (barbKingSlot != null) {
 			tmp[barbKingSlot] = 1;
 
-			// if BK was found after a 0 slot, new length should be adjusted
-			// according to BK
+			// if BK was found after a 0 slot, new length should be adjusted according to BK
 			// ie [110, 90, 0, BK] -> len = 4
 			curr = Math.max(curr + 1, barbKingSlot + 1);
 		}
@@ -172,8 +171,7 @@ public class ImageParser {
 		if (archerQueenSlot != null) {
 			tmp[archerQueenSlot] = 1;
 
-			// if AQ was found after a 0 slot, new length should be adjusted
-			// according to AQ
+			// if AQ was found after a 0 slot, new length should be adjusted according to AQ
 			// ie [110, 90, 0, AQ] -> len = 4
 			curr = Math.max(curr + 1, archerQueenSlot + 1);
 		}
