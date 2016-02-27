@@ -9,13 +9,16 @@ import java.awt.Color;
  */
 public enum Clickable {
 
-	BUTTON_ATTACK(63, 650, new Color(0xF0E8D8)), // make sure to pick a solid spot, some parts are transparent
+	// make sure to pick a solid spot, some parts are transparent
+	BUTTON_ATTACK_NO_STAR(61, 639, new Color(0xF0E8D8)),
+	BUTTON_ATTACK_STAR(63, 650, new Color(0xF0E8D8)),
+
 	BUTTON_ARMY_OVERVIEW(27, 575, null), // button above attack button
 	BUTTON_ARMY_OVERVIEW_NEXT(760, 326, new Color(0xF1873A)),
 	BUTTON_ARMY_OVERVIEW_CLOSE(729, 114, new Color(0xF8FCFF)),
 	BUTTON_ARMY_OVERVIEW_READY(131, 170, new Color(0x98C638)), // green check button top left
 	// this button moves when you have a shield
-	BUTTON_FIND_A_MATCH_1(202, 426, new Color(0xFFFFFF)), // when you have a shield
+	BUTTON_FIND_A_MATCH_1(202, 492, new Color(0xFFFFFF)), // when you have a shield
 	BUTTON_FIND_A_MATCH_2(202, 535, new Color(0xFFFFFF)), // when you don't have a shield
 	BUTTON_SHIELD_DISABLE(512, 397, null),
 
@@ -55,8 +58,10 @@ public enum Clickable {
 	UNIT_BLUESTACKS_DC(699, 343, new Color(0x282828)), // 160,250 to 700,420
 	UNIT_RECONNECT(435, 400, null),
 
-	BUTTON_WAS_ATTACKED_OKAY(432, 507, new Color(0x5CAC10)),
-	BUTTON_WAS_ATTACKED_HEADLINE(437, 158, new Color(0x585450));
+	BUTTON_WAS_ATTACKED_OKAY(432, 487, new Color(0x5CAC10)),
+	BUTTON_WAS_ATTACKED_HEADLINE(437, 158, new Color(0x585450)),
+
+	CLOSE_NOTIFICATION(835, 25, null);
 
 	private Integer x;
 	private Integer y;
