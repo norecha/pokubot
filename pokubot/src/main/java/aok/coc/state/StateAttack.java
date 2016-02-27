@@ -1,5 +1,15 @@
 package aok.coc.state;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
 import aok.coc.attack.ManualAttack;
 import aok.coc.exception.BotBadBaseException;
 import aok.coc.exception.BotException;
@@ -9,25 +19,16 @@ import aok.coc.util.RobotUtils;
 import aok.coc.util.coords.Area;
 import aok.coc.util.coords.Clickable;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 public class StateAttack implements State {
-	private static final Logger			logger		= Logger.getLogger(StateAttack.class.getName());
+	private static final Logger logger = Logger.getLogger(StateAttack.class.getName());
 
-	private static final StateAttack	instance	= new StateAttack();
+	private static final StateAttack instance = new StateAttack();
 
 	public static StateAttack instance() {
 		return instance;
 	}
 
-	private int[]	prevLoot;
+	private int[] prevLoot;
 
 	private StateAttack() {
 	}
@@ -53,22 +54,23 @@ public class StateAttack implements State {
 			}
 
 			// save base for debug
-//			try {
-//				logger.info(ImageParser.isCollectorFullBase() + " attackable");
-//				RobotUtils.saveScreenShot(Area.ENEMY_BASE, "debug", "false_" + System.currentTimeMillis());
-//			} catch (IOException e1) {
-//				logger.log(Level.SEVERE, e1.getMessage(), e1);
-//			}
+			// try {
+			// logger.info(ImageParser.isCollectorFullBase() + " attackable");
+			// RobotUtils.saveScreenShot(Area.ENEMY_BASE, "debug", "false_" +
+			// System.currentTimeMillis());
+			// } catch (IOException e1) {
+			// logger.log(Level.SEVERE, e1.getMessage(), e1);
+			// }
 
 			int gold = loot[0];
 			int elixir = loot[1];
 			int de = loot[2];
 
-			if (ConfigUtils.instance().doConditionsMatch(gold, elixir, de) &&
-				(!ConfigUtils.instance().isDetectEmptyCollectors() || ImageParser.isCollectorFullBase())) {
+			if (ConfigUtils.instance().doConditionsMatch(gold, elixir, de)
+					&& (!ConfigUtils.instance().isDetectEmptyCollectors() || ImageParser.isCollectorFullBase())) {
 
-//			// debug
-//			if (true) {
+				// // debug
+				// if (true) {
 				// attack or let user manually attack
 				if (ConfigUtils.instance().getAttackStrategy() != ManualAttack.instance()) {
 
@@ -76,6 +78,7 @@ public class StateAttack implements State {
 					int[] attackGroup = ImageParser.parseTroopCount();
 					playAttackReady();
 					ConfigUtils.instance().getAttackStrategy().attack(loot, attackGroup);
+
 					RobotUtils.leftClick(Clickable.BUTTON_END_BATTLE, 1200);
 					RobotUtils.leftClick(Clickable.BUTTON_END_BATTLE_QUESTION_OKAY, 1200);
 					RobotUtils.leftClick(Clickable.BUTTON_END_BATTLE_RETURN_HOME, 1200);
@@ -88,16 +91,15 @@ public class StateAttack implements State {
 					prevLoot = loot;
 
 					/**
-					 * NOTE: minor race condition
-					 * 1. Matching base found.
-					 * 2. sound is played.
-					 * 3. prevLoot is set to full available loot
-					 * 4. Thread.sleep(XXX)
-					 * 5. StateIdle -> next is available to state is set back to attack.
-					 * 6. user drops units, loot number changes AFTER state is set BEFORE this state parsed the image.
-					 * 7. loot is different now.
-					 * 8. sound is played again which is wrong.
-					 * 9. won't happen more than once since next button won't be available after attack has started.
+					 * NOTE: minor race condition 1. Matching base found. 2.
+					 * sound is played. 3. prevLoot is set to full available
+					 * loot 4. Thread.sleep(XXX) 5. StateIdle -> next is
+					 * available to state is set back to attack. 6. user drops
+					 * units, loot number changes AFTER state is set BEFORE this
+					 * state parsed the image. 7. loot is different now. 8.
+					 * sound is played again which is wrong. 9. won't happen
+					 * more than once since next button won't be available after
+					 * attack has started.
 					 */
 					Thread.sleep(5000);
 				}
@@ -107,12 +109,14 @@ public class StateAttack implements State {
 				break;
 			} else {
 				// next
-				// make sure you dont immediately check for next button because you may see the original one
+				// make sure you dont immediately check for next button because
+				// you may see the original one
 				RobotUtils.leftClick(Clickable.BUTTON_NEXT, 666);
 
 				RobotUtils.sleepTillClickableIsActive(Clickable.BUTTON_NEXT);
 
-				// NOTE: Since version 1.1, calculating loot takes ~1.5 seconds, which makes up for
+				// NOTE: Since version 1.1, calculating loot takes ~1.5 seconds,
+				// which makes up for
 				// sleep we had before.
 
 				// to avoid server/client sync from nexting too fast
@@ -128,7 +132,7 @@ public class StateAttack implements State {
 		String[] clips = new String[] { "/fight.wav", "/finishim.wav", "/getoverhere.wav" };
 		URL resource = this.getClass().getResource(clips[RobotUtils.random.nextInt(clips.length)]);
 		try (Clip clip = AudioSystem.getClip();
-			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(resource)) {
+				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(resource)) {
 
 			clip.open(audioInputStream);
 			clip.start();

@@ -8,21 +8,21 @@ import java.awt.Color;
  */
 public enum Clickable {
 
-	BUTTON_ATTACK(63, 599, new Color(0xF0E4C8)), // make sure to pick a solid spot, some parts are transparent
-	BUTTON_ARMY_OVERVIEW(27, 524, null), // button above attack button
+	BUTTON_ATTACK(63, 650, new Color(0xF0E8D8)), // make sure to pick a solid spot, some parts are transparent
+	BUTTON_ARMY_OVERVIEW(27, 575, null), // button above attack button
 	BUTTON_ARMY_OVERVIEW_NEXT(760, 326, new Color(0xF1873A)),
 	BUTTON_ARMY_OVERVIEW_CLOSE(729, 114, new Color(0xF8FCFF)),
-	BUTTON_ARMY_OVERVIEW_READY(129, 146, new Color(0x98C537)), // green check button top left
+	BUTTON_ARMY_OVERVIEW_READY(131, 170, new Color(0x98C638)), // green check button top left
 	// this button moves when you have a shield
 	BUTTON_FIND_A_MATCH_1(148, 529, new Color(0xE89D28)), // when you have a shield
-	BUTTON_FIND_A_MATCH_2(173, 519, new Color(0xD85000)), // when you don't have a shield
+	BUTTON_FIND_A_MATCH_2(202, 535, new Color(0xFFFFFF)), // when you don't have a shield
 	BUTTON_SHIELD_DISABLE(512, 397, null),
 
 	// finding opponent
-	BUTTON_NEXT(817, 505, new Color(0xF0AA28)),
-	BUTTON_END_BATTLE(59, 517, null),
-	BUTTON_END_BATTLE_QUESTION_OKAY(509, 394, null),
-	BUTTON_END_BATTLE_RETURN_HOME(437, 532, null),
+	BUTTON_NEXT(817, 555, new Color(0xEFA828)),
+	BUTTON_END_BATTLE(59, 583, null),
+	BUTTON_END_BATTLE_QUESTION_OKAY(509, 424, null),
+	BUTTON_END_BATTLE_RETURN_HOME(437, 567, null),
 	
 	// trainables
 	BUTTON_RAX_NO_UNIT(null, null, null, "No Unit"),
@@ -44,13 +44,13 @@ public enum Clickable {
 	BUTTON_RAX_WITCH(642, 333, null, "Witch"),
 	BUTTON_RAX_LAVA(212, 451, null, "Lava Hound"),
 	
-	BUTTON_ATTACK_UNIT_1(72, 600, null),
-	BUTTON_ATTACK_UNIT_2(145, 600, null),
-	BUTTON_ATTACK_UNIT_3(217, 600, null),
-	BUTTON_ATTACK_UNIT_4(288, 600, null),
-	BUTTON_ATTACK_UNIT_5(361, 600, null),
-	BUTTON_ATTACK_UNIT_6(435, 600, null),
-	BUTTON_ATTACK_UNIT_7(505, 600, null),
+	BUTTON_ATTACK_UNIT_1(72, 650, null),
+	BUTTON_ATTACK_UNIT_2(145, 650, null),
+	BUTTON_ATTACK_UNIT_3(217, 650, null),
+	BUTTON_ATTACK_UNIT_4(288, 650, null),
+	BUTTON_ATTACK_UNIT_5(361, 650, null),
+	BUTTON_ATTACK_UNIT_6(435, 650, null),
+	BUTTON_ATTACK_UNIT_7(505, 650, null),
 	UNIT_BLUESTACKS_DC(699, 343, new Color(0x282828)), // 160,250 to 700,420
 	UNIT_RECONNECT(435, 400, null),
 	

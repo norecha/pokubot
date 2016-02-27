@@ -1,16 +1,15 @@
 package aok.coc.state;
 
+import java.util.logging.Logger;
+
 import aok.coc.exception.BotException;
-import aok.coc.util.ImageParser;
 import aok.coc.util.RobotUtils;
 import aok.coc.util.coords.Clickable;
 
-import java.util.logging.Logger;
-
 public class StateMainMenu implements State {
-	private static final Logger			logger		= Logger.getLogger(StateMainMenu.class.getName());
+	private static final Logger logger = Logger.getLogger(StateMainMenu.class.getName());
 
-	private static final StateMainMenu	instance	= new StateMainMenu();
+	private static final StateMainMenu instance = new StateMainMenu();
 
 	private StateMainMenu() {
 	}
@@ -24,34 +23,29 @@ public class StateMainMenu implements State {
 		RobotUtils.zoomOut();
 
 		/**
-		 * 1 zoom is equal to ~3 zoom out.
-		 * With TH11 update, map size is increased and you can zoom out even further.
-		 * To make empty collector detection work, we need to zoom-in little bit to
-		 * get a similar resolution.
+		 * 1 zoom is equal to ~3 zoom out. With TH11 update, map size is
+		 * increased and you can zoom out even further. To make empty collector
+		 * detection work, we need to zoom-in little bit to get a similar
+		 * resolution.
 		 */
 		RobotUtils.zoomIn(1);
 		RobotUtils.zoomOut(1);
 
-		//debug
-//		if (true) {
-//			BufferedImage test = RobotUtils.screenShot(Area.ENEMY_BASE);
-//
-//			String name = "HOME_" + System.currentTimeMillis();
-//			try {
-//				RobotUtils.saveImage(test, "debug", name + "_colored.png");
-//			} catch (IOException e) {
-//				logger.log(Level.SEVERE, "Unable to save image", e);
-//			}
-//		}
-		try {
-			ImageParser.collect();
-		} catch (BotException e) {
-			e.printStackTrace();
-		}
-		
+		// debug
+		// if (true) {
+		// BufferedImage test = RobotUtils.screenShot(Area.ENEMY_BASE);
+		//
+		// String name = "HOME_" + System.currentTimeMillis();
+		// try {
+		// RobotUtils.saveImage(test, "debug", name + "_colored.png");
+		// } catch (IOException e) {
+		// logger.log(Level.SEVERE, "Unable to save image", e);
+		// }
+		// }
+
 		RobotUtils.sleepRandom(350);
 		RobotUtils.leftClick(Clickable.BUTTON_ARMY_OVERVIEW, 500);
-		
+
 		// camp is full
 		if (RobotUtils.isClickableActive(Clickable.BUTTON_ARMY_OVERVIEW_READY)) {
 			logger.info("Camp is full");

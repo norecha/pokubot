@@ -1,21 +1,7 @@
 package aok.coc.util;
 
-import aok.coc.exception.BotException;
-import aok.coc.launcher.Setup;
-import aok.coc.util.coords.Area;
-import aok.coc.util.coords.Clickable;
-import aok.coc.util.w32.GDI32;
-import aok.coc.util.w32.User32;
-import com.sun.jna.Memory;
-import com.sun.jna.platform.win32.WinDef;
-import com.sun.jna.platform.win32.WinDef.*;
-import com.sun.jna.platform.win32.WinGDI;
-import com.sun.jna.platform.win32.WinGDI.BITMAPINFO;
-import com.sun.jna.platform.win32.WinNT.HANDLE;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -24,36 +10,59 @@ import java.nio.file.Paths;
 import java.util.Random;
 import java.util.logging.Logger;
 
+import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
+
+import com.sun.jna.Memory;
+import com.sun.jna.platform.win32.WinDef;
+import com.sun.jna.platform.win32.WinDef.DWORD;
+import com.sun.jna.platform.win32.WinDef.HBITMAP;
+import com.sun.jna.platform.win32.WinDef.HDC;
+import com.sun.jna.platform.win32.WinDef.HWND;
+import com.sun.jna.platform.win32.WinDef.LPARAM;
+import com.sun.jna.platform.win32.WinDef.POINT;
+import com.sun.jna.platform.win32.WinDef.WPARAM;
+import com.sun.jna.platform.win32.WinGDI;
+import com.sun.jna.platform.win32.WinGDI.BITMAPINFO;
+import com.sun.jna.platform.win32.WinNT.HANDLE;
+
+import aok.coc.exception.BotException;
+import aok.coc.launcher.Setup;
+import aok.coc.util.coords.Area;
+import aok.coc.util.coords.Clickable;
+import aok.coc.util.w32.GDI32;
+import aok.coc.util.w32.User32;
+
 public class RobotUtils {
 
-	private static final Logger	logger				= Logger.getLogger(RobotUtils.class.getName());
+	private static final Logger logger = Logger.getLogger(RobotUtils.class.getName());
 
-	public static final String	WORKING_DIR			= System.getProperty("user.dir");
-	public static final int		SCREEN_WIDTH		= Toolkit.getDefaultToolkit().getScreenSize().width;
-	public static final int		SCREEN_HEIGHT		= Toolkit.getDefaultToolkit().getScreenSize().height;
-	public static final String	SYSTEM_OS			= System.getProperty("os.name");
-	public static final String	USER_NAME			= System.getProperty("user.name");
-	public static final String	USER_HOME_DIR		= System.getProperty("user.home");
+	public static final String WORKING_DIR = System.getProperty("user.dir");
+	public static final int SCREEN_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
+	public static final int SCREEN_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
+	public static final String SYSTEM_OS = System.getProperty("os.name");
+	public static final String USER_NAME = System.getProperty("user.name");
+	public static final String USER_HOME_DIR = System.getProperty("user.home");
 
-	public static Random		random				= new Random();
+	public static Random random = new Random();
 
 	// user32
-	public static final int		WM_NULL				= 0x000;
-	public static final int		WM_COMMAND			= 0x111;
-	public static final int		WM_LBUTTONDOWN		= 0x201;
-	public static final int		WM_LBUTTONUP		= 0x202;
-	public static final int		WM_LBUTTONDBLCLK	= 0x203;
-	public static final int		WM_RBUTTONDOWN		= 0x204;
-	public static final int		WM_RBUTTONUP		= 0x205;
-	public static final int		WM_RBUTTONDBLCLK	= 0x206;
-	public static final int		WM_KEYDOWN			= 0x100;
-	public static final int		WM_KEYUP			= 0x101;
-	public static final int		WM_MOUSEWHEEL		= 0x20A;
-	public static final int		VK_CONTROL			= 0x11;
-	public static final int		VK_UP				= 0x26;
-	public static final int		VK_DOWN				= 0x28;
+	public static final int WM_NULL = 0x000;
+	public static final int WM_COMMAND = 0x111;
+	public static final int WM_LBUTTONDOWN = 0x201;
+	public static final int WM_LBUTTONUP = 0x202;
+	public static final int WM_LBUTTONDBLCLK = 0x203;
+	public static final int WM_RBUTTONDOWN = 0x204;
+	public static final int WM_RBUTTONUP = 0x205;
+	public static final int WM_RBUTTONDBLCLK = 0x206;
+	public static final int WM_KEYDOWN = 0x100;
+	public static final int WM_KEYUP = 0x101;
+	public static final int WM_MOUSEWHEEL = 0x20A;
+	public static final int VK_CONTROL = 0x11;
+	public static final int VK_UP = 0x26;
+	public static final int VK_DOWN = 0x28;
 
-	private static HWND			handle				= null;
+	private static HWND handle = null;
 
 	public static void setupWin32(HWND handler) {
 		RobotUtils.handle = handler;
@@ -65,7 +74,7 @@ public class RobotUtils {
 
 	public static void zoomOut(int notch) throws InterruptedException {
 		logger.info("Zooming out...");
-		int lParam = 0x00000001 | (0x50 /*scancode*/<< 16) | 0x01000000 /*extended*/;
+		int lParam = 0x00000001 | (0x50 /* scancode */ << 16) | 0x01000000 /* extended */;
 
 		WPARAM wparam = new WinDef.WPARAM(VK_DOWN);
 		LPARAM lparamDown = new WinDef.LPARAM(lParam);
@@ -82,7 +91,7 @@ public class RobotUtils {
 
 	public static void zoomIn(int notch) throws InterruptedException {
 		logger.info("Zooming in...");
-		int lParam = 0x00000001 | (0x50 /*scancode*/<< 16) | 0x01000000 /*extended*/;
+		int lParam = 0x00000001 | (0x50 /* scancode */ << 16) | 0x01000000 /* extended */;
 
 		WPARAM wparam = new WinDef.WPARAM(VK_UP);
 		LPARAM lparamDown = new WinDef.LPARAM(lParam);
@@ -102,7 +111,7 @@ public class RobotUtils {
 	}
 
 	public static void zoomOut() throws InterruptedException {
-		zoomOut(7);
+		zoomOut(14);
 	}
 
 	public static void leftClick(Clickable clickable, int sleepInMs) throws InterruptedException {
@@ -127,7 +136,7 @@ public class RobotUtils {
 		}
 		logger.finest("clicking " + x + " " + y);
 		int lParam = makeParam(x, y);
-		
+
 		while (isCtrlKeyDown()) {
 		}
 		User32.INSTANCE.SendMessage(handle, WM_LBUTTONDOWN, 0x00000001, lParam);
@@ -153,7 +162,9 @@ public class RobotUtils {
 	}
 
 	private static void msgBox(String Text, String Title) {
-		JOptionPane.showMessageDialog(null, Text, Title, JOptionPane.PLAIN_MESSAGE); //Show message box
+		JOptionPane.showMessageDialog(null, Text, Title, JOptionPane.PLAIN_MESSAGE); // Show
+																						// message
+																						// box
 	}
 
 	public static void msgBox(String Text) {
@@ -211,11 +222,13 @@ public class RobotUtils {
 		return screenShotBackGround(area.getX1(), area.getY1(), area.getX2(), area.getY2());
 	}
 
-	public static File saveScreenShot(Area area, String filePathFirst, String... filePathRest) throws IOException, BotException {
+	public static File saveScreenShot(Area area, String filePathFirst, String... filePathRest)
+			throws IOException, BotException {
 		return saveScreenShot(area.getX1(), area.getY1(), area.getX2(), area.getY2(), filePathFirst, filePathRest);
 	}
 
-	public static File saveScreenShot(int x1, int y1, int x2, int y2, String filePathFirst, String... filePathRest) throws IOException, BotException {
+	public static File saveScreenShot(int x1, int y1, int x2, int y2, String filePathFirst, String... filePathRest)
+			throws IOException, BotException {
 		BufferedImage img = screenShotBackGround(x1, y1, x2, y2);
 		return saveImage(img, filePathFirst, filePathRest);
 	}
@@ -247,6 +260,20 @@ public class RobotUtils {
 		int tarColor = clickable.getColor().getRGB();
 		int actualColor = pixelGetColor(clickable.getX(), clickable.getY()).getRGB();
 		return compareColor(tarColor, actualColor, 5);
+	}
+
+	public static boolean isClickableActive(Clickable clickable, int minRGB, int maxRGB) throws BotException {
+		if (clickable.getColor() == null) {
+			throw new IllegalArgumentException(clickable.name());
+		}
+
+		for (int i = minRGB; i < maxRGB; i++) {
+			int tarColor = i;
+			int actualColor = pixelGetColor(clickable.getX(), clickable.getY()).getRGB();
+
+			if (compareColor(tarColor, actualColor, 5)) return true;
+		}
+		return false;
 	}
 
 	public static boolean compareColor(int c1, int c2, int var) {
