@@ -268,7 +268,7 @@ public class RobotUtils {
 			throw new IllegalArgumentException(clickable.name());
 		}
 
-		for (int i = minRGB; i < maxRGB; i++) {
+		for (int i = minRGB; i <= maxRGB; i++) {
 			int tarColor = i;
 			int actualColor = pixelGetColor(clickable.getX(), clickable.getY()).getRGB();
 

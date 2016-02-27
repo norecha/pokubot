@@ -51,7 +51,7 @@ public class StateMainMenu implements State {
 			logger.info("Camp is full");
 			RobotUtils.leftClick(Clickable.BUTTON_ARMY_OVERVIEW_CLOSE, 200);
 
-			RobotUtils.leftClick(Clickable.BUTTON_ATTACK, 1000);
+			RobotUtils.leftClick(Clickable.BUTTON_ATTACK_STAR, 1000);
 
 			context.setState(StateFindAMatch.instance());
 		} else {

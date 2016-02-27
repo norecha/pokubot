@@ -35,7 +35,8 @@ public class StateIdle implements State {
 					|| RobotUtils.isClickableActive(Clickable.BUTTON_WAS_ATTACKED_OKAY)) {
 				logger.info("Was attacked.");
 				RobotUtils.leftClick(Clickable.BUTTON_WAS_ATTACKED_OKAY, 250);
-			} else if (RobotUtils.isClickableActive(Clickable.BUTTON_ATTACK, 0xF0E300, 0xF0EA00)) {
+			} else if (RobotUtils.isClickableActive(Clickable.BUTTON_ATTACK_NO_STAR, 0xF0E300, 0xF0EA00)
+					|| RobotUtils.isClickableActive(Clickable.BUTTON_ATTACK_STAR, 0xF0E300, 0xF0EA00)) {
 				nextState = StateMainMenu.instance();
 				break;
 			} else if (RobotUtils.isClickableActive(Clickable.BUTTON_NEXT)) {
@@ -45,6 +46,9 @@ public class StateIdle implements State {
 					|| RobotUtils.isClickableActive(Clickable.BUTTON_FIND_A_MATCH_2)) {
 				nextState = StateFindAMatch.instance();
 				break;
+			} else {
+				// Close any misc. notification
+				RobotUtils.leftClick(Clickable.CLOSE_NOTIFICATION, 500);
 			}
 
 			Thread.sleep(1000);
