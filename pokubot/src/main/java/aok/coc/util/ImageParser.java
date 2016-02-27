@@ -115,15 +115,15 @@ public class ImageParser {
 		BufferedImage binary = imageToBinary(image);
 
 		// debug
-		// if (true) {
-		// String name = "troop_" + System.currentTimeMillis();
-		// try {
-		// RobotUtils.saveImage(image, "debug", name + "_colored.png");
-		// RobotUtils.saveImage(binary, "debug", name + "_binary.png");
-		// } catch (IOException e) {
-		// logger.log(Level.SEVERE, "Unable to save image", e);
-		// }
-		// }
+		//		if (true) {
+		//			String name = "troop_" + System.currentTimeMillis();
+		//			try {
+		//				RobotUtils.saveImage(image, "debug", name + "_colored.png");
+		//				RobotUtils.saveImage(binary, "debug", name + "_binary.png");
+		//			} catch (IOException e) {
+		//				logger.log(Level.SEVERE, "Unable to save image", e);
+		//			}
+		//		}
 
 		int[] tmp = new int[11]; // max group size
 
@@ -138,8 +138,7 @@ public class ImageParser {
 		while (true) {
 			try {
 				if (selected) {
-					no = parseNumberFromBinary(binary, xStart, yStart, digitTroopBig, ATTACK_GROUP_UNIT_DIFF * 5 / 6,
-							20);
+					no = parseNumberFromBinary(binary, xStart, yStart, digitTroopBig, ATTACK_GROUP_UNIT_DIFF * 5 / 6, 20);
 					selected = false;
 				} else {
 					no = parseNumberFromBinary(binary, xStart, yStart, digitTroop, ATTACK_GROUP_UNIT_DIFF * 5 / 6, 20);
@@ -224,15 +223,13 @@ public class ImageParser {
 	static BufferedImage imageToBinary(BufferedImage colored) {
 
 		// to greyscale
-		BufferedImage greyscale = new BufferedImage(colored.getWidth(), colored.getHeight(),
-				BufferedImage.TYPE_BYTE_GRAY);
+		BufferedImage greyscale = new BufferedImage(colored.getWidth(), colored.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
 		Graphics g = greyscale.getGraphics();
 		g.drawImage(colored, 0, 0, null);
 		g.dispose();
 
 		// to binary
-		BufferedImage binary = new BufferedImage(greyscale.getWidth(), greyscale.getHeight(),
-				BufferedImage.TYPE_INT_RGB);
+		BufferedImage binary = new BufferedImage(greyscale.getWidth(), greyscale.getHeight(), BufferedImage.TYPE_INT_RGB);
 		for (int i = 0; i < greyscale.getWidth(); i++) {
 			for (int j = 0; j < greyscale.getHeight(); j++) {
 				int rgb = greyscale.getRGB(i, j);
@@ -246,8 +243,8 @@ public class ImageParser {
 		return binary;
 	}
 
-	static int parseNumberFromBinary(BufferedImage binary, int xStart, int yStart, BufferedImage digit[], int width,
-			int height) throws BotBadBaseException {
+	static int parseNumberFromBinary(BufferedImage binary, int xStart, int yStart, BufferedImage digit[], int width, int height)
+			throws BotBadBaseException {
 
 		List<Rectangle> rois = new ArrayList<>();
 		rois.add(new Rectangle(xStart, yStart, width, height));
@@ -255,8 +252,7 @@ public class ImageParser {
 		// RegionMatch, digitLoot pair
 		List<Pair<RegionMatch, Integer>> matches = new ArrayList<>();
 		for (int i = 0; i < 10; i++) {
-			List<RegionMatch> digitMatches = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolutionWithROIs(binary,
-					digit[i], 10, 0.60, rois);
+			List<RegionMatch> digitMatches = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolutionWithROIs(binary, digit[i], 10, 0.60, rois);
 
 			final int finalI = i;
 			digitMatches.forEach(rm -> matches.add(new MutablePair<>(rm, finalI)));
@@ -277,8 +273,7 @@ public class ImageParser {
 		int bestY = matches.get(0).getLeft().y;
 		for (Iterator<Pair<RegionMatch, Integer>> it = matches.iterator(); it.hasNext();) {
 			Pair<RegionMatch, Integer> match = it.next();
-			Range<Integer> range = Range.between(match.getLeft().x,
-					match.getLeft().x + digit[match.getRight()].getWidth());
+			Range<Integer> range = Range.between(match.getLeft().x, match.getLeft().x + digit[match.getRight()].getWidth());
 
 			boolean removed = false;
 
@@ -376,8 +371,7 @@ public class ImageParser {
 					continue;
 				}
 
-				List<RegionMatch> doFindAll = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolution(image, tar, 7,
-						0.75);
+				List<RegionMatch> doFindAll = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolution(image, tar, 7, 0.75);
 
 				int c = 0;
 
@@ -389,17 +383,16 @@ public class ImageParser {
 					}
 
 					// check if it's an existing match
-					// for (Rectangle r : matchedElixirs) {
-					// if (r.intersects(i.getBounds())) {
-					// break RECT_LOOP;
-					// }
-					// }
+					for (Rectangle r : matchedElixirs) {
+						if (r.intersects(i.getBounds())) {
+							break RECT_LOOP;
+						}
+					}
 
 					c++;
 					matchedElixirs.add(i.getBounds());
-					if (next.getFileName().toString().startsWith("empty")) {
 
-					} else if (next.getFileName().toString().startsWith("full")) {
+					if (next.getFileName().toString().startsWith("full")) {
 						attackableElixirs++;
 					}
 					logger.finest("\t" + i.getBounds() + " score: " + i.getScore());

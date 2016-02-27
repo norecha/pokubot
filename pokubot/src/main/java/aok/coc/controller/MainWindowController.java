@@ -1,11 +1,18 @@
 package aok.coc.controller;
 
-import java.util.Set;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
+import org.kohsuke.github.GHRelease;
+import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GitHub;
+
+import aok.coc.launcher.BotLauncher;
 import aok.coc.launcher.Setup;
+import aok.coc.util.ConfigUtils;
+import aok.coc.util.coords.Clickable;
 import javafx.application.HostServices;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -27,15 +34,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-
-//import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
-//import org.kohsuke.github.GHRelease;
-//import org.kohsuke.github.GHRepository;
-//import org.kohsuke.github.GitHub;
-
-import aok.coc.launcher.BotLauncher;
-import aok.coc.util.ConfigUtils;
-import aok.coc.util.coords.Clickable;
 
 public class MainWindowController {
 
@@ -76,9 +74,9 @@ public class MainWindowController {
 	@FXML
 	private ComboBox<String>	rax4ComboBox;
 	@FXML
-	private ComboBox<String> 	darkRax1ComboBox;
+	private ComboBox<String>	darkRax1ComboBox;
 	@FXML
-	private ComboBox<String> 	darkRax2ComboBox;
+	private ComboBox<String>	darkRax2ComboBox;
 	@FXML
 	private Hyperlink			githubLink;
 	@FXML
@@ -120,7 +118,7 @@ public class MainWindowController {
 		initializeTextFields();
 		initializeSetupService();
 		initializeRunnerService();
-//		checkForUpdate();
+		checkForUpdate();
 	}
 
 	private void initializeLinks() {
@@ -260,9 +258,7 @@ public class MainWindowController {
 	}
 
 	private void initializeComboBox() {
-		autoAttackComboBox.getItems().addAll(
-			ConfigUtils.instance().getAttackStrategies()
-			);
+		autoAttackComboBox.getItems().addAll(ConfigUtils.instance().getAttackStrategies());
 		autoAttackComboBox.setValue(autoAttackComboBox.getItems().get(0));
 
 		Clickable[] availableTroops = ConfigUtils.instance().getAvailableTroops();
@@ -272,18 +268,10 @@ public class MainWindowController {
 			troops[i] = c.getDescription();
 		}
 
-		rax1ComboBox.getItems().addAll(
-			troops
-			);
-		rax2ComboBox.getItems().addAll(
-			troops
-			);
-		rax3ComboBox.getItems().addAll(
-			troops
-			);
-		rax4ComboBox.getItems().addAll(
-			troops
-			);
+		rax1ComboBox.getItems().addAll(troops);
+		rax2ComboBox.getItems().addAll(troops);
+		rax3ComboBox.getItems().addAll(troops);
+		rax4ComboBox.getItems().addAll(troops);
 
 		Clickable[] availableDarkTroops = ConfigUtils.instance().getAvailableDarkTroops();
 		String[] darkTroops = new String[availableDarkTroops.length];
@@ -292,13 +280,9 @@ public class MainWindowController {
 			darkTroops[i] = c.getDescription();
 		}
 
-		darkRax1ComboBox.getItems().addAll(
-			darkTroops
-			);
+		darkRax1ComboBox.getItems().addAll(darkTroops);
 
-		darkRax2ComboBox.getItems().addAll(
-			darkTroops
-			);
+		darkRax2ComboBox.getItems().addAll(darkTroops);
 	}
 
 	@FXML
@@ -406,29 +390,29 @@ public class MainWindowController {
 	}
 
 	/**
-	 * GitHub dependency is only used here and unused parts are excluded. Make sure
-	 * it works fine if it is used somewhere else.
+	 * GitHub dependency is only used here and unused parts are excluded. Make
+	 * sure it works fine if it is used somewhere else.
 	 */
-//	private void checkForUpdate() {
-//		try {
-//			String current = getClass().getPackage().getImplementationVersion();
-//			if (current == null) {
-//				// IDE run
-//				return;
-//			}
-//			DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(current);
-//			GitHub github = GitHub.connectAnonymously();
-//			GHRepository repository = github.getRepository("norecha/pokubot");
-//			for (GHRelease r : repository.listReleases()) {
-//				String release = r.getName().substring(1);
-//				DefaultArtifactVersion releaseVersion = new DefaultArtifactVersion(release);
-//				if (currentVersion.compareTo(releaseVersion) < 0) {
-//					updateLabel.setVisible(true);
-//					return;
-//				}
-//			}
-//		} catch (Exception e) {
-//			logger.log(Level.WARNING, "Unable to get latest version", e);
-//		}
-//	}
+	private void checkForUpdate() {
+		try {
+			String current = getClass().getPackage().getImplementationVersion();
+			if (current == null) {
+				// IDE run
+				return;
+			}
+			DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(current);
+			GitHub github = GitHub.connectAnonymously();
+			GHRepository repository = github.getRepository("norecha/pokubot");
+			for (GHRelease r : repository.listReleases()) {
+				String release = r.getName().substring(1);
+				DefaultArtifactVersion releaseVersion = new DefaultArtifactVersion(release);
+				if (currentVersion.compareTo(releaseVersion) < 0) {
+					updateLabel.setVisible(true);
+					return;
+				}
+			}
+		} catch (Exception e) {
+			logger.log(Level.WARNING, "Unable to get latest version", e);
+		}
+	}
 }

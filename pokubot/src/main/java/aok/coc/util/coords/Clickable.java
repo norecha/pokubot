@@ -4,6 +4,7 @@ import java.awt.Color;
 
 /**
  * All coordinates are client coordinates
+ * 
  * @author norecha
  */
 public enum Clickable {
@@ -23,7 +24,7 @@ public enum Clickable {
 	BUTTON_END_BATTLE(59, 583, null),
 	BUTTON_END_BATTLE_QUESTION_OKAY(509, 424, null),
 	BUTTON_END_BATTLE_RETURN_HOME(437, 567, null),
-	
+
 	// trainables
 	BUTTON_RAX_NO_UNIT(null, null, null, "No Unit"),
 	BUTTON_RAX_BARB(212, 324, null, "Barb"),
@@ -43,7 +44,7 @@ public enum Clickable {
 	BUTTON_RAX_GOLEM(542, 333, null, "Golem"),
 	BUTTON_RAX_WITCH(642, 333, null, "Witch"),
 	BUTTON_RAX_LAVA(212, 451, null, "Lava Hound"),
-	
+
 	BUTTON_ATTACK_UNIT_1(72, 650, null),
 	BUTTON_ATTACK_UNIT_2(145, 650, null),
 	BUTTON_ATTACK_UNIT_3(217, 650, null),
@@ -53,14 +54,14 @@ public enum Clickable {
 	BUTTON_ATTACK_UNIT_7(505, 650, null),
 	UNIT_BLUESTACKS_DC(699, 343, new Color(0x282828)), // 160,250 to 700,420
 	UNIT_RECONNECT(435, 400, null),
-	
+
 	BUTTON_WAS_ATTACKED_OKAY(432, 507, new Color(0x5CAC10)),
 	BUTTON_WAS_ATTACKED_HEADLINE(437, 158, new Color(0x585450));
 
-	private Integer	x;
-	private Integer	y;
-	private Color	color;
-	private String	description;
+	private Integer x;
+	private Integer y;
+	private Color color;
+	private String description;
 
 	Clickable(Integer x, Integer y, Color color) {
 		this.x = x;
@@ -75,36 +76,36 @@ public enum Clickable {
 
 	public static Clickable getButtonAttackUnit(int x) {
 		switch (x) {
-		case 1:
-			return BUTTON_ATTACK_UNIT_1;
-		case 2:
-			return BUTTON_ATTACK_UNIT_2;
-		case 3:
-			return BUTTON_ATTACK_UNIT_3;
-		case 4:
-			return BUTTON_ATTACK_UNIT_4;
-		case 5:
-			return BUTTON_ATTACK_UNIT_5;
-		case 6:
-			return BUTTON_ATTACK_UNIT_6;
-		case 7:
-			return BUTTON_ATTACK_UNIT_7;
-		default:
-			throw new IllegalArgumentException(x + "");
+			case 1:
+				return BUTTON_ATTACK_UNIT_1;
+			case 2:
+				return BUTTON_ATTACK_UNIT_2;
+			case 3:
+				return BUTTON_ATTACK_UNIT_3;
+			case 4:
+				return BUTTON_ATTACK_UNIT_4;
+			case 5:
+				return BUTTON_ATTACK_UNIT_5;
+			case 6:
+				return BUTTON_ATTACK_UNIT_6;
+			case 7:
+				return BUTTON_ATTACK_UNIT_7;
+			default:
+				throw new IllegalArgumentException(x + "");
 		}
 	}
-	
+
 	public static Clickable fromDescription(String description) {
 		if (description == null) {
 			throw new NullPointerException();
 		}
-		
+
 		for (Clickable c : Clickable.values()) {
 			if (description.equals(c.getDescription())) {
 				return c;
 			}
 		}
-		
+
 		throw new IllegalArgumentException(description);
 	}
 
