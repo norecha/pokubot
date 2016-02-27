@@ -15,7 +15,7 @@ public enum Clickable {
 	BUTTON_ARMY_OVERVIEW_CLOSE(729, 114, new Color(0xF8FCFF)),
 	BUTTON_ARMY_OVERVIEW_READY(131, 170, new Color(0x98C638)), // green check button top left
 	// this button moves when you have a shield
-	BUTTON_FIND_A_MATCH_1(148, 529, new Color(0xE89D28)), // when you have a shield
+	BUTTON_FIND_A_MATCH_1(202, 426, new Color(0xFFFFFF)), // when you have a shield
 	BUTTON_FIND_A_MATCH_2(202, 535, new Color(0xFFFFFF)), // when you don't have a shield
 	BUTTON_SHIELD_DISABLE(512, 397, null),
 
