@@ -27,7 +27,10 @@ public class StateFindAMatch implements State {
 		if (RobotUtils.isClickableActive(Clickable.BUTTON_FIND_A_MATCH_1) ||
 			RobotUtils.isClickableActive(Clickable.BUTTON_FIND_A_MATCH_2)) {
 
-			RobotUtils.leftClick(Clickable.BUTTON_FIND_A_MATCH_2, 300);
+			// Checks for shield or no shield
+			RobotUtils.leftClick(Clickable.BUTTON_FIND_A_MATCH_1, 100);
+			RobotUtils.leftClick(Clickable.BUTTON_FIND_A_MATCH_2, 100);
+
 			RobotUtils.sleepTillClickableIsActive(Clickable.BUTTON_NEXT);
 
 			context.setState(StateAttack.instance());

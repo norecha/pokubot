@@ -360,7 +360,7 @@ public class ImageParser {
 				}
 
 				List<RegionMatch> doFindAll = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolution(
-					image, tar, 7, 0.8);
+image, tar, 7, 0.65);
 
 				int c = 0;
 
@@ -380,9 +380,7 @@ public class ImageParser {
 					}
 					c++;
 					matchedElixirs.add(i.getBounds());
-					if (next.getFileName().toString().startsWith("empty")) {
-						attackableElixirs--;
-					} else if (next.getFileName().toString().startsWith("full")) {
+					if (next.getFileName().toString().startsWith("full")) {
 						attackableElixirs++;
 					}
 					logger.finest("\t" + i.getBounds() + " score: " + i.getScore());
@@ -392,7 +390,7 @@ public class ImageParser {
 				}
 			}
 
-			boolean result = attackableElixirs >= 0;
+			boolean result = attackableElixirs > 0;
 			if (result == false) {
 				logger.info("empty collectors");
 			}

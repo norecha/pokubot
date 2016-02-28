@@ -13,11 +13,11 @@ public abstract class AbstractAttack {
 	protected static int		TOP_X			= 429;
 	protected static int		TOP_Y			= 18;
 
-	protected static int		LEFT_X			= 19;
-	protected static int		LEFT_Y			= 307;
+	protected static int		LEFT_X			= 10;
+	protected static int		LEFT_Y			= 360;
 
 	protected static int		RIGHT_X			= 836;
-	protected static int		RIGHT_Y			= 307;
+	protected static int		RIGHT_Y			= 360;
 
 	protected static int		BOTTOM_LEFT_X	= 300;
 	protected static int		BOTTOM_LEFT_Y	= 536;
@@ -32,6 +32,8 @@ public abstract class AbstractAttack {
 	public void attack(int[] loot, int[] attackGroup) throws InterruptedException, BotException {
 		logger.info("Attacking...");
 		RobotUtils.zoomOut();
+		RobotUtils.zoomIn(1);
+		RobotUtils.zoomOut(1);
 
 		doDropUnits(attackGroup);
 

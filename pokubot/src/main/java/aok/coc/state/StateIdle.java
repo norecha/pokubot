@@ -3,7 +3,6 @@ package aok.coc.state;
 import java.util.logging.Logger;
 
 import aok.coc.exception.BotException;
-import aok.coc.launcher.Setup;
 import aok.coc.util.RobotUtils;
 import aok.coc.util.coords.Clickable;
 
@@ -36,7 +35,8 @@ public class StateIdle implements State {
 				RobotUtils.isClickableActive(Clickable.BUTTON_WAS_ATTACKED_OKAY)) {
 				logger.info("Was attacked.");
 				RobotUtils.leftClick(Clickable.BUTTON_WAS_ATTACKED_OKAY, 250);
-			} else if (RobotUtils.isClickableActive(Clickable.BUTTON_ATTACK)) {
+			} else if (RobotUtils.isClickableActive(Clickable.BUTTON_ATTACK_NO_STAR)
+					|| RobotUtils.isClickableActive(Clickable.BUTTON_ATTACK_STAR)) {
 				nextState = StateMainMenu.instance();
 				break;
 			} else if (RobotUtils.isClickableActive(Clickable.BUTTON_NEXT)) {
@@ -46,6 +46,9 @@ public class StateIdle implements State {
 						RobotUtils.isClickableActive(Clickable.BUTTON_FIND_A_MATCH_2)) {
 				nextState = StateFindAMatch.instance();
 				break;
+			} else {
+				// Try to close any misc. notification
+				RobotUtils.leftClick(Clickable.CLOSE_NOTIFICATION, 500);
 			}
 
 			Thread.sleep(1000);
