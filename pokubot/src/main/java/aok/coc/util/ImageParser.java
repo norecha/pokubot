@@ -36,20 +36,20 @@ import aok.coc.exception.BotException;
 import aok.coc.util.coords.Area;
 
 public class ImageParser {
-	private static final int ATTACK_GROUP_UNIT_DIFF = 72;
+	private static final int		ATTACK_GROUP_UNIT_DIFF	= 72;
 
-	private static final Logger logger = Logger.getLogger(ImageParser.class.getName());
+	private static final Logger		logger					= Logger.getLogger(ImageParser.class.getName());
 
-	private static final BufferedImage[] digitLoot = new BufferedImage[10];
-	private static final BufferedImage[] digitTroop = new BufferedImage[10];
-	private static final BufferedImage[] digitTroopBig = new BufferedImage[10];
+	private static final BufferedImage[] 	digitLoot = new BufferedImage[10];
+	private static final BufferedImage[] 	digitTroop = new BufferedImage[10];
+	private static final BufferedImage[] 	digitTroopBig = new BufferedImage[10];
 
 	// boundaries of base according to Area.ENEMY_BASE
-	private static final Point ENEMY_BASE_LEFT = new Point(13, 313);
-	private static final Point ENEMY_BASE_TOP = new Point(401, 16);
-	private static final Point ENEMY_BASE_RIGHT = new Point(779, 312);
-	private static final Point ENEMY_BASE_BOTTOM = new Point(400, 597);
-	private static final Polygon ENEMY_BASE_POLY = new Polygon();
+	private static final Point		ENEMY_BASE_LEFT			= new Point(13, 313);
+	private static final Point		ENEMY_BASE_TOP			= new Point(401, 16);
+	private static final Point		ENEMY_BASE_RIGHT		= new Point(779, 312);
+	private static final Point		ENEMY_BASE_BOTTOM		= new Point(400, 597);
+	private static final Polygon	ENEMY_BASE_POLY			= new Polygon();
 
 	static {
 		ENEMY_BASE_POLY.addPoint(ENEMY_BASE_LEFT.x, ENEMY_BASE_LEFT.y);
@@ -57,18 +57,18 @@ public class ImageParser {
 		ENEMY_BASE_POLY.addPoint(ENEMY_BASE_RIGHT.x, ENEMY_BASE_RIGHT.y);
 		ENEMY_BASE_POLY.addPoint(ENEMY_BASE_BOTTOM.x, ENEMY_BASE_BOTTOM.y);
 
-		for (int i = 0; i < digitLoot.length; i++) {
-			digitLoot[i] = fromResource("/digits/l" + i + ".png");
-		}
+        for (int i = 0; i < digitLoot.length; i++) {
+            digitLoot[i] = fromResource("/digits/l" + i + ".png");
+        }
 
-		for (int i = 0; i < digitTroop.length; i++) {
+        for (int i = 0; i < digitTroop.length; i++) {
 			digitTroop[i] = fromResource("/digits/t" + i + ".png");
-		}
+        }
 
-		for (int i = 0; i < digitTroopBig.length; i++) {
+        for (int i = 0; i < digitTroopBig.length; i++) {
 			digitTroopBig[i] = fromResource("/digits/tb" + i + ".png");
-		}
-	}
+        }
+    }
 
 	static boolean hasDE(BufferedImage image) throws BotBadBaseException {
 		int deCheck = image.getRGB(20, 0);
@@ -115,15 +115,15 @@ public class ImageParser {
 		BufferedImage binary = imageToBinary(image);
 
 		// debug
-		//		if (true) {
-		//			String name = "troop_" + System.currentTimeMillis();
-		//			try {
-		//				RobotUtils.saveImage(image, "debug", name + "_colored.png");
-		//				RobotUtils.saveImage(binary, "debug", name + "_binary.png");
-		//			} catch (IOException e) {
-		//				logger.log(Level.SEVERE, "Unable to save image", e);
-		//			}
-		//		}
+//		if (true) {
+//			String name = "troop_" + System.currentTimeMillis();
+//			try {
+//				RobotUtils.saveImage(image, "debug", name + "_colored.png");
+//				RobotUtils.saveImage(binary, "debug", name + "_binary.png");
+//			} catch (IOException e) {
+//				logger.log(Level.SEVERE, "Unable to save image", e);
+//			}
+//		}
 
 		int[] tmp = new int[11]; // max group size
 
@@ -209,7 +209,8 @@ public class ImageParser {
 	static Rectangle findArea(BufferedImage input, String resourcePath) {
 		BufferedImage tar = fromResource(resourcePath);
 
-		List<RegionMatch> doFindAll = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolution(input, tar, 1, 0.9);
+		List<RegionMatch> doFindAll = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolution(
+			input, tar, 1, 0.9);
 
 		if (doFindAll.isEmpty()) {
 			return null;
@@ -221,7 +222,8 @@ public class ImageParser {
 	static BufferedImage imageToBinary(BufferedImage colored) {
 
 		// to greyscale
-		BufferedImage greyscale = new BufferedImage(colored.getWidth(), colored.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+		BufferedImage greyscale = new BufferedImage(colored.getWidth(), colored.getHeight(),
+				BufferedImage.TYPE_BYTE_GRAY);
 		Graphics g = greyscale.getGraphics();
 		g.drawImage(colored, 0, 0, null);
 		g.dispose();
@@ -241,21 +243,22 @@ public class ImageParser {
 		return binary;
 	}
 
-	static int parseNumberFromBinary(BufferedImage binary, int xStart, int yStart, BufferedImage digit[], int width, int height)
-			throws BotBadBaseException {
+	static int parseNumberFromBinary(BufferedImage binary, int xStart, int yStart, BufferedImage digit[],
+									 int width, int height) throws BotBadBaseException {
 
-		List<Rectangle> rois = new ArrayList<>();
-		rois.add(new Rectangle(xStart, yStart, width, height));
+        List<Rectangle> rois = new ArrayList<>();
+        rois.add(new Rectangle(xStart, yStart, width, height));
 
 		// RegionMatch, digitLoot pair
-		List<Pair<RegionMatch, Integer>> matches = new ArrayList<>();
+        List<Pair<RegionMatch, Integer>> matches = new ArrayList<>();
 		for (int i = 0; i < 10; i++) {
-			List<RegionMatch> digitMatches = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolutionWithROIs(binary, digit[i], 10, 0.60, rois);
+            List<RegionMatch> digitMatches =
+				TemplateMatcher.findMatchesByGrayscaleAtOriginalResolutionWithROIs(binary, digit[i], 10, 0.60, rois);
 
 			final int finalI = i;
 			digitMatches.forEach(rm -> matches.add(new MutablePair<>(rm, finalI)));
 
-			for (RegionMatch match : digitMatches) {
+            for (RegionMatch match : digitMatches) {
 				logger.finest("digitLoot:" + i + " " + match.getScore() + " " + match.getLocation());
 			}
 		}
@@ -266,10 +269,10 @@ public class ImageParser {
 
 		// filter out bad matches
 		// sort by score
-		matches.sort((o1, o2) -> Double.compare(o2.getLeft().getScore(), o1.getLeft().getScore()));
+        matches.sort((o1, o2) -> Double.compare(o2.getLeft().getScore(), o1.getLeft().getScore()));
 		List<Range<Integer>> ranges = new ArrayList<>();
 		int bestY = matches.get(0).getLeft().y;
-		for (Iterator<Pair<RegionMatch, Integer>> it = matches.iterator(); it.hasNext();) {
+		for (Iterator<Pair<RegionMatch, Integer>> it = matches.iterator(); it.hasNext(); ) {
 			Pair<RegionMatch, Integer> match = it.next();
 			Range<Integer> range = Range.between(match.getLeft().x, match.getLeft().x + digit[match.getRight()].getWidth());
 
@@ -314,18 +317,19 @@ public class ImageParser {
 		int gold = parseGoldFromBinary(binary);
 		int elixir = parseElixirFromBinary(binary);
 		int de = hasDE ? parseDarkElixirFromBinary(binary) : 0;
-		logger.info(String.format("[gold: %d, elixir: %d, de: %d]", gold, elixir, de));
+		logger.info(String.format("[gold: %d, elixir: %d, de: %d]",
+			gold, elixir, de));
 
 		// debug
-		// if (true) {
-		// String name = "loot_" + System.currentTimeMillis();
-		// try {
-		// RobotUtils.saveImage(image, "debug", name + "_colored.png");
-		// RobotUtils.saveImage(binary, "debug", name + "_binary.png");
-		// } catch (IOException e) {
-		// logger.log(Level.SEVERE, "Unable to save image", e);
-		// }
-		// }
+//		if (true) {
+//			String name = "loot_" + System.currentTimeMillis();
+//			try {
+//				RobotUtils.saveImage(image, "debug", name + "_colored.png");
+//				RobotUtils.saveImage(binary, "debug", name + "_binary.png");
+//			} catch (IOException e) {
+//				logger.log(Level.SEVERE, "Unable to save image", e);
+//			}
+//		}
 
 		return new int[] { gold, elixir, de };
 	}
@@ -345,7 +349,7 @@ public class ImageParser {
 
 		FileSystem fileSystem = null;
 		Stream<Path> walk = null;
-		try {
+		try  {
 			URI uri = ImageParser.class.getResource("/elixir_images").toURI();
 			Path images;
 			if (uri.getScheme().equals("jar")) {
@@ -369,11 +373,13 @@ public class ImageParser {
 					continue;
 				}
 
-				List<RegionMatch> doFindAll = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolution(image, tar, 7, 0.65);
+				List<RegionMatch> doFindAll = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolution(
+						image, tar, 7, 0.65);
 
 				int c = 0;
 
-				RECT_LOOP: for (RegionMatch i : doFindAll) {
+				RECT_LOOP:
+				for (RegionMatch i : doFindAll) {
 
 					// if matched area is out of enemy poly
 					if (!ENEMY_BASE_POLY.contains(i.x, i.y)) {
@@ -386,18 +392,15 @@ public class ImageParser {
 							break RECT_LOOP;
 						}
 					}
-
 					c++;
 					matchedElixirs.add(i.getBounds());
-
 					if (next.getFileName().toString().startsWith("full")) {
 						attackableElixirs++;
 					}
 					logger.finest("\t" + i.getBounds() + " score: " + i.getScore());
 				}
 				if (c > 0) {
-					String match = String.format("\tfound %d elixirs matching %s\n", c, next.getFileName().toString());
-					logger.info(match);
+					logger.finest(String.format("\tfound %d elixirs matching %s\n", c, next.getFileName().toString()));
 				}
 			}
 
@@ -421,5 +424,4 @@ public class ImageParser {
 			}
 		}
 	}
-
 }

@@ -4,14 +4,13 @@ import java.awt.Color;
 
 /**
  * All coordinates are client coordinates
- * 
  * @author norecha
  */
 public enum Clickable {
 
 	// make sure to pick a solid spot, some parts are transparent
 	BUTTON_ATTACK_NO_STAR(61, 639, new Color(0xF0E8D8)),
-	BUTTON_ATTACK_STAR(63, 650, new Color(0xF0E8D8)),
+	BUTTON_ATTACK_STAR(62, 646, new Color(0xF0E8D8)),
 
 	BUTTON_ARMY_OVERVIEW(27, 575, null), // button above attack button
 	BUTTON_ARMY_OVERVIEW_NEXT(760, 326, new Color(0xF1873A)),
@@ -63,10 +62,10 @@ public enum Clickable {
 
 	CLOSE_NOTIFICATION(835, 25, null);
 
-	private Integer x;
-	private Integer y;
-	private Color color;
-	private String description;
+	private Integer	x;
+	private Integer	y;
+	private Color	color;
+	private String	description;
 
 	Clickable(Integer x, Integer y, Color color) {
 		this.x = x;
@@ -81,36 +80,36 @@ public enum Clickable {
 
 	public static Clickable getButtonAttackUnit(int x) {
 		switch (x) {
-			case 1:
-				return BUTTON_ATTACK_UNIT_1;
-			case 2:
-				return BUTTON_ATTACK_UNIT_2;
-			case 3:
-				return BUTTON_ATTACK_UNIT_3;
-			case 4:
-				return BUTTON_ATTACK_UNIT_4;
-			case 5:
-				return BUTTON_ATTACK_UNIT_5;
-			case 6:
-				return BUTTON_ATTACK_UNIT_6;
-			case 7:
-				return BUTTON_ATTACK_UNIT_7;
-			default:
-				throw new IllegalArgumentException(x + "");
+		case 1:
+			return BUTTON_ATTACK_UNIT_1;
+		case 2:
+			return BUTTON_ATTACK_UNIT_2;
+		case 3:
+			return BUTTON_ATTACK_UNIT_3;
+		case 4:
+			return BUTTON_ATTACK_UNIT_4;
+		case 5:
+			return BUTTON_ATTACK_UNIT_5;
+		case 6:
+			return BUTTON_ATTACK_UNIT_6;
+		case 7:
+			return BUTTON_ATTACK_UNIT_7;
+		default:
+			throw new IllegalArgumentException(x + "");
 		}
 	}
-
+	
 	public static Clickable fromDescription(String description) {
 		if (description == null) {
 			throw new NullPointerException();
 		}
-
+		
 		for (Clickable c : Clickable.values()) {
 			if (description.equals(c.getDescription())) {
 				return c;
 			}
 		}
-
+		
 		throw new IllegalArgumentException(description);
 	}
 

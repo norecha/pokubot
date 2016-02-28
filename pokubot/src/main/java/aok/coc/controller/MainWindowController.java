@@ -1,18 +1,11 @@
 package aok.coc.controller;
 
+import java.util.Set;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
-import org.kohsuke.github.GHRelease;
-import org.kohsuke.github.GHRepository;
-import org.kohsuke.github.GitHub;
-
-import aok.coc.launcher.BotLauncher;
 import aok.coc.launcher.Setup;
-import aok.coc.util.ConfigUtils;
-import aok.coc.util.coords.Clickable;
 import javafx.application.HostServices;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -35,69 +28,78 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
+import org.kohsuke.github.GHRelease;
+import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GitHub;
+
+import aok.coc.launcher.BotLauncher;
+import aok.coc.util.ConfigUtils;
+import aok.coc.util.coords.Clickable;
+
 public class MainWindowController {
 
 	@FXML
-	private TextField goldField;
+	private TextField			goldField;
 	@FXML
-	private TextField elixirField;
+	private TextField			elixirField;
 	@FXML
-	private TextField deField;
+	private TextField			deField;
 	@FXML
-	private TextField maxThField;
+	private TextField			maxThField;
 	@FXML
-	private CheckBox isMatchAllConditionsCheckBox;
+	private CheckBox			isMatchAllConditionsCheckBox;
 	@FXML
-	private Button startButton;
+	private Button				startButton;
 	@FXML
-	private Button stopButton;
+	private Button				stopButton;
 	@FXML
-	private Button hideBSButton;
+	private Button				hideBSButton;
 	@FXML
-	private TextArea textArea;
+	private TextArea			textArea;
 	@FXML
-	private GridPane configGridPane;
+	private GridPane			configGridPane;
 	@FXML
-	private ComboBox<String> autoAttackComboBox;
+	private ComboBox<String>	autoAttackComboBox;
 	@FXML
-	private CheckBox detectEmptyCollectorsCheckBox;
+	private CheckBox			detectEmptyCollectorsCheckBox;
 	@FXML
-	private CheckBox playSoundCheckBox;
+	private CheckBox			playSoundCheckBox;
 	@FXML
-	private Label versionLabel;
+	private Label				versionLabel;
 	@FXML
-	private ComboBox<String> rax1ComboBox;
+	private ComboBox<String>	rax1ComboBox;
 	@FXML
-	private ComboBox<String> rax2ComboBox;
+	private ComboBox<String>	rax2ComboBox;
 	@FXML
-	private ComboBox<String> rax3ComboBox;
+	private ComboBox<String>	rax3ComboBox;
 	@FXML
-	private ComboBox<String> rax4ComboBox;
+	private ComboBox<String>	rax4ComboBox;
 	@FXML
-	private ComboBox<String> darkRax1ComboBox;
+	private ComboBox<String> 	darkRax1ComboBox;
 	@FXML
-	private ComboBox<String> darkRax2ComboBox;
+	private ComboBox<String> 	darkRax2ComboBox;
 	@FXML
-	private Hyperlink githubLink;
+	private Hyperlink			githubLink;
 	@FXML
-	private Hyperlink donateLink;
+	private Hyperlink			donateLink;
 	@FXML
-	private ImageView heartImage;
+	private ImageView			heartImage;
 	@FXML
-	private Label donateLabel;
+	private Label				donateLabel;
 	@FXML
-	private Label updateLabel;
+	private Label				updateLabel;
 
-	private static final Logger logger = Logger.getLogger(MainWindowController.class.getName());
+	private static final Logger	logger			= Logger.getLogger(MainWindowController.class.getName());
 
-	private BotLauncher botLauncher = null;
-	private Service<Void> setupService = null;
-	private Service<Void> runnerService = null;
-	private boolean isSetupDone = false;
-	private boolean isBSHidden = false;
-	private int[] previousWindowRect;
+	private BotLauncher			botLauncher		= null;
+	private Service<Void>		setupService	= null;
+	private Service<Void>		runnerService	= null;
+	private boolean				isSetupDone		= false;
+	private boolean				isBSHidden		= false;
+	private int[]				previousWindowRect;
 
-	private HostServices hostServices = null;
+	private HostServices		hostServices	= null;
 
 	@FXML
 	private void initialize() {
@@ -258,7 +260,9 @@ public class MainWindowController {
 	}
 
 	private void initializeComboBox() {
-		autoAttackComboBox.getItems().addAll(ConfigUtils.instance().getAttackStrategies());
+		autoAttackComboBox.getItems().addAll(
+			ConfigUtils.instance().getAttackStrategies()
+			);
 		autoAttackComboBox.setValue(autoAttackComboBox.getItems().get(0));
 
 		Clickable[] availableTroops = ConfigUtils.instance().getAvailableTroops();
@@ -268,10 +272,18 @@ public class MainWindowController {
 			troops[i] = c.getDescription();
 		}
 
-		rax1ComboBox.getItems().addAll(troops);
-		rax2ComboBox.getItems().addAll(troops);
-		rax3ComboBox.getItems().addAll(troops);
-		rax4ComboBox.getItems().addAll(troops);
+		rax1ComboBox.getItems().addAll(
+			troops
+			);
+		rax2ComboBox.getItems().addAll(
+			troops
+			);
+		rax3ComboBox.getItems().addAll(
+			troops
+			);
+		rax4ComboBox.getItems().addAll(
+			troops
+			);
 
 		Clickable[] availableDarkTroops = ConfigUtils.instance().getAvailableDarkTroops();
 		String[] darkTroops = new String[availableDarkTroops.length];
@@ -280,9 +292,13 @@ public class MainWindowController {
 			darkTroops[i] = c.getDescription();
 		}
 
-		darkRax1ComboBox.getItems().addAll(darkTroops);
+		darkRax1ComboBox.getItems().addAll(
+			darkTroops
+			);
 
-		darkRax2ComboBox.getItems().addAll(darkTroops);
+		darkRax2ComboBox.getItems().addAll(
+			darkTroops
+			);
 	}
 
 	@FXML
@@ -390,8 +406,8 @@ public class MainWindowController {
 	}
 
 	/**
-	 * GitHub dependency is only used here and unused parts are excluded. Make
-	 * sure it works fine if it is used somewhere else.
+	 * GitHub dependency is only used here and unused parts are excluded. Make sure
+	 * it works fine if it is used somewhere else.
 	 */
 	private void checkForUpdate() {
 		try {

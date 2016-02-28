@@ -8,30 +8,30 @@ import aok.coc.util.ImageParser;
 import aok.coc.util.RobotUtils;
 
 public abstract class AbstractAttack {
-	private static final Logger logger = Logger.getLogger(AbstractAttack.class.getName());
+	private static final Logger	logger			= Logger.getLogger(AbstractAttack.class.getName());
 
-	protected static int TOP_X = 429;
-	protected static int TOP_Y = 18;
+	protected static int		TOP_X			= 429;
+	protected static int		TOP_Y			= 18;
 
-	protected static int LEFT_X = 10;
-	protected static int LEFT_Y = 360;
+	protected static int		LEFT_X			= 10;
+	protected static int		LEFT_Y			= 360;
 
-	protected static int RIGHT_X = 836;
-	protected static int RIGHT_Y = 360;
+	protected static int		RIGHT_X			= 836;
+	protected static int		RIGHT_Y			= 360;
 
-	protected static int BOTTOM_LEFT_X = 300;
-	protected static int BOTTOM_LEFT_Y = 576;
+	protected static int		BOTTOM_LEFT_X	= 300;
+	protected static int		BOTTOM_LEFT_Y	= 536;
 
-	protected static int BOTTOM_RIGHT_X = 537;
-	protected static int BOTTOM_RIGHT_Y = 578;
-
-	protected static final int PAUSE_BETWEEN_UNIT_DROP = 61;
+	protected static int		BOTTOM_RIGHT_X	= 537;
+	protected static int		BOTTOM_RIGHT_Y	= 538;
+	
+	protected static final int	PAUSE_BETWEEN_UNIT_DROP = 61;
 
 	protected abstract void doDropUnits(int[] attackGroup) throws InterruptedException;
 
 	public void attack(int[] loot, int[] attackGroup) throws InterruptedException, BotException {
 		logger.info("Attacking...");
-		RobotUtils.zoomOut(5);
+		RobotUtils.zoomOut();
 		RobotUtils.zoomIn(1);
 		RobotUtils.zoomOut(1);
 
@@ -64,7 +64,6 @@ public abstract class AbstractAttack {
 
 	protected void sleepUntilLootDoesNotChange(int[] loot) throws InterruptedException, BotException {
 		Thread.sleep(10000);
-
 		int[] prevLoot = loot;
 		int diff = Integer.MAX_VALUE;
 		int delta = 500;
@@ -83,9 +82,9 @@ public abstract class AbstractAttack {
 			diff = 0;
 			for (int i = 0; i < prevLoot.length; i++) {
 				// in case of wrong parsing
-				// [01.21.15 11:45:13 PM] INFO: [gold: 20174, elixir: 93476, de: 218]
-				// [01.21.15 11:45:28 PM] INFO: [gold: 201758, elixir: 31364, de: 202]
-
+				// [01.21.15 11:45:13 PM] INFO: [gold: 20174, elixir: 93476, de: 218] 
+				// [01.21.15 11:45:28 PM] INFO: [gold: 201758, elixir: 31364, de: 202] 
+				
 				diff += prevLoot[i] > currLoot[i] ? prevLoot[i] - currLoot[i] : 0;
 			}
 			prevLoot = currLoot;
