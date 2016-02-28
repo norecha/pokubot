@@ -258,23 +258,6 @@ public class RobotUtils {
 		return compareColor(tarColor, actualColor, 5);
 	}
 
-	/*
-	 * Searches a range of RGB values rather than one
-	 */
-	public static boolean isClickableActive(Clickable clickable, int minRGB, int maxRGB) throws BotException {
-		if (clickable.getColor() == null) {
-			throw new IllegalArgumentException(clickable.name());
-		}
-
-		for (int i = minRGB; i <= maxRGB; i++) {
-			int tarColor = i;
-			int actualColor = pixelGetColor(clickable.getX(), clickable.getY()).getRGB();
-
-			if (compareColor(tarColor, actualColor, 5)) return true;
-		}
-		return false;
-	}
-
 	public static boolean compareColor(int c1, int c2, int var) {
 		int r1 = (c1 >> 16) & 0xFF;
 		int r2 = (c2 >> 16) & 0xFF;
