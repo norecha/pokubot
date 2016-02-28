@@ -1,7 +1,21 @@
 package aok.coc.util;
 
-import java.awt.Color;
-import java.awt.Toolkit;
+import aok.coc.exception.BotException;
+import aok.coc.launcher.Setup;
+import aok.coc.util.coords.Area;
+import aok.coc.util.coords.Clickable;
+import aok.coc.util.w32.GDI32;
+import aok.coc.util.w32.User32;
+import com.sun.jna.Memory;
+import com.sun.jna.platform.win32.WinDef;
+import com.sun.jna.platform.win32.WinDef.*;
+import com.sun.jna.platform.win32.WinGDI;
+import com.sun.jna.platform.win32.WinGDI.BITMAPINFO;
+import com.sun.jna.platform.win32.WinNT.HANDLE;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -9,29 +23,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Random;
 import java.util.logging.Logger;
-
-import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
-
-import com.sun.jna.Memory;
-import com.sun.jna.platform.win32.WinDef;
-import com.sun.jna.platform.win32.WinDef.DWORD;
-import com.sun.jna.platform.win32.WinDef.HBITMAP;
-import com.sun.jna.platform.win32.WinDef.HDC;
-import com.sun.jna.platform.win32.WinDef.HWND;
-import com.sun.jna.platform.win32.WinDef.LPARAM;
-import com.sun.jna.platform.win32.WinDef.POINT;
-import com.sun.jna.platform.win32.WinDef.WPARAM;
-import com.sun.jna.platform.win32.WinGDI;
-import com.sun.jna.platform.win32.WinGDI.BITMAPINFO;
-import com.sun.jna.platform.win32.WinNT.HANDLE;
-
-import aok.coc.exception.BotException;
-import aok.coc.launcher.Setup;
-import aok.coc.util.coords.Area;
-import aok.coc.util.coords.Clickable;
-import aok.coc.util.w32.GDI32;
-import aok.coc.util.w32.User32;
 
 public class RobotUtils {
 
