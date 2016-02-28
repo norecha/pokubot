@@ -374,7 +374,7 @@ public class ImageParser {
 				}
 
 				List<RegionMatch> doFindAll = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolution(
-						image, tar, 7, 0.65);
+image, tar, 7, 0.65);
 
 				int c = 0;
 
