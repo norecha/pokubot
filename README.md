@@ -62,8 +62,3 @@ If there are bugs/suggestions, create an issue and attach the log file.
 * Barracks are scrolling to dark barracks/spells instead of next barracks
 
     Your first barracks was improperly configured. All settings are saved under %appdata%/PokuBot/config.properties. Delete this file and reconfigure.
-
-
-###Donate
-If you like PokuBot consider a donation to support further development. Click
-[here!](https://cdn.rawgit.com/norecha/pokubot/master/donate2.html)
