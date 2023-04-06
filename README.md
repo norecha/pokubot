@@ -1,7 +1,8 @@
-##PokuBot
+# This project is not maintained anymore, use it at your own risk
+## PokuBot
 An open source Clash of Clans bot. Read [FAQ](#faq) for most common issues.
 
-###Features
+### Features
 * Auto train troops(all troops)
 * Auto opponent finder matching gold, elixir, dark elixir criterias
 * Auto attack with different attack strategies
@@ -11,7 +12,7 @@ An open source Clash of Clans bot. Read [FAQ](#faq) for most common issues.
 * Disconnect detector. You cannot run game for more than 6 hours at a time, you will be disconnected after that for 5 min, it will reload you again. Or in case something goes wrong and bot dies, you will get disconnected from inactivity, and it will log you back in and start again.
 * Background mode
 
-###Requirements
+### Requirements
 * Windows OS
 * [BlueStacks] (http://www.bluestacks.com/) [(Tutorial here)](http://cocland.com/tutorials/play-clash-clans-pc-bluestacks)
 * [Java 8 JRE] (http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html)
@@ -21,7 +22,7 @@ An open source Clash of Clans bot. Read [FAQ](#faq) for most common issues.
 * You need to have at least level 4 barracks(it should have boost and boost all options because bot will click train button according to that. It will not boost it for you automatically.)
 * Run the game in **English,** some users reported errors in other languages.
 
-###Instructions
+### Instructions
 Download the latest version of PokuBot from [releases page](https://github.com/norecha/pokubot/releases) and run the .jar file.
 
 Make sure you are running it with java 8, not with an older version of Java.
@@ -36,7 +37,7 @@ You can change the values while bot is running too, just don't forget to click s
 All settings are saved under %appdata%/PokuBot/config.properties.
 In case barracks configuration went wrong and you want to reset it, you can delete this file.
 
-###Recommended Settings
+### Recommended Settings
 * At least 170k for resources, so you increase the chance of getting a base with full collectors.
 * Auto Attack: Attack 4 Side Parallel 2 Half Wave
 * Detect empty collectors: true
@@ -47,10 +48,10 @@ In case barracks configuration went wrong and you want to reset it, you can dele
 
 *If one or more of your barracks are upgrading, you need to set remaining ones to "No Unit"
 
-###Issues
+### Issues
 If there are bugs/suggestions, create an issue and attach the log file.
 
-###FAQ
+### FAQ
 * Stuck in StateIdle
 
     Your resolution is not right. If bot fails to automatically change it, you need to manually change values from registry. Google how to change resolution for bluestacks. You need to **restart** your BlueStacks(from system tray icon) after you change resolution. If it still looks wrong, restart your pc.
